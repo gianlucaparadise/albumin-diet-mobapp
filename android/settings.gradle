@@ -1,0 +1,3 @@
+rootProject.name = 'AlbuminDietMobapp'
+
+include ':app'

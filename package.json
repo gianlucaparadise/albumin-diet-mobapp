@@ -5,11 +5,14 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "android": "cd ./android && ./gradlew app:assembleDebug && ./gradlew installDebug",
+    "emulator": "~/Library/Android/sdk/emulator/emulator @Pixel_2_API_28"
   },
   "dependencies": {
     "react": "16.6.3",
-    "react-native": "0.58.6"
+    "react-native": "0.58.6",
+    "react-native-navigation": "^2.13.1"
   },
   "devDependencies": {
     "@types/jest": "^24.0.9",

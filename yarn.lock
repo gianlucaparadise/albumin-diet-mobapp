@@ -2213,7 +2213,7 @@ fbjs-scripts@^1.0.0:
     semver "^5.1.0"
     through2 "^2.0.0"
 
-fbjs@^0.8.9:
+fbjs@^0.8.17, fbjs@^0.8.9:
   version "0.8.17"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.17.tgz#c4d598ead6949112653d6588b01a5cdcd9f90fdd"
   integrity sha1-xNWY6taUkRJlPWWIsBpc3Nn5D90=
@@ -4835,6 +4835,14 @@ react-native-navigation@^2.13.1:
     prop-types "15.x.x"
     react-lifecycles-compat "2.0.0"
     tslib "1.9.3"
+
+react-native-webview@^5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-5.3.0.tgz#191666e7ded6d6077380a98b0a32a6cce81a2f4b"
+  integrity sha512-1tiHUXCt7uTAZylRezk5danOUCHVpchxGl9eOtXAa2oSDJUcr6CeafctDbTPTGN4r7jo89wp+XdAHT+FRTGumQ==
+  dependencies:
+    escape-string-regexp "^1.0.5"
+    fbjs "^0.8.17"
 
 react-native@0.58.6:
   version "0.58.6"

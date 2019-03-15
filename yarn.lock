@@ -942,6 +942,13 @@ ajv@^6.5.5:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
+albumin-diet-types@^0.0.15:
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/albumin-diet-types/-/albumin-diet-types-0.0.15.tgz#270933e8d5c3c223c1e32c079ed6eb500e0b3c05"
+  integrity sha512-KJ1hBV0LFMbAdAsfwziaOw8rDa76Hb7E2lyCh8qoDGE0T+xcXb808Zp6fPllt85uLRRM0zP+3eB2HlPxJmyaUA==
+  dependencies:
+    spotify-web-api-node-typings "^0.0.5"
+
 ansi-colors@^1.0.1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/ansi-colors/-/ansi-colors-1.1.0.tgz#6374b4dd5d4718ff3ce27a671a3b1cad077132a9"
@@ -5499,6 +5506,11 @@ split-string@^3.0.1, split-string@^3.0.2:
   integrity sha512-NzNVhJDYpwceVVii8/Hu6DKfD2G+NrQHlS/V/qgv763EYudVwEcMQNxd2lh+0VrUByXN/oJkl5grOhYWvQUYiw==
   dependencies:
     extend-shallow "^3.0.0"
+
+spotify-web-api-node-typings@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/spotify-web-api-node-typings/-/spotify-web-api-node-typings-0.0.5.tgz#b583b74e971cd3cd227cc48ce6f23fc7488e1368"
+  integrity sha512-Er5048SisHvhmQhPOsHeB3mGYP6KT2Ci2+CS+Edv1XOWesSScdb3nQiz9iuM5dv2qj24ADK+ydQDDOgsiVKXFw==
 
 sprintf-js@~1.0.2:
   version "1.0.3"

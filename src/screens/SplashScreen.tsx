@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, Button } from 'react-native';
 import { Navigation } from 'react-native-navigation';
+import { StorageHelper } from '../helpers/StorageHelper';
 
 interface Props {
 	componentId: string
@@ -11,12 +12,23 @@ export default class SplashScreen extends Component<Props> {
 
 	}
 
-	onPressGo = () => {
-		Navigation.push(this.props.componentId, {
-			component: {
-				name: 'navigation.LoginScreen'
-			}
-		});
+	onPressGo = async () => {
+		const isLoggedIn = await StorageHelper.Instance.getToken(); // TODO: move this logic in a separate helper
+
+		if (isLoggedIn) {
+			Navigation.push(this.props.componentId, {
+				component: {
+					name: 'navigation.HomeScreen'
+				}
+			});
+		}
+		else {
+			Navigation.push(this.props.componentId, {
+				component: {
+					name: 'navigation.LoginScreen'
+				}
+			});
+		}
 	}
 
 	render() {

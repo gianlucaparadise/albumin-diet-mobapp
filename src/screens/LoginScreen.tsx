@@ -3,6 +3,7 @@ import { Platform, StyleSheet, Text, View, NativeSyntheticEvent } from 'react-na
 import { WebView, WebViewNavigation, WebViewError, WebViewIOSLoadRequestEvent } from "react-native-webview";
 import { Navigation } from 'react-native-navigation';
 import { SendTokenResponse } from 'albumin-diet-types';
+import { StorageHelper } from '../helpers/StorageHelper';
 
 interface Props {
 	componentId: string
@@ -67,8 +68,7 @@ export default class LoginScreen extends Component<Props> {
 			}
 
 			let body: SendTokenResponse = await response.json();
-			// TODO: save the token
-			console.log(body.token);
+			StorageHelper.Instance.setToken(body.token); // I save the token
 
 			Navigation.push(this.props.componentId, {
 				component: {
@@ -85,7 +85,8 @@ export default class LoginScreen extends Component<Props> {
 	render() {
 		return (
 			<WebView
-				source={{ uri: 'https://albumin-diet-engine.herokuapp.com/auth/spotify' }} // TODO: use a url factory
+				// source={{ uri: 'https://albumin-diet-engine.herokuapp.com/auth/spotify' }} // TODO: use a url factory
+				source={{ uri: 'http://localhost:3000/auth/spotify' }} // TODO: use a url factory
 				onLoad={this.onLoad}
 				onLoadStart={this.onLoadStart}
 				onLoadEnd={this.onLoadEnd}

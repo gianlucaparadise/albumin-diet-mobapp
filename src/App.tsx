@@ -16,18 +16,25 @@ import { Navigation } from 'react-native-navigation';
 export function start() {
   registerScreens();
 
+  // This works only on Android
+  // TODO: make this work also on iOS
+  Navigation.setDefaultOptions({
+    animations: {
+      setRoot: {
+        alpha: {
+          from: 0,
+          to: 1,
+          duration: 500
+        }
+      }
+    }
+  });
+
   Navigation.events().registerAppLaunchedListener(() => {
     Navigation.setRoot({
       root: {
-        stack: {
-          id: 'MainStack',
-          children: [
-            {
-              component: {
-                name: 'navigation.SplashScreen'
-              }
-            }
-          ]
+        component: {
+          name: 'navigation.SplashScreen'
         }
       }
     });

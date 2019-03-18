@@ -4,6 +4,7 @@ import { WebView, WebViewNavigation, WebViewError, WebViewIOSLoadRequestEvent } 
 import { Navigation } from 'react-native-navigation';
 import { SendTokenResponse } from 'albumin-diet-types';
 import { StorageHelper } from '../helpers/StorageHelper';
+import { goToHome } from './navigation';
 
 interface Props {
 	componentId: string
@@ -70,11 +71,7 @@ export default class LoginScreen extends Component<Props> {
 			let body: SendTokenResponse = await response.json();
 			StorageHelper.Instance.setToken(body.token); // I save the token
 
-			Navigation.push(this.props.componentId, {
-				component: {
-					name: 'navigation.HomeScreen'
-				}
-			});
+			goToHome();
 		}
 		catch (ex) {
 			console.error('Error while finishing login');

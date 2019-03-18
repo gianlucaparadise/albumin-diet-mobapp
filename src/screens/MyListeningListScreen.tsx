@@ -6,7 +6,7 @@ interface Props {
 	componentId: string
 }
 
-export default class HomeScreen extends Component<Props> {
+export default class MyListeningListScreen extends Component<Props> {
 	componentDidAppear() {
 
 	}
@@ -14,7 +14,7 @@ export default class HomeScreen extends Component<Props> {
 	render() {
 		return (
 			<View style={styles.container}>
-				<Text style={styles.welcome}>Home</Text>
+				<Text style={styles.welcome}>My Listening List</Text>
 			</View>
 		);
 	}

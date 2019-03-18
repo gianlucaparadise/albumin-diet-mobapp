@@ -1,37 +1,20 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, Button } from 'react-native';
 import { Navigation } from 'react-native-navigation';
-import { StorageHelper } from '../helpers/StorageHelper';
-import { goToLogin, goToHome } from './navigation';
 
 interface Props {
 	componentId: string
 }
 
-export default class SplashScreen extends Component<Props> {
+export default class SearchScreen extends Component<Props> {
 	componentDidAppear() {
 
-	}
-
-	onPressGo = async () => {
-		const isLoggedIn = await StorageHelper.Instance.getToken(); // TODO: move this logic in a separate helper
-
-		if (isLoggedIn) {
-			goToHome();
-		}
-		else {
-			goToLogin();
-		}
 	}
 
 	render() {
 		return (
 			<View style={styles.container}>
-				<Text style={styles.welcome}>Albumin Diet</Text>
-				<Button
-					onPress={this.onPressGo}
-					title="Go"
-				/>
+				<Text style={styles.welcome}>Search</Text>
 			</View>
 		);
 	}

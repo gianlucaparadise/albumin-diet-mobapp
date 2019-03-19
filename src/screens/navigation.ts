@@ -7,7 +7,7 @@ export const goToLogin = () => Navigation.setRoot({
 			children: [
 				{
 					component: {
-						name: 'navigation.LoginScreen',
+						name: 'navigation.WelcomeScreen',
 					}
 				}
 			],

@@ -20,7 +20,7 @@ export class StorageHelper {
 		return value;
 	}
 
-	public async setToken(value: string): Promise<void> {
+	public async setToken(value: string | null): Promise<void> {
 		await this.setByKey('token', value);
 	}
 
@@ -47,13 +47,19 @@ export class StorageHelper {
 	 * The saved into AsyncStorage.
 	 * This will never throw an exception.
 	 * @param key Key where to save the value
-	 * @param value Value to save
+	 * @param value Value to save or `null` to remove it
 	 */
-	private async setByKey(key: string, value: string): Promise<void> {
+	private async setByKey(key: string, value: string | null): Promise<void> {
 		// TODO: use hashmap to cache values
 
 		try {
-			await AsyncStorage.setItem(`${SUPER_STORE_KEY}:${key}`, value);
+			if (value) {
+				await AsyncStorage.setItem(`${SUPER_STORE_KEY}:${key}`, value);
+			}
+			else {
+				// When I receive `null` as input, I remove the item
+				await AsyncStorage.removeItem(`${SUPER_STORE_KEY}:${key}`);
+			}
 		} catch (ex) {
 			console.error(`Error while saving - key: ${key} - value: ${value}`);
 			console.error(ex);

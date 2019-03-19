@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, NativeSyntheticEvent } from 'react-native';
 import { WebView, WebViewNavigation, WebViewError, WebViewIOSLoadRequestEvent } from "react-native-webview";
-import { Navigation } from 'react-native-navigation';
-import { SendTokenResponse } from 'albumin-diet-types';
-import { StorageHelper } from '../helpers/StorageHelper';
 import { goToHome } from './navigation';
+import { LoginHelper } from '../helpers/LoginHelper';
 
 interface Props {
 	componentId: string
@@ -47,7 +45,7 @@ export default class LoginScreen extends Component<Props> {
 		console.log(`onShouldLoad`);
 		console.log(event);
 
-		if (this.isLoginCallback(event.url)) {
+		if (LoginHelper.Instance.isLoginCallback(event.url)) {
 			this.finishLogin(event.url);
 			return false;
 		}
@@ -55,22 +53,10 @@ export default class LoginScreen extends Component<Props> {
 		return true;
 	}
 
-	isLoginCallback = (url: string) => {
-		return url.indexOf('/auth/spotify/callback') !== -1;
-	}
-
 	finishLogin = async (url: string) => {
 		console.log('Getting token');
 		try {
-			let response = await fetch(url);
-			console.log(response);
-			if (response.status !== 200) {
-				throw new Error(`Repsonse Error: ${response.status}`);
-			}
-
-			let body: SendTokenResponse = await response.json();
-			StorageHelper.Instance.setToken(body.token); // I save the token
-
+			await LoginHelper.Instance.finishLogin(url);
 			goToHome();
 		}
 		catch (ex) {
@@ -82,8 +68,7 @@ export default class LoginScreen extends Component<Props> {
 	render() {
 		return (
 			<WebView
-				// source={{ uri: 'https://albumin-diet-engine.herokuapp.com/auth/spotify' }} // TODO: use a url factory
-				source={{ uri: 'http://localhost:3000/auth/spotify' }} // TODO: use a url factory
+				source={{ uri: LoginHelper.Instance.loginUrl }}
 				onLoad={this.onLoad}
 				onLoadStart={this.onLoadStart}
 				onLoadEnd={this.onLoadEnd}

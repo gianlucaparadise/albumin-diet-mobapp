@@ -1,36 +1,30 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, Button } from 'react-native';
-import { goToLogin, goToHome } from './navigation';
-import { LoginHelper } from '../helpers/LoginHelper';
+import { Navigation } from 'react-native-navigation';
 
 interface Props {
 	componentId: string
 }
 
-export default class SplashScreen extends Component<Props> {
+export default class WelcomeScreen extends Component<Props> {
 	componentDidAppear() {
 
 	}
 
-	onPressGo = async () => {
-		const isLoggedIn = await LoginHelper.Instance.isLoggedIn();
-
-		if (isLoggedIn) {
-			goToHome();
-		}
-		else {
-			goToLogin();
-		}
-	}
+	goToLogin = () => {
+		Navigation.push(this.props.componentId, {
+			component: {
+				name: 'navigation.LoginScreen'
+			}
+		})
+	};
 
 	render() {
 		return (
 			<View style={styles.container}>
-				<Text style={styles.welcome}>Albumin Diet</Text>
-				<Button
-					onPress={this.onPressGo}
-					title="Go"
-				/>
+				<Text style={styles.welcome}>Welcome</Text>
+				<Text style={styles.welcome}>You need to login to use the app</Text>
+				<Button onPress={this.goToLogin} title='Login' />
 			</View>
 		);
 	}

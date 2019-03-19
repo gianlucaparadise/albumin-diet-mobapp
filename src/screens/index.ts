@@ -6,10 +6,12 @@ import MyAlbumsScreen from "./MyAlbumsScreen";
 import MyListeningListScreen from "./MyListeningListScreen";
 import SearchScreen from "./SearchScreen";
 import MyProfileScreen from "./MyProfileScreen";
+import WelcomeScreen from "./WelcomeScreen";
 
 export function registerScreens() {
 	Navigation.registerComponent(`navigation.SplashScreen`, () => SplashScreen);
 	Navigation.registerComponent(`navigation.LoginScreen`, () => LoginScreen);
+	Navigation.registerComponent(`navigation.WelcomeScreen`, () => WelcomeScreen);
 	Navigation.registerComponent(`navigation.MyAlbumsScreen`, () => MyAlbumsScreen);
 	Navigation.registerComponent(`navigation.MyListeningListScreen`, () => MyListeningListScreen);
 	Navigation.registerComponent(`navigation.SearchScreen`, () => SearchScreen);

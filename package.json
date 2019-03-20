@@ -13,6 +13,8 @@
     "react": "16.6.3",
     "react-native": "0.58.6",
     "react-native-navigation": "^2.13.1",
+    "react-native-paper": "^2.13.0",
+    "react-native-vector-icons": "^6.4.1",
     "react-native-webview": "^5.3.0"
   },
   "devDependencies": {

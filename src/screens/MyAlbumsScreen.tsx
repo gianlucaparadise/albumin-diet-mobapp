@@ -6,9 +6,20 @@ interface Props {
 	componentId: string
 }
 
-export default class MyAlbumsScreen extends Component<Props> {
-	componentDidAppear() {
+	componentDidMount() {
+		this.getAlbums();
+	}
 
+	getAlbums = async () => {
+		try {
+			console.log('retrieving albums');
+			const albumsResponse = await ConnectionHelper.Instance.getAlbums(null, false);
+			console.log(albumsResponse);
+	}
+		catch (error) {
+			console.error('Error while retrieving albums');
+			console.error(error);
+		}
 	}
 
 	render() {

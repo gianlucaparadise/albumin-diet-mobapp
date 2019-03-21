@@ -60,6 +60,19 @@ export class LoginHelper {
 	}
 
 	/**
+	 * Extracts the token from the headers and saves it
+	 * @param headers Response headers
+	 */
+	public async refreshToken(headers: Headers) {
+		if (!headers.has('x-auth-token')) return;
+
+		const token = headers.get('x-auth-token');
+		if (!token) return;
+
+		await StorageHelper.Instance.setToken(token);
+	}
+
+	/**
 	 * Deletes current token
 	 */
 	public async logout() {

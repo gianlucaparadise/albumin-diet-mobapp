@@ -7,8 +7,11 @@ interface Props {
 }
 
 export default class MyListeningListScreen extends Component<Props> {
-	componentDidAppear() {
+	componentDidMount() {
+		Navigation.events().bindComponent(this);
+	}
 
+	componentDidAppear() {
 	}
 
 	render() {

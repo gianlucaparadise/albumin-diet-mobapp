@@ -7,8 +7,11 @@ interface Props {
 }
 
 export default class WelcomeScreen extends Component<Props> {
-	componentDidAppear() {
+	componentDidMount() {
+		Navigation.events().bindComponent(this);
+	}
 
+	componentDidAppear() {
 	}
 
 	goToLogin = () => {

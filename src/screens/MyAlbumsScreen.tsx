@@ -1,10 +1,26 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, Button } from 'react-native';
-import { Navigation } from 'react-native-navigation';
+import { Platform, StyleSheet, Text, View, FlatList } from 'react-native';
+import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
+import { ConnectionHelper } from '../helpers/ConnectionHelper';
+import AlbumCardWidget from '../widgets/AlbumCardWidget';
+import { GetAlbumResponse, UserAlbum } from 'albumin-diet-types';
 
 interface Props {
 	componentId: string
 }
+
+interface State {
+	albumDescriptors: UserAlbum[]
+}
+
+export default class MyAlbumsScreen extends Component<Props, State> {
+	constructor(props: Props) {
+		super(props);
+
+		this.state = {
+			albumDescriptors: []
+		};
+	}
 
 	componentDidMount() {
 		this.getAlbums();
@@ -15,7 +31,8 @@ interface Props {
 			console.log('retrieving albums');
 			const albumsResponse = await ConnectionHelper.Instance.getAlbums(null, false);
 			console.log(albumsResponse);
-	}
+			this.setState({ albumDescriptors: albumsResponse.data });
+		}
 		catch (error) {
 			console.error('Error while retrieving albums');
 			console.error(error);
@@ -24,23 +41,23 @@ interface Props {
 
 	render() {
 		return (
-			<View style={styles.container}>
-				<Text style={styles.welcome}>My Albums</Text>
-			</View>
+			<FlatList
+				style={styles.list}
+				data={this.state.albumDescriptors}
+				renderItem={({ item }) => <AlbumCardWidget style={styles.listItem} albumDescriptor={item} />}
+				keyExtractor={(item, index) => item.album.id}
+			/>
 		);
 	}
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: '#F5FCFF',
+	list: {
+		paddingLeft: 14,
+		paddingRight: 14,
 	},
-	welcome: {
-		fontSize: 20,
-		textAlign: 'center',
-		margin: 10,
-	},
+	listItem: {
+		marginTop: 7,
+		marginBottom: 7,
+	}
 });

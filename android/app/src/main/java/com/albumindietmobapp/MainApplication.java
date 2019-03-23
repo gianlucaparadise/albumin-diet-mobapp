@@ -39,7 +39,9 @@ public class MainApplication extends NavigationApplication {
 		// Add additional packages you require here
 		// No need to add RnnPackage and MainReactPackage
 		return Arrays.<ReactPackage>asList(
-				// eg. new VectorIconsPackage()
+            // the following line is present so that `react-native link` works correctly
+            // new MainReactPackage(),
+			new RNCWebViewPackage()
 		);
 	}
 

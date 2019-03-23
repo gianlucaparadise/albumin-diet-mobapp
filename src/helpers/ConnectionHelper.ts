@@ -1,4 +1,4 @@
-import { GetMyAlbumsResponse } from "albumin-diet-types";
+import { GetMyAlbumsResponse, GetMyTagsResponse } from "albumin-diet-types";
 import { LoginHelper } from "./LoginHelper";
 
 const BASE_PATH = 'http://localhost:3000';
@@ -53,5 +53,14 @@ export class ConnectionHelper {
 		const result = await this.send<GetMyAlbumsResponse>(request);
 
 		return result;
+	}
+
+	public async getTags() {
+		const url = this.getUrl(`/api/me/tag`);
+		const request = new Request(url);
+
+		const response = await this.send<GetMyTagsResponse>(request);
+
+		return response;
 	}
 }

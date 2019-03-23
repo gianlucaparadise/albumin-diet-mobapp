@@ -1,18 +1,44 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import { Navigation } from 'react-native-navigation';
-import { Button } from 'react-native-paper';
+import { ConnectionHelper } from '../helpers/ConnectionHelper';
+import { ITag } from 'albumin-diet-types';
 
 interface Props {
 	componentId: string
 }
 
-export default class TagsFilterScreen extends Component<Props> {
+interface State {
+	tags: ITag[]
+}
+
+export default class TagsFilterScreen extends Component<Props, State> {
+	constructor(props: Props) {
+		super(props);
+
+		this.state = {
+			tags: []
+		};
+	}
+
 	componentDidMount() {
 		Navigation.events().bindComponent(this);
+		this.getTags();
 	}
 
 	componentDidAppear() {
+	}
+
+	getTags = async () => {
+		try {
+			const response = await ConnectionHelper.Instance.getTags();
+			this.setState({ tags: response.data })
+			console.log('Tags:');
+			console.log(response);
+		} catch (error) {
+			console.error('Error while retrieving tags');
+			console.error(error);
+		}
 	}
 
 	onOkPress = () => {

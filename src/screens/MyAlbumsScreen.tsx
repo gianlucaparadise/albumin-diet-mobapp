@@ -54,9 +54,7 @@ export default class MyAlbumsScreen extends Component<Props, State> {
 
 	getAlbums = async () => {
 		try {
-			console.log('retrieving albums');
 			const albumsResponse = await ConnectionHelper.Instance.getAlbums(null, false);
-			console.log(albumsResponse);
 			this.setState({ albumDescriptors: albumsResponse.data });
 		}
 		catch (error) {

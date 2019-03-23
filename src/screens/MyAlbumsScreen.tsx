@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, FlatList } from 'react-native';
-import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
+import { Avatar, Button, Card, Title, Paragraph, FAB } from 'react-native-paper';
 import { ConnectionHelper } from '../helpers/ConnectionHelper';
 import AlbumCardWidget from '../widgets/AlbumCardWidget';
 import { GetAlbumResponse, UserAlbum } from 'albumin-diet-types';
+import { Navigation } from 'react-native-navigation';
 
 interface Props {
 	componentId: string
@@ -23,7 +24,32 @@ export default class MyAlbumsScreen extends Component<Props, State> {
 	}
 
 	componentDidMount() {
+		Navigation.events().bindComponent(this);
 		this.getAlbums();
+	}
+
+	componentDidAppear = () => {
+		console.log('MyAlbums Appeared!');
+		// If this worked, I would have enabled the side menu only in this page
+		// Navigation.mergeOptions('sideMenu', {
+		// 	sideMenu: {
+		// 		right: {
+		// 			enabled: true
+		// 		}
+		// 	}
+		// });
+	}
+
+	componentDidDisappear = () => {
+		console.log('MyAlbums Disappeared!');
+		// If this worked, I would have enabled the side menu only in this page
+		// Navigation.mergeOptions('sideMenu', {
+		// 	sideMenu: {
+		// 		right: {
+		// 			enabled: false
+		// 		}
+		// 	}
+		// });
 	}
 
 	getAlbums = async () => {
@@ -39,14 +65,33 @@ export default class MyAlbumsScreen extends Component<Props, State> {
 		}
 	}
 
+	onFabClick = () => {
+		Navigation.mergeOptions('rightSideMenu', {
+			sideMenu: {
+				right: {
+					visible: true
+				}
+			}
+		});
+	}
+
 	render() {
 		return (
-			<FlatList
-				style={styles.list}
-				data={this.state.albumDescriptors}
-				renderItem={({ item }) => <AlbumCardWidget style={styles.listItem} albumDescriptor={item} />}
-				keyExtractor={(item, index) => item.album.id}
-			/>
+			<View>
+				<FlatList
+					style={styles.list}
+					data={this.state.albumDescriptors}
+					renderItem={({ item }) => <AlbumCardWidget style={styles.listItem} albumDescriptor={item} />}
+					keyExtractor={(item, index) => item.album.id}
+				/>
+				<FAB
+					style={styles.fab}
+					small
+					icon="filter-list"
+					accessibilityLabel="Filter by tag"
+					onPress={this.onFabClick}
+				/>
+			</View>
 		);
 	}
 }
@@ -59,5 +104,11 @@ const styles = StyleSheet.create({
 	listItem: {
 		marginTop: 7,
 		marginBottom: 7,
+	},
+	fab: {
+		position: 'absolute',
+		margin: 16,
+		right: 0,
+		bottom: 0,
 	}
 });

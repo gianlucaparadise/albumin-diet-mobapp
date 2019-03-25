@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, Button, NativeSyntheticEvent, NativeTouchEvent } from 'react-native';
-import { Navigation } from 'react-native-navigation';
+// import { Navigation } from 'react-native-navigation';
 import { LoginHelper } from '../helpers/LoginHelper';
 import { goToLogin } from './navigation';
 
@@ -10,7 +10,7 @@ interface Props {
 
 export default class MyProfileScreen extends Component<Props> {
 	componentDidMount() {
-		Navigation.events().bindComponent(this);
+		// Navigation.events().bindComponent(this);
 	}
 
 	componentDidAppear() {

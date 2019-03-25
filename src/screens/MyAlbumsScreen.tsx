@@ -4,7 +4,7 @@ import { Avatar, Button, Card, Title, Paragraph, FAB } from 'react-native-paper'
 import { ConnectionHelper } from '../helpers/ConnectionHelper';
 import AlbumCardWidget from '../widgets/AlbumCardWidget';
 import { GetAlbumResponse, UserAlbum } from 'albumin-diet-types';
-import { Navigation } from 'react-native-navigation';
+// import { Navigation } from 'react-native-navigation';
 import AlbumDetailScreen from './AlbumDetailScreen';
 
 interface Props {
@@ -39,7 +39,7 @@ export default class MyAlbumsScreen extends Component<Props, State> {
 	}
 
 	componentDidMount() {
-		Navigation.events().bindComponent(this);
+		// Navigation.events().bindComponent(this);
 		this.getAlbums();
 	}
 
@@ -69,13 +69,13 @@ export default class MyAlbumsScreen extends Component<Props, State> {
 
 	navigationButtonPressed(args: any) {
 		if (args.buttonId === 'filterButton') {
-			Navigation.mergeOptions('rightSideMenu', {
-				sideMenu: {
-					right: {
-						visible: true
-					}
-				}
-			});
+			// Navigation.mergeOptions('rightSideMenu', {
+			// 	sideMenu: {
+			// 		right: {
+			// 			visible: true
+			// 		}
+			// 	}
+			// });
 		}
 	}
 
@@ -91,22 +91,22 @@ export default class MyAlbumsScreen extends Component<Props, State> {
 	}
 
 	goToDetail = (albumDescriptor: UserAlbum, elementId: string) => {
-		Navigation.push(this.props.componentId, {
-			component: {
-				name: 'navigation.AlbumDetailScreen',
-				passProps: {
-					albumDescriptor: albumDescriptor
-				},
-				options: {
-					customTransition: {
-						animations: [
-							{ type: 'sharedElement', fromId: elementId, toId: AlbumDetailScreen.IMAGE_ELEMENT_ID, startDelay: 0, springVelocity: 0.2, duration: 0.5 }
-						],
-						duration: 0.8
-					}
-				}
-			}
-		});
+		// Navigation.push(this.props.componentId, {
+		// 	component: {
+		// 		name: 'navigation.AlbumDetailScreen',
+		// 		passProps: {
+		// 			albumDescriptor: albumDescriptor
+		// 		},
+		// 		options: {
+		// 			customTransition: {
+		// 				animations: [
+		// 					{ type: 'sharedElement', fromId: elementId, toId: AlbumDetailScreen.IMAGE_ELEMENT_ID, startDelay: 0, springVelocity: 0.2, duration: 0.5 }
+		// 				],
+		// 				duration: 0.8
+		// 			}
+		// 		}
+		// 	}
+		// });
 	}
 
 	render() {

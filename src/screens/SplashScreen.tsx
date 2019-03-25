@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, Button } from 'react-native';
-import { goToLogin, goToHome } from './navigation';
+// import { goToLogin, goToHome } from './navigation';
 import { LoginHelper } from '../helpers/LoginHelper';
 
 interface Props {
@@ -16,10 +16,10 @@ export default class SplashScreen extends Component<Props> {
 		const isLoggedIn = await LoginHelper.Instance.isLoggedIn();
 
 		if (isLoggedIn) {
-			goToHome();
+			// goToHome();
 		}
 		else {
-			goToLogin();
+			// goToLogin();
 		}
 	}
 

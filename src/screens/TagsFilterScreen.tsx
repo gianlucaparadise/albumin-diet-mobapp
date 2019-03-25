@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, FlatList } from 'react-native';
-import { Navigation } from 'react-native-navigation';
+// import { Navigation } from 'react-native-navigation';
 import { Button, Chip } from 'react-native-paper';
 import { ConnectionHelper } from '../helpers/ConnectionHelper';
 import { ITag } from 'albumin-diet-types';
@@ -23,7 +23,7 @@ export default class TagsFilterScreen extends Component<Props, State> {
 	}
 
 	componentDidMount() {
-		Navigation.events().bindComponent(this);
+		// Navigation.events().bindComponent(this);
 		this.getTags();
 	}
 
@@ -43,13 +43,13 @@ export default class TagsFilterScreen extends Component<Props, State> {
 	}
 
 	onOkPress = () => {
-		Navigation.mergeOptions('rightSideMenu', {
-			sideMenu: {
-				right: {
-					visible: false
-				}
-			}
-		});
+		// Navigation.mergeOptions('rightSideMenu', {
+		// 	sideMenu: {
+		// 		right: {
+		// 			visible: false
+		// 		}
+		// 	}
+		// });
 	}
 
 	onTagPressed = () => {

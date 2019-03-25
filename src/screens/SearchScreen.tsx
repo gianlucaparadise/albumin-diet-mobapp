@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, Button } from 'react-native';
-import { Navigation } from 'react-native-navigation';
+// import { Navigation } from 'react-native-navigation';
 
 interface Props {
 	componentId: string
@@ -8,7 +8,7 @@ interface Props {
 
 export default class SearchScreen extends Component<Props> {
 	componentDidMount() {
-		Navigation.events().bindComponent(this);
+		// Navigation.events().bindComponent(this);
 	}
 
 	componentDidAppear() {

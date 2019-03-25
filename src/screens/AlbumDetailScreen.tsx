@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, Button, Image, ScrollView } from 'react-native';
-import { Navigation } from 'react-native-navigation';
+// import { Navigation } from 'react-native-navigation';
 import { UserAlbum } from 'albumin-diet-types';
 import { Headline, Subheading } from 'react-native-paper';
 import { TrackObjectSimplified } from 'spotify-web-api-node-typings';
@@ -24,7 +24,7 @@ export default class AlbumDetailScreen extends Component<Props> {
 	public static readonly IMAGE_ELEMENT_ID = 'detailImage';
 
 	componentDidMount() {
-		Navigation.events().bindComponent(this);
+		// Navigation.events().bindComponent(this);
 	}
 
 	componentDidAppear() {
@@ -95,13 +95,13 @@ export default class AlbumDetailScreen extends Component<Props> {
 	render() {
 		return (
 			<ScrollView contentContainerStyle={styles.container}>
-				<Navigation.Element elementId={AlbumDetailScreen.IMAGE_ELEMENT_ID}>
-					<Image
-						resizeMode="cover"
-						style={styles.cover}
-						source={{ uri: this.imageUrl }}
-					/>
-				</Navigation.Element>
+				{/* <Navigation.Element elementId={AlbumDetailScreen.IMAGE_ELEMENT_ID}> */}
+				<Image
+					resizeMode="cover"
+					style={styles.cover}
+					source={{ uri: this.imageUrl }}
+				/>
+				{/* </Navigation.Element> */}
 				<View style={styles.space} />
 				<Headline style={styles.text}>{this.albumName}</Headline>
 				<Subheading style={styles.text}>{this.artistName}</Subheading>

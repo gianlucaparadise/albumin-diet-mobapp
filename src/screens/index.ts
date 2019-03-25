@@ -1,4 +1,4 @@
-import { Navigation } from "react-native-navigation";
+// import { Navigation } from "react-native-navigation";
 
 import SplashScreen from "./SplashScreen";
 import LoginScreen from "./LoginScreen";
@@ -11,13 +11,13 @@ import TagsFilterScreen from "./TagsFilterScreen";
 import AlbumDetailScreen from "./AlbumDetailScreen";
 
 export function registerScreens() {
-	Navigation.registerComponent(`navigation.SplashScreen`, () => SplashScreen);
-	Navigation.registerComponent(`navigation.LoginScreen`, () => LoginScreen);
-	Navigation.registerComponent(`navigation.WelcomeScreen`, () => WelcomeScreen);
-	Navigation.registerComponent(`navigation.MyAlbumsScreen`, () => MyAlbumsScreen);
-	Navigation.registerComponent(`navigation.AlbumDetailScreen`, () => AlbumDetailScreen);
-	Navigation.registerComponent(`navigation.TagsFilterScreen`, () => TagsFilterScreen);
-	Navigation.registerComponent(`navigation.MyListeningListScreen`, () => MyListeningListScreen);
-	Navigation.registerComponent(`navigation.SearchScreen`, () => SearchScreen);
-	Navigation.registerComponent(`navigation.MyProfileScreen`, () => MyProfileScreen);
+	// Navigation.registerComponent(`navigation.SplashScreen`, () => SplashScreen);
+	// Navigation.registerComponent(`navigation.LoginScreen`, () => LoginScreen);
+	// Navigation.registerComponent(`navigation.WelcomeScreen`, () => WelcomeScreen);
+	// Navigation.registerComponent(`navigation.MyAlbumsScreen`, () => MyAlbumsScreen);
+	// Navigation.registerComponent(`navigation.AlbumDetailScreen`, () => AlbumDetailScreen);
+	// Navigation.registerComponent(`navigation.TagsFilterScreen`, () => TagsFilterScreen);
+	// Navigation.registerComponent(`navigation.MyListeningListScreen`, () => MyListeningListScreen);
+	// Navigation.registerComponent(`navigation.SearchScreen`, () => SearchScreen);
+	// Navigation.registerComponent(`navigation.MyProfileScreen`, () => MyProfileScreen);
 }

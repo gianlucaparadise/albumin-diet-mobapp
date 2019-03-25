@@ -44,7 +44,7 @@ export const goToHome = () => Navigation.setRoot({
 												bottomTab: {
 													// fontSize: 12,
 													text: 'Albums',
-													// icon: require('./signin.png')
+													icon: require('./../../asset/icons/album.png')
 												}
 											}
 										}
@@ -59,7 +59,7 @@ export const goToHome = () => Navigation.setRoot({
 									bottomTab: {
 										// fontSize: 12,
 										text: 'Listening List',
-										// icon: require('./signin.png')
+										icon: require('./../../asset/icons/album.png')
 									}
 								}
 							},
@@ -71,7 +71,7 @@ export const goToHome = () => Navigation.setRoot({
 									bottomTab: {
 										// fontSize: 12,
 										text: 'Search',
-										// icon: require('./signin.png')
+										icon: require('./../../asset/icons/search.png')
 									}
 								}
 							},
@@ -83,7 +83,7 @@ export const goToHome = () => Navigation.setRoot({
 									bottomTab: {
 										// fontSize: 12,
 										text: 'Profile',
-										// icon: require('./signin.png')
+										icon: require('./../../asset/icons/person.png')
 									}
 								}
 							},

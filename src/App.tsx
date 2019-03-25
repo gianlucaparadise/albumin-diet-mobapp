@@ -19,6 +19,9 @@ export function start() {
   // This works only on Android
   // TODO: make this work also on iOS
   Navigation.setDefaultOptions({
+    bottomTabs: {
+      titleDisplayMode: "alwaysShow"
+    },
     animations: {
       setRoot: {
         alpha: {

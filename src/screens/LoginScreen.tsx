@@ -32,13 +32,6 @@ export default class LoginScreen extends Component<Props> {
 	onNavigationStateChange = (event: WebViewNavigation) => {
 		console.log(`onNavigationStateChange`);
 		console.log(event);
-
-		// This should make it work on Android (https://stackoverflow.com/questions/39682445/prevent-webview-from-loading-url-in-android-react-native)
-		// if (this.isLoginCallback(event.url)) {
-		// 	this.finishLogin(event.url);
-
-		// 	// this.refs[WEBVIEW_REF].stopLoading();
-		// }
 	}
 
 	onShouldLoad = (event: WebViewIOSLoadRequestEvent) => {

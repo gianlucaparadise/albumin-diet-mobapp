@@ -15,6 +15,20 @@ interface State {
 }
 
 export default class MyAlbumsScreen extends Component<Props, State> {
+	static options(passProps: Props) {
+		// Vector icons in topbar: https://github.com/wix/react-native-navigation/issues/43
+		return {
+			topBar: {
+				rightButtons: [
+					{
+						id: 'filterButton',
+						icon: require('./../../asset/icons/filter_list.png')
+					}
+				],
+			}
+		}
+	}
+
 	constructor(props: Props) {
 		super(props);
 
@@ -52,6 +66,18 @@ export default class MyAlbumsScreen extends Component<Props, State> {
 		// });
 	}
 
+	navigationButtonPressed(args: any) {
+		if (args.buttonId === 'filterButton') {
+			Navigation.mergeOptions('rightSideMenu', {
+				sideMenu: {
+					right: {
+						visible: true
+					}
+				}
+			});
+		}
+	}
+
 	getAlbums = async () => {
 		try {
 			const albumsResponse = await ConnectionHelper.Instance.getAlbums(null, false);
@@ -83,13 +109,6 @@ export default class MyAlbumsScreen extends Component<Props, State> {
 					renderItem={({ item }) => <AlbumCardWidget onPress={this.goToDetail} style={styles.listItem} albumDescriptor={item} />}
 					keyExtractor={(item, index) => item.album.id}
 				/>
-				<FAB
-					style={styles.fab}
-					small
-					icon="filter-list"
-					accessibilityLabel="Filter by tag"
-					onPress={this.onFabClick}
-				/>
 			</View>
 		);
 	}
@@ -104,10 +123,4 @@ const styles = StyleSheet.create({
 		marginTop: 7,
 		marginBottom: 7,
 	},
-	fab: {
-		position: 'absolute',
-		margin: 16,
-		right: 0,
-		bottom: 0,
-	}
 });

@@ -63,11 +63,12 @@ export default class MyAlbumsScreen extends Component<Props, State> {
 		}
 	}
 
-	onFabClick = () => {
-		Navigation.mergeOptions('rightSideMenu', {
-			sideMenu: {
-				right: {
-					visible: true
+	goToDetail = (albumDescriptor: UserAlbum) => {
+		Navigation.push(this.props.componentId, {
+			component: {
+				name: 'navigation.AlbumDetailScreen',
+				passProps: {
+					albumDescriptor: albumDescriptor
 				}
 			}
 		});
@@ -79,7 +80,7 @@ export default class MyAlbumsScreen extends Component<Props, State> {
 				<FlatList
 					style={styles.list}
 					data={this.state.albumDescriptors}
-					renderItem={({ item }) => <AlbumCardWidget style={styles.listItem} albumDescriptor={item} />}
+					renderItem={({ item }) => <AlbumCardWidget onPress={this.goToDetail} style={styles.listItem} albumDescriptor={item} />}
 					keyExtractor={(item, index) => item.album.id}
 				/>
 				<FAB

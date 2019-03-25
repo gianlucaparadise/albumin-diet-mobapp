@@ -35,15 +35,21 @@ export const goToHome = () => Navigation.setRoot({
 					id: 'MainNavigator',
 					children: [
 						{
-							component: {
-								name: 'navigation.MyAlbumsScreen',
-								options: {
-									bottomTab: {
-										// fontSize: 12,
-										text: 'Albums',
-										// icon: require('./signin.png')
+							stack: {
+								children: [
+									{
+										component: {
+											name: 'navigation.MyAlbumsScreen',
+											options: {
+												bottomTab: {
+													// fontSize: 12,
+													text: 'Albums',
+													// icon: require('./signin.png')
+												}
+											}
+										}
 									}
-								}
+								]
 							},
 						},
 						{

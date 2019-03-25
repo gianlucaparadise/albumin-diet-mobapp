@@ -8,12 +8,14 @@ import SearchScreen from "./SearchScreen";
 import MyProfileScreen from "./MyProfileScreen";
 import WelcomeScreen from "./WelcomeScreen";
 import TagsFilterScreen from "./TagsFilterScreen";
+import AlbumDetailScreen from "./AlbumDetailScreen";
 
 export function registerScreens() {
 	Navigation.registerComponent(`navigation.SplashScreen`, () => SplashScreen);
 	Navigation.registerComponent(`navigation.LoginScreen`, () => LoginScreen);
 	Navigation.registerComponent(`navigation.WelcomeScreen`, () => WelcomeScreen);
 	Navigation.registerComponent(`navigation.MyAlbumsScreen`, () => MyAlbumsScreen);
+	Navigation.registerComponent(`navigation.AlbumDetailScreen`, () => AlbumDetailScreen);
 	Navigation.registerComponent(`navigation.TagsFilterScreen`, () => TagsFilterScreen);
 	Navigation.registerComponent(`navigation.MyListeningListScreen`, () => MyListeningListScreen);
 	Navigation.registerComponent(`navigation.SearchScreen`, () => SearchScreen);

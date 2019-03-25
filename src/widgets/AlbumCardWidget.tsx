@@ -5,6 +5,7 @@ import { UserAlbum } from 'albumin-diet-types';
 
 interface Props {
 	albumDescriptor: UserAlbum,
+	onPress?: (albumDescriptor: UserAlbum) => any,
 	style?: StyleProp<ViewStyle>
 }
 
@@ -43,9 +44,14 @@ export default class AlbumCardWidget extends Component<Props, State> {
 		return this.props.albumDescriptor.album.name;
 	}
 
+	onPressed = () => {
+		if (!this.props.onPress) return;
+		this.props.onPress(this.props.albumDescriptor);
+	}
+
 	render() {
 		return (
-			<Card style={this.props.style} elevation={3}>
+			<Card onPress={this.onPressed} style={this.props.style} elevation={3}>
 				<Card.Cover source={{ uri: this.imageUrl }} />
 				<Card.Content style={styles.content}>
 					<Paragraph>{this.artistName}</Paragraph>

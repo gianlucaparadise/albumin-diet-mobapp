@@ -1,11 +1,19 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, StyleProp, ViewStyle } from 'react-native';
+import { Platform, StyleSheet, Text, View, StyleProp, ViewStyle, Image } from 'react-native';
 import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
 import { UserAlbum } from 'albumin-diet-types';
+import { Navigation } from 'react-native-navigation';
 
 interface Props {
 	albumDescriptor: UserAlbum,
-	onPress?: (albumDescriptor: UserAlbum) => any,
+
+	/**
+	 * This callback gets called when the user clicks an album
+	 * @param albumDescriptor Clicked album
+	 * @param elementId Id for shared transition
+	 */
+	onPress?: (albumDescriptor: UserAlbum, elementId: string) => any,
+
 	style?: StyleProp<ViewStyle>
 }
 
@@ -44,15 +52,28 @@ export default class AlbumCardWidget extends Component<Props, State> {
 		return this.props.albumDescriptor.album.name;
 	}
 
+	/**
+	 * This is used for shared transition
+	 */
+	get elementId() {
+		return `image${this.props.albumDescriptor.album.id}`;
+	}
+
 	onPressed = () => {
 		if (!this.props.onPress) return;
-		this.props.onPress(this.props.albumDescriptor);
+		this.props.onPress(this.props.albumDescriptor, this.elementId);
 	}
 
 	render() {
 		return (
 			<Card onPress={this.onPressed} style={this.props.style} elevation={3}>
-				<Card.Cover source={{ uri: this.imageUrl }} />
+				<Navigation.Element elementId={this.elementId}>
+					<Image
+						resizeMode="cover"
+						style={styles.cover}
+						source={{ uri: this.imageUrl }}
+					/>
+				</Navigation.Element>
 				<Card.Content style={styles.content}>
 					<Paragraph>{this.artistName}</Paragraph>
 					<Paragraph>{this.releaseYear}</Paragraph>
@@ -70,7 +91,8 @@ const styles = StyleSheet.create({
 	content: {
 		marginTop: 5,
 	},
-	// image: {
-	// 	resizeMode: 'cover',
-	// }
+	cover: {
+		width: '100%',
+		aspectRatio: 1,
+	}
 });

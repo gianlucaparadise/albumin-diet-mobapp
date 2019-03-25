@@ -5,6 +5,7 @@ import { ConnectionHelper } from '../helpers/ConnectionHelper';
 import AlbumCardWidget from '../widgets/AlbumCardWidget';
 import { GetAlbumResponse, UserAlbum } from 'albumin-diet-types';
 import { Navigation } from 'react-native-navigation';
+import AlbumDetailScreen from './AlbumDetailScreen';
 
 interface Props {
 	componentId: string
@@ -89,12 +90,20 @@ export default class MyAlbumsScreen extends Component<Props, State> {
 		}
 	}
 
-	goToDetail = (albumDescriptor: UserAlbum) => {
+	goToDetail = (albumDescriptor: UserAlbum, elementId: string) => {
 		Navigation.push(this.props.componentId, {
 			component: {
 				name: 'navigation.AlbumDetailScreen',
 				passProps: {
 					albumDescriptor: albumDescriptor
+				},
+				options: {
+					customTransition: {
+						animations: [
+							{ type: 'sharedElement', fromId: elementId, toId: AlbumDetailScreen.IMAGE_ELEMENT_ID, startDelay: 0, springVelocity: 0.2, duration: 0.5 }
+						],
+						duration: 0.8
+					}
 				}
 			}
 		});

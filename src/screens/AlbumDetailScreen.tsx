@@ -21,6 +21,8 @@ export default class AlbumDetailScreen extends Component<Props> {
 		};
 	}
 
+	public static readonly IMAGE_ELEMENT_ID = 'detailImage';
+
 	componentDidMount() {
 		Navigation.events().bindComponent(this);
 	}
@@ -93,11 +95,14 @@ export default class AlbumDetailScreen extends Component<Props> {
 	render() {
 		return (
 			<ScrollView contentContainerStyle={styles.container}>
-				<Image
-					resizeMode="cover"
-					style={styles.cover}
-					source={{ uri: this.imageUrl }}
-				/>
+				<Navigation.Element elementId={AlbumDetailScreen.IMAGE_ELEMENT_ID}>
+					<Image
+						resizeMode="cover"
+						style={styles.cover}
+						source={{ uri: this.imageUrl }}
+					/>
+				</Navigation.Element>
+				<View style={styles.space} />
 				<Headline style={styles.text}>{this.albumName}</Headline>
 				<Subheading style={styles.text}>{this.artistName}</Subheading>
 				<Subheading style={styles.text}>{this.releaseYear}</Subheading>
@@ -115,7 +120,10 @@ const styles = StyleSheet.create({
 	cover: {
 		width: '100%',
 		aspectRatio: 1,
-		marginBottom: 10
+	},
+	space: {
+		height: 10,
+		width: '100%'
 	},
 	text: {
 		textAlign: 'center'

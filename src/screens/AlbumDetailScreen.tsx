@@ -1,41 +1,50 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, Button, Image, ScrollView } from 'react-native';
-// import { Navigation } from 'react-native-navigation';
 import { UserAlbum } from 'albumin-diet-types';
 import { Headline, Subheading } from 'react-native-paper';
 import { TrackObjectSimplified } from 'spotify-web-api-node-typings';
+import { NavigationScreenProps } from 'react-navigation';
+import { MyNavigationScreenOptionsGetter } from '../../types/react-navigation-types';
+import { NavigationScreenOptions } from 'react-navigation';
 
-interface Props {
-	componentId: string,
+interface Props extends NavigationScreenProps {
+}
+
+export interface AlbumDetailNavigationParams {
 	albumDescriptor: UserAlbum
 }
 
 export default class AlbumDetailScreen extends Component<Props> {
-	static options(passProps: Props) {
-		return {
-			topBar: {
-				title: {
-					text: passProps.albumDescriptor.album.name
-				},
-			}
-		};
-	}
+	// static options(passProps: Props) {
+	// 	return {
+	// 		topBar: {
+	// 			title: {
+	// 				text: passProps.albumDescriptor.album.name
+	// 			},
+	// 		}
+	// 	};
+	// }
+	static navigationOptions: MyNavigationScreenOptionsGetter<NavigationScreenOptions> = (navigationOptions) => {
+		const albumDescriptor: UserAlbum = navigationOptions.navigation.getParam('albumDescriptor');
+		const options: NavigationScreenOptions = { title: albumDescriptor.album.name };
+		return options;
+	};
 
-	public static readonly IMAGE_ELEMENT_ID = 'detailImage';
+	// public static readonly IMAGE_ELEMENT_ID = 'detailImage';
 
 	componentDidMount() {
-		// Navigation.events().bindComponent(this);
 	}
 
-	componentDidAppear() {
+	get albumDescriptor() {
+		return this.props.navigation.getParam('albumDescriptor');
 	}
 
 	get artistName() {
-		return this.props.albumDescriptor.album.artists[0].name;
+		return this.albumDescriptor.album.artists[0].name;
 	}
 
 	get releaseYear() {
-		const releaseDate = this.props.albumDescriptor.album.release_date;
+		const releaseDate = this.albumDescriptor.album.release_date;
 		try {
 			const date = new Date(releaseDate);
 			return date.getFullYear();
@@ -47,15 +56,15 @@ export default class AlbumDetailScreen extends Component<Props> {
 	}
 
 	get imageUrl() {
-		return this.props.albumDescriptor.album.images[0].url;
+		return this.albumDescriptor.album.images[0].url;
 	}
 
 	get albumName() {
-		return this.props.albumDescriptor.album.name;
+		return this.albumDescriptor.album.name;
 	}
 
 	get totalTracks() {
-		return this.props.albumDescriptor.album.tracks.total;
+		return this.albumDescriptor.album.tracks.total;
 	}
 
 	calculateDuration(trackList: TrackObjectSimplified[]) {
@@ -86,7 +95,7 @@ export default class AlbumDetailScreen extends Component<Props> {
 	}
 
 	get totalDuration() {
-		const timespan = this.calculateDuration(this.props.albumDescriptor.album.tracks.items);
+		const timespan = this.calculateDuration(this.albumDescriptor.album.tracks.items);
 		const duration = this.timespanToString(timespan);
 
 		return duration;

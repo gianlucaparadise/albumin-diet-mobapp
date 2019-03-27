@@ -1,17 +1,12 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, Button } from 'react-native';
-// import { Navigation } from 'react-native-navigation';
+import { NavigationScreenProps } from 'react-navigation';
 
-interface Props {
-	componentId: string
+interface Props extends NavigationScreenProps {
 }
 
 export default class MyListeningListScreen extends Component<Props> {
 	componentDidMount() {
-		// Navigation.events().bindComponent(this);
-	}
-
-	componentDidAppear() {
 	}
 
 	render() {

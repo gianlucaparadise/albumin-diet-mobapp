@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, StyleProp, ViewStyle, Image } from 'react-native';
 import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
 import { UserAlbum } from 'albumin-diet-types';
-import { Navigation } from 'react-native-navigation';
+// import { Navigation } from 'react-native-navigation';
 
 interface Props {
 	albumDescriptor: UserAlbum,
@@ -67,13 +67,13 @@ export default class AlbumCardWidget extends Component<Props, State> {
 	render() {
 		return (
 			<Card onPress={this.onPressed} style={this.props.style} elevation={3}>
-				<Navigation.Element elementId={this.elementId}>
-					<Image
-						resizeMode="cover"
-						style={styles.cover}
-						source={{ uri: this.imageUrl }}
-					/>
-				</Navigation.Element>
+				{/* <Navigation.Element elementId={this.elementId}> */}
+				<Image
+					resizeMode="cover"
+					style={styles.cover}
+					source={{ uri: this.imageUrl }}
+				/>
+				{/* </Navigation.Element> */}
 				<Card.Content style={styles.content}>
 					<Paragraph>{this.artistName}</Paragraph>
 					<Paragraph>{this.releaseYear}</Paragraph>

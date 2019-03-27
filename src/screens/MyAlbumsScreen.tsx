@@ -4,11 +4,11 @@ import { Avatar, Button, Card, Title, Paragraph, FAB } from 'react-native-paper'
 import { ConnectionHelper } from '../helpers/ConnectionHelper';
 import AlbumCardWidget from '../widgets/AlbumCardWidget';
 import { GetAlbumResponse, UserAlbum } from 'albumin-diet-types';
-// import { Navigation } from 'react-native-navigation';
-import AlbumDetailScreen from './AlbumDetailScreen';
+import AlbumDetailScreen, { AlbumDetailNavigationParams } from './AlbumDetailScreen';
+import { NavigationScreenProps } from 'react-navigation';
+import { NavigationScreenOptions } from 'react-navigation';
 
-interface Props {
-	componentId: string
+interface Props extends NavigationScreenProps {
 }
 
 interface State {
@@ -16,18 +16,21 @@ interface State {
 }
 
 export default class MyAlbumsScreen extends Component<Props, State> {
-	static options(passProps: Props) {
-		// Vector icons in topbar: https://github.com/wix/react-native-navigation/issues/43
-		return {
-			topBar: {
-				rightButtons: [
-					{
-						id: 'filterButton',
-						icon: require('./../../asset/icons/filter_list.png')
-					}
-				],
-			}
-		}
+	// static options(passProps: Props) {
+	// 	// Vector icons in topbar: https://github.com/wix/react-native-navigation/issues/43
+	// 	return {
+	// 		topBar: {
+	// 			rightButtons: [
+	// 				{
+	// 					id: 'filterButton',
+	// 					icon: require('./../../asset/icons/filter_list.png')
+	// 				}
+	// 			],
+	// 		}
+	// 	}
+	// }
+	static navigationOptions: NavigationScreenOptions = {
+		title: 'Albums'
 	}
 
 	constructor(props: Props) {
@@ -39,33 +42,32 @@ export default class MyAlbumsScreen extends Component<Props, State> {
 	}
 
 	componentDidMount() {
-		// Navigation.events().bindComponent(this);
 		this.getAlbums();
 	}
 
-	componentDidAppear = () => {
-		console.log('MyAlbums Appeared!');
-		// If this worked, I would have enabled the side menu only in this page
-		// Navigation.mergeOptions('sideMenu', {
-		// 	sideMenu: {
-		// 		right: {
-		// 			enabled: true
-		// 		}
-		// 	}
-		// });
-	}
+	// componentDidAppear = () => {
+	// 	// console.log('MyAlbums Appeared!');
+	// 	// If this worked, I would have enabled the side menu only in this page
+	// 	// Navigation.mergeOptions('sideMenu', {
+	// 	// 	sideMenu: {
+	// 	// 		right: {
+	// 	// 			enabled: true
+	// 	// 		}
+	// 	// 	}
+	// 	// });
+	// }
 
-	componentDidDisappear = () => {
-		console.log('MyAlbums Disappeared!');
-		// If this worked, I would have enabled the side menu only in this page
-		// Navigation.mergeOptions('sideMenu', {
-		// 	sideMenu: {
-		// 		right: {
-		// 			enabled: false
-		// 		}
-		// 	}
-		// });
-	}
+	// componentDidDisappear = () => {
+	// 	// console.log('MyAlbums Disappeared!');
+	// 	// If this worked, I would have enabled the side menu only in this page
+	// 	// Navigation.mergeOptions('sideMenu', {
+	// 	// 	sideMenu: {
+	// 	// 		right: {
+	// 	// 			enabled: false
+	// 	// 		}
+	// 	// 	}
+	// 	// });
+	// }
 
 	navigationButtonPressed(args: any) {
 		if (args.buttonId === 'filterButton') {
@@ -107,6 +109,8 @@ export default class MyAlbumsScreen extends Component<Props, State> {
 		// 		}
 		// 	}
 		// });
+		const navigationParams: AlbumDetailNavigationParams = { albumDescriptor: albumDescriptor };
+		this.props.navigation.navigate('AlbumDetail', navigationParams);
 	}
 
 	render() {

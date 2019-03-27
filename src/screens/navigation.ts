@@ -1,102 +1,88 @@
-// import { Navigation } from "react-native-navigation";
+import { createStackNavigator, createSwitchNavigator } from "react-navigation";
+import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 
-// Custom bottomnavigation: https://github.com/wix/react-native-navigation/issues/498#issuecomment-456218215
-// Custom navbar: https://wix.github.io/react-native-navigation/#/docs/options-migration?id=navbarcustomview
+import WelcomeScreen from "./WelcomeScreen";
+import LoginScreen from "./LoginScreen";
+import SplashScreen from "./SplashScreen";
+import MyAlbumsScreen from "./MyAlbumsScreen";
+import MyListeningListScreen from "./MyListeningListScreen";
+import SearchScreen from "./SearchScreen";
+import MyProfileScreen from "./MyProfileScreen";
+import AlbumDetailScreen from "./AlbumDetailScreen";
 
-// export const goToLogin = () => Navigation.setRoot({
-// 	root: {
-// 		stack: {
-// 			id: 'LoginNavigator',
-// 			children: [
-// 				{
-// 					component: {
-// 						name: 'navigation.WelcomeScreen',
-// 					}
-// 				}
-// 			],
-// 		}
-// 	}
-// });
+const AlbumsFlow = createStackNavigator(
+	{
+		MyAlbums: MyAlbumsScreen,
+		AlbumDetail: AlbumDetailScreen,
+	},
+	{
+		initialRouteName: 'MyAlbums'
+	}
+);
 
-// export const goToHome = () => Navigation.setRoot({
-// 	root: {
-// 		sideMenu: {
-// 			id: 'sideMenu',
-// 			options: {
-// 				sideMenu: {
-// 					right: {
-// 						// this is enabled on in the correct page
-// 						enabled: false
-// 					}
-// 				}
-// 			},
-// 			center: {
-// 				bottomTabs: {
-// 					id: 'MainNavigator',
-// 					children: [
-// 						{
-// 							stack: {
-// 								children: [
-// 									{
-// 										component: {
-// 											name: 'navigation.MyAlbumsScreen',
-// 											options: {
-// 												bottomTab: {
-// 													// fontSize: 12,
-// 													text: 'Albums',
-// 													icon: require('./../../asset/icons/album.png')
-// 												}
-// 											}
-// 										}
-// 									}
-// 								]
-// 							},
-// 						},
-// 						{
-// 							component: {
-// 								name: 'navigation.MyListeningListScreen',
-// 								options: {
-// 									bottomTab: {
-// 										// fontSize: 12,
-// 										text: 'Listening List',
-// 										icon: require('./../../asset/icons/album.png')
-// 									}
-// 								}
-// 							},
-// 						},
-// 						{
-// 							component: {
-// 								name: 'navigation.SearchScreen',
-// 								options: {
-// 									bottomTab: {
-// 										// fontSize: 12,
-// 										text: 'Search',
-// 										icon: require('./../../asset/icons/search.png')
-// 									}
-// 								}
-// 							},
-// 						},
-// 						{
-// 							component: {
-// 								name: 'navigation.MyProfileScreen',
-// 								options: {
-// 									bottomTab: {
-// 										// fontSize: 12,
-// 										text: 'Profile',
-// 										icon: require('./../../asset/icons/person.png')
-// 									}
-// 								}
-// 							},
-// 						},
-// 					],
-// 				}
-// 			},
-// 			right: {
-// 				component: {
-// 					name: 'navigation.TagsFilterScreen',
-// 					id: 'rightSideMenu'
-// 				}
-// 			}
-// 		},
-// 	}
-// });
+const ListeningListFlow = createStackNavigator(
+	{
+		MyListeningList: MyListeningListScreen,
+	},
+	{
+		initialRouteName: 'MyListeningList'
+	}
+);
+
+const SearchFlow = createStackNavigator(
+	{
+		Search: SearchScreen,
+	},
+	{
+		initialRouteName: 'Search'
+	}
+);
+
+const ProfileFlow = createStackNavigator(
+	{
+		MyProfile: MyProfileScreen,
+	},
+	{
+		initialRouteName: 'MyProfile'
+	}
+);
+
+const HomeStack = createMaterialBottomTabNavigator(
+	{
+		AlbumsFlow: AlbumsFlow,
+		ListeningListFlow: ListeningListFlow,
+		SearchFlow: SearchFlow,
+		ProfileFlow: ProfileFlow
+	},
+	{
+		shifting: false,
+		labeled: true,
+		paths: {
+			AlbumsFlow: 'Albums',
+			ListeningListFlow: 'ListeningList',
+			SearchFlow: 'Search',
+			ProfileFlow: 'Profile'
+		},
+	}
+);
+
+const LoginStack = createStackNavigator(
+	{
+		Welcome: WelcomeScreen,
+		Login: LoginScreen,
+	},
+	{
+		initialRouteName: 'Welcome',
+	}
+);
+
+export const RootStack = createSwitchNavigator(
+	{
+		Splash: SplashScreen,
+		HomeFlow: HomeStack,
+		LoginFlow: LoginStack,
+	},
+	{
+		initialRouteName: 'Splash'
+	}
+);

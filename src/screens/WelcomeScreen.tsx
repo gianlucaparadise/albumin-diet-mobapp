@@ -1,25 +1,13 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, Button } from 'react-native';
-// import { Navigation } from 'react-native-navigation';
+import { NavigationScreenProps } from 'react-navigation';
 
-interface Props {
-	componentId: string
+interface Props extends NavigationScreenProps {
 }
 
 export default class WelcomeScreen extends Component<Props> {
-	componentDidMount() {
-		// Navigation.events().bindComponent(this);
-	}
-
-	componentDidAppear() {
-	}
-
 	goToLogin = () => {
-		// Navigation.push(this.props.componentId, {
-		// 	component: {
-		// 		name: 'navigation.LoginScreen'
-		// 	}
-		// })
+		this.props.navigation.navigate('Login');
 	};
 
 	render() {

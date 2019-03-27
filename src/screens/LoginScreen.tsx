@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, NativeSyntheticEvent } from 'react-native';
 import { WebView, WebViewNavigation, WebViewError, WebViewIOSLoadRequestEvent } from "react-native-webview";
-import { goToHome } from './navigation';
 import { LoginHelper } from '../helpers/LoginHelper';
+import { NavigationScreenProps } from 'react-navigation';
 
-interface Props {
-	componentId: string
+interface Props extends NavigationScreenProps {
 }
 
 export default class LoginScreen extends Component<Props> {
@@ -50,7 +49,7 @@ export default class LoginScreen extends Component<Props> {
 		console.log('Getting token');
 		try {
 			await LoginHelper.Instance.finishLogin(url);
-			goToHome();
+			this.props.navigation.navigate('HomeFlow');
 		}
 		catch (ex) {
 			console.error('Error while finishing login');

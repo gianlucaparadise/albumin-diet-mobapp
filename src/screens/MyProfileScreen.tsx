@@ -1,25 +1,19 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, Button, NativeSyntheticEvent, NativeTouchEvent } from 'react-native';
-// import { Navigation } from 'react-native-navigation';
 import { LoginHelper } from '../helpers/LoginHelper';
-import { goToLogin } from './navigation';
+import { NavigationScreenProps } from 'react-navigation';
 
-interface Props {
-	componentId: string
+interface Props extends NavigationScreenProps {
 }
 
 export default class MyProfileScreen extends Component<Props> {
 	componentDidMount() {
-		// Navigation.events().bindComponent(this);
-	}
-
-	componentDidAppear() {
 	}
 
 	logout = async () => {
 		try {
 			await LoginHelper.Instance.logout();
-			goToLogin();
+			this.props.navigation.navigate('LoginFlow');
 		} catch (error) {
 			console.error('Error while logging out');
 			console.error(error);

@@ -4,9 +4,9 @@ import { Platform, StyleSheet, Text, View, FlatList } from 'react-native';
 import { Button, Chip } from 'react-native-paper';
 import { ConnectionHelper } from '../helpers/ConnectionHelper';
 import { ITag } from 'albumin-diet-types';
+import { DrawerItemsProps } from 'react-navigation';
 
-interface Props {
-	componentId: string
+interface Props extends DrawerItemsProps {
 }
 
 interface State {
@@ -23,11 +23,7 @@ export default class TagsFilterScreen extends Component<Props, State> {
 	}
 
 	componentDidMount() {
-		// Navigation.events().bindComponent(this);
 		this.getTags();
-	}
-
-	componentDidAppear() {
 	}
 
 	getTags = async () => {
@@ -50,7 +46,16 @@ export default class TagsFilterScreen extends Component<Props, State> {
 		// 		}
 		// 	}
 		// });
+		this.props.navigation.closeDrawer();
 	}
+
+	// https://codeburst.io/custom-drawer-using-react-navigation-80abbab489f7
+	// navigateToScreen = (route) => () => {
+	// 	const navigateAction = NavigationActions.navigate({
+	// 	  routeName: route
+	// 	});
+	// 	this.props.navigation.dispatch(navigateAction);
+	//   }
 
 	onTagPressed = () => {
 		console.log('Tag pressed');

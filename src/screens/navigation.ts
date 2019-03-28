@@ -1,4 +1,4 @@
-import { createStackNavigator, createSwitchNavigator } from "react-navigation";
+import { createStackNavigator, createSwitchNavigator, createDrawerNavigator } from "react-navigation";
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 
 import WelcomeScreen from "./WelcomeScreen";
@@ -9,39 +9,39 @@ import MyListeningListScreen from "./MyListeningListScreen";
 import SearchScreen from "./SearchScreen";
 import MyProfileScreen from "./MyProfileScreen";
 import AlbumDetailScreen from "./AlbumDetailScreen";
+import TagsFilterScreen from "./TagsFilterScreen";
+
+const screens = {
+	MyAlbums: MyAlbumsScreen,
+	AlbumDetail: AlbumDetailScreen,
+	MyListeningList: MyListeningListScreen,
+	Search: SearchScreen,
+	MyProfile: MyProfileScreen,
+}
 
 const AlbumsFlow = createStackNavigator(
-	{
-		MyAlbums: MyAlbumsScreen,
-		AlbumDetail: AlbumDetailScreen,
-	},
+	screens,
 	{
 		initialRouteName: 'MyAlbums'
 	}
 );
 
 const ListeningListFlow = createStackNavigator(
-	{
-		MyListeningList: MyListeningListScreen,
-	},
+	screens,
 	{
 		initialRouteName: 'MyListeningList'
 	}
 );
 
 const SearchFlow = createStackNavigator(
-	{
-		Search: SearchScreen,
-	},
+	screens,
 	{
 		initialRouteName: 'Search'
 	}
 );
 
 const ProfileFlow = createStackNavigator(
-	{
-		MyProfile: MyProfileScreen,
-	},
+	screens,
 	{
 		initialRouteName: 'MyProfile'
 	}
@@ -49,20 +49,45 @@ const ProfileFlow = createStackNavigator(
 
 const HomeStack = createMaterialBottomTabNavigator(
 	{
-		AlbumsFlow: AlbumsFlow,
-		ListeningListFlow: ListeningListFlow,
-		SearchFlow: SearchFlow,
-		ProfileFlow: ProfileFlow
+		AlbumsFlow: {
+			screen: AlbumsFlow,
+			navigationOptions: {
+				tabBarLabel: 'Albums',
+			},
+		},
+		ListeningListFlow: {
+			screen: ListeningListFlow,
+			navigationOptions: {
+				tabBarLabel: 'Listening List',
+			},
+		},
+		SearchFlow: {
+			screen: SearchFlow,
+			navigationOptions: {
+				tabBarLabel: 'Search',
+			},
+		},
+		ProfileFlow: {
+			screen: ProfileFlow,
+			navigationOptions: {
+				tabBarLabel: 'Profile',
+			},
+		},
 	},
 	{
 		shifting: false,
 		labeled: true,
-		paths: {
-			AlbumsFlow: 'Albums',
-			ListeningListFlow: 'ListeningList',
-			SearchFlow: 'Search',
-			ProfileFlow: 'Profile'
-		},
+	}
+);
+
+const HomeDrawer = createDrawerNavigator(
+	{
+		HomeTabs: HomeStack, // this is needed by the library, but it's never used
+	},
+	{
+		drawerPosition: 'right',
+		contentComponent: TagsFilterScreen,
+		drawerLockMode: 'locked-closed', // this is enabled on in the correct page
 	}
 );
 
@@ -79,7 +104,7 @@ const LoginStack = createStackNavigator(
 export const RootStack = createSwitchNavigator(
 	{
 		Splash: SplashScreen,
-		HomeFlow: HomeStack,
+		HomeFlow: HomeDrawer,
 		LoginFlow: LoginStack,
 	},
 	{

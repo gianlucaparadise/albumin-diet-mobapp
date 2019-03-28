@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, FlatList } from 'react-native';
-import { Avatar, Button, Card, Title, Paragraph, FAB } from 'react-native-paper';
+import { Avatar, Button, Card, Title, Paragraph, FAB, IconButton } from 'react-native-paper';
 import { ConnectionHelper } from '../helpers/ConnectionHelper';
 import AlbumCardWidget from '../widgets/AlbumCardWidget';
 import { GetAlbumResponse, UserAlbum } from 'albumin-diet-types';
 import AlbumDetailScreen, { AlbumDetailNavigationParams } from './AlbumDetailScreen';
 import { NavigationScreenProps } from 'react-navigation';
 import { NavigationScreenOptions } from 'react-navigation';
+import { MyNavigationScreenOptionsGetter } from '../../types/react-navigation-types';
 
 interface Props extends NavigationScreenProps {
 }
@@ -16,21 +17,18 @@ interface State {
 }
 
 export default class MyAlbumsScreen extends Component<Props, State> {
-	// static options(passProps: Props) {
-	// 	// Vector icons in topbar: https://github.com/wix/react-native-navigation/issues/43
-	// 	return {
-	// 		topBar: {
-	// 			rightButtons: [
-	// 				{
-	// 					id: 'filterButton',
-	// 					icon: require('./../../asset/icons/filter_list.png')
-	// 				}
-	// 			],
-	// 		}
-	// 	}
-	// }
-	static navigationOptions: NavigationScreenOptions = {
-		title: 'Albums'
+	// TODO: add react-native-paper AppBar.Header as custom Header: https://hackernoon.com/how-to-use-a-custom-header-and-custom-bottom-tab-bar-for-react-native-with-react-navigation-969a5d3cabb1
+	static navigationOptions: MyNavigationScreenOptionsGetter<NavigationScreenOptions> = (navigationOptions) => {
+		return {
+			title: 'Albums',
+			headerRight: (
+				<IconButton
+					icon="filter-list"
+					onPress={navigationOptions.navigation.getParam('onFilterClicked')}
+				/>
+			),
+			// drawerLockMode: "unlocked" // If this worked, I would have enabled the side menu only in this page
+		};
 	}
 
 	constructor(props: Props) {
@@ -42,43 +40,13 @@ export default class MyAlbumsScreen extends Component<Props, State> {
 	}
 
 	componentDidMount() {
+		this.props.navigation.setParams({ onFilterClicked: this.onFilterClicked });
 		this.getAlbums();
 	}
 
-	// componentDidAppear = () => {
-	// 	// console.log('MyAlbums Appeared!');
-	// 	// If this worked, I would have enabled the side menu only in this page
-	// 	// Navigation.mergeOptions('sideMenu', {
-	// 	// 	sideMenu: {
-	// 	// 		right: {
-	// 	// 			enabled: true
-	// 	// 		}
-	// 	// 	}
-	// 	// });
-	// }
-
-	// componentDidDisappear = () => {
-	// 	// console.log('MyAlbums Disappeared!');
-	// 	// If this worked, I would have enabled the side menu only in this page
-	// 	// Navigation.mergeOptions('sideMenu', {
-	// 	// 	sideMenu: {
-	// 	// 		right: {
-	// 	// 			enabled: false
-	// 	// 		}
-	// 	// 	}
-	// 	// });
-	// }
-
-	navigationButtonPressed(args: any) {
-		if (args.buttonId === 'filterButton') {
-			// Navigation.mergeOptions('rightSideMenu', {
-			// 	sideMenu: {
-			// 		right: {
-			// 			visible: true
-			// 		}
-			// 	}
-			// });
-		}
+	onFilterClicked = () => {
+		console.log('Show filters');
+		this.props.navigation.openDrawer();
 	}
 
 	getAlbums = async () => {

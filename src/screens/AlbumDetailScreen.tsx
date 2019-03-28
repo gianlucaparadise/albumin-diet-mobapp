@@ -15,15 +15,6 @@ export interface AlbumDetailNavigationParams {
 }
 
 export default class AlbumDetailScreen extends Component<Props> {
-	// static options(passProps: Props) {
-	// 	return {
-	// 		topBar: {
-	// 			title: {
-	// 				text: passProps.albumDescriptor.album.name
-	// 			},
-	// 		}
-	// 	};
-	// }
 	static navigationOptions: MyNavigationScreenOptionsGetter<NavigationScreenOptions> = (navigationOptions) => {
 		const albumDescriptor: UserAlbum = navigationOptions.navigation.getParam('albumDescriptor');
 		const options: NavigationScreenOptions = { title: albumDescriptor.album.name };

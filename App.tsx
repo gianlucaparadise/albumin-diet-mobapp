@@ -1,7 +1,7 @@
 import React from 'react';
 import { createAppContainer } from 'react-navigation';
 
-import { RootStack } from './src/screens/navigation';
+import { RootStack } from './src/navigation';
 
 const AppContainer = createAppContainer(RootStack);
 

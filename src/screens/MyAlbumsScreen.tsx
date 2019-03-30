@@ -27,7 +27,7 @@ export default class MyAlbumsScreen extends Component<Props, State> {
 					onPress={navigationOptions.navigation.getParam('onFilterClicked')}
 				/>
 			),
-			// drawerLockMode: "unlocked" // If this worked, I would have enabled the side menu only in this page
+			drawerLockMode: "unlocked",
 		};
 	}
 

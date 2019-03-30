@@ -1,6 +1,8 @@
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 
-export type MyNavigationScreenOptionsGetter<Options> = (getterParam: {
+export type MyNavigationScreenOptionsGetterParam = {
 	navigation: NavigationScreenProp<NavigationRoute<any>>,
 	screenProps?: { [key: string]: any }
-}) => Options;
+};
+
+export type MyNavigationScreenOptionsGetter<Options> = (getterParam: MyNavigationScreenOptionsGetterParam) => Options;

@@ -1,12 +1,22 @@
 import { AlbumsFlow, ListeningListFlow, SearchFlow, ProfileFlow } from "./HomeStacks";
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
+import { getActiveChildNavigationOptions, NavigationScreenOptions } from "react-navigation";
+import { MyNavigationScreenOptionsGetter, MyNavigationScreenOptionsGetterParam } from "../../types/react-navigation-types";
+
+const extractActiveChildNavigationOptions = (navigationOptions: MyNavigationScreenOptionsGetterParam, optionName: string) => {
+	const activeChildOptions = getActiveChildNavigationOptions(navigationOptions.navigation, navigationOptions.screenProps);
+	return activeChildOptions[optionName];
+};
 
 export const HomeTabs = createMaterialBottomTabNavigator(
 	{
 		AlbumsFlow: {
 			screen: AlbumsFlow,
-			navigationOptions: {
-				tabBarLabel: 'Albums',
+			navigationOptions: (navigationOptions: MyNavigationScreenOptionsGetterParam): NavigationScreenOptions => {
+				return {
+					tabBarLabel: 'Albums',
+					drawerLockMode: extractActiveChildNavigationOptions(navigationOptions, 'drawerLockMode')
+				}
 			},
 		},
 		ListeningListFlow: {
@@ -33,3 +43,9 @@ export const HomeTabs = createMaterialBottomTabNavigator(
 		labeled: true,
 	}
 );
+
+HomeTabs.navigationOptions = (navigationOptions: MyNavigationScreenOptionsGetterParam): NavigationScreenOptions => {
+	return {
+		drawerLockMode: extractActiveChildNavigationOptions(navigationOptions, 'drawerLockMode')
+	}
+};

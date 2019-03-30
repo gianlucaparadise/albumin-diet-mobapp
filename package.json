@@ -8,6 +8,11 @@
     "tsc": "tsc",
     "emulator": "~/Library/Android/sdk/emulator/emulator @Pixel_2_API_28"
   },
+  "rnpm": {
+    "assets": [
+      "resources/fonts"
+    ]
+  },
   "dependencies": {
     "react": "16.6.3",
     "react-native": "0.58.6",

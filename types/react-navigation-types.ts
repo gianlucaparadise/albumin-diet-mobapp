@@ -1,4 +1,4 @@
-import { NavigationScreenProp, NavigationRoute } from "react-navigation";
+import { NavigationScreenProp, NavigationRoute, NavigationTransitionProps, TransitionConfig } from "react-navigation";
 
 export type MyNavigationScreenOptionsGetterParam = {
 	navigation: NavigationScreenProp<NavigationRoute<any>>,
@@ -6,3 +6,10 @@ export type MyNavigationScreenOptionsGetterParam = {
 };
 
 export type MyNavigationScreenOptionsGetter<Options> = (getterParam: MyNavigationScreenOptionsGetterParam) => Options;
+
+// This type is taken from `interface NavigationStackViewConfig` property `transitionConfig`
+export type TransitionConfigType = (
+	transitionProps: NavigationTransitionProps,
+	prevTransitionProps: NavigationTransitionProps,
+	isModal: boolean
+) => TransitionConfig;

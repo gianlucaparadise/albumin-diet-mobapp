@@ -2,6 +2,7 @@ import WelcomeScreen from "./../screens/WelcomeScreen";
 import LoginScreen from "./../screens/LoginScreen";
 
 import { createStackNavigator } from "react-navigation";
+import { RightToLeftTransitionConfig } from "./helpers";
 
 export const LoginStack = createStackNavigator(
 	{
@@ -10,5 +11,6 @@ export const LoginStack = createStackNavigator(
 	},
 	{
 		initialRouteName: 'Welcome',
+		transitionConfig: RightToLeftTransitionConfig,
 	}
 );

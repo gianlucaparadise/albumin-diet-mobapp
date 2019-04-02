@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, Button, Image, ScrollView } from 'react-native';
+import { StyleSheet, View, Image, ScrollView } from 'react-native';
 import { UserAlbum } from 'albumin-diet-types';
 import { Headline, Subheading } from 'react-native-paper';
 import { TrackObjectSimplified } from 'spotify-web-api-node-typings';

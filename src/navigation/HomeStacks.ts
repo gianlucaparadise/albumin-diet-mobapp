@@ -1,12 +1,12 @@
 import { screens } from "./screens";
 import { createStackNavigator } from "react-navigation";
-import { RightToLeftTransitionConfig } from "./helpers";
+import { commonStackConfig } from "./helpers";
 
 export const AlbumsFlow = createStackNavigator(
 	screens,
 	{
 		initialRouteName: 'MyAlbums',
-		transitionConfig: RightToLeftTransitionConfig,
+		...commonStackConfig,
 	}
 );
 
@@ -14,7 +14,7 @@ export const ListeningListFlow = createStackNavigator(
 	screens,
 	{
 		initialRouteName: 'MyListeningList',
-		transitionConfig: RightToLeftTransitionConfig,
+		...commonStackConfig,
 	}
 );
 
@@ -22,7 +22,7 @@ export const SearchFlow = createStackNavigator(
 	screens,
 	{
 		initialRouteName: 'Search',
-		transitionConfig: RightToLeftTransitionConfig,
+		...commonStackConfig,
 	}
 );
 
@@ -30,6 +30,6 @@ export const ProfileFlow = createStackNavigator(
 	screens,
 	{
 		initialRouteName: 'MyProfile',
-		transitionConfig: RightToLeftTransitionConfig,
+		...commonStackConfig,
 	}
 );

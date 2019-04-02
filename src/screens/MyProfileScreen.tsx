@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, Button, NativeSyntheticEvent, NativeTouchEvent } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { LoginHelper } from '../helpers/LoginHelper';
 import { NavigationScreenProps } from 'react-navigation';
+import { Text, Button } from 'react-native-paper';
 
 interface Props extends NavigationScreenProps {
 }
@@ -24,7 +25,7 @@ export default class MyProfileScreen extends Component<Props> {
 		return (
 			<View style={styles.container}>
 				<Text style={styles.welcome}>My Profile</Text>
-				<Button onPress={this.logout} title='Logout' />
+				<Button onPress={this.logout}>Logout</Button>
 			</View>
 		);
 	}
@@ -35,7 +36,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: '#F5FCFF',
 	},
 	welcome: {
 		fontSize: 20,

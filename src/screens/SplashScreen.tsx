@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { LoginHelper } from '../helpers/LoginHelper';
 import { NavigationScreenProps } from 'react-navigation';
+import { Button, Text } from 'react-native-paper';
+import { AlbuminColors } from '../Theme';
 
 interface Props extends NavigationScreenProps {
 }
 
 export default class SplashScreen extends Component<Props> {
-	componentDidAppear() {
-
-	}
 
 	onPressGo = async () => {
 		const isLoggedIn = await LoginHelper.Instance.isLoggedIn();
@@ -26,10 +25,9 @@ export default class SplashScreen extends Component<Props> {
 		return (
 			<View style={styles.container}>
 				<Text style={styles.welcome}>Albumin Diet</Text>
-				<Button
-					onPress={this.onPressGo}
-					title="Go"
-				/>
+				<Button onPress={this.onPressGo}>
+					Go
+				</Button>
 			</View>
 		);
 	}
@@ -40,7 +38,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: '#F5FCFF',
+		backgroundColor: AlbuminColors.background,
 	},
 	welcome: {
 		fontSize: 20,

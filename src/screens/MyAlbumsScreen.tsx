@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, FlatList } from 'react-native';
-import { Avatar, Button, Card, Title, Paragraph, FAB, IconButton } from 'react-native-paper';
+import { StyleSheet, View, FlatList } from 'react-native';
+import { IconButton } from 'react-native-paper';
 import { ConnectionHelper } from '../helpers/ConnectionHelper';
 import AlbumCardWidget from '../widgets/AlbumCardWidget';
-import { GetAlbumResponse, UserAlbum } from 'albumin-diet-types';
-import AlbumDetailScreen, { AlbumDetailNavigationParams } from './AlbumDetailScreen';
+import { UserAlbum } from 'albumin-diet-types';
+import { AlbumDetailNavigationParams } from './AlbumDetailScreen';
 import { NavigationScreenProps } from 'react-navigation';
 import { NavigationScreenOptions } from 'react-navigation';
 import { MyNavigationScreenOptionsGetter } from '../../types/react-navigation-types';

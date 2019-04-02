@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
+import { Text } from 'react-native-paper';
 
 interface Props extends NavigationScreenProps {
 }
@@ -23,7 +24,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: '#F5FCFF',
 	},
 	welcome: {
 		fontSize: 20,

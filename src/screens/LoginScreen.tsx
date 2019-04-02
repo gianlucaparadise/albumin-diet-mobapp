@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, NativeSyntheticEvent } from 'react-native';
+import { StyleSheet, NativeSyntheticEvent } from 'react-native';
 import { WebView, WebViewNavigation, WebViewError, WebViewIOSLoadRequestEvent } from "react-native-webview";
 import { LoginHelper } from '../helpers/LoginHelper';
 import { NavigationScreenProps } from 'react-navigation';
@@ -78,7 +78,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: '#F5FCFF',
 	},
 	welcome: {
 		fontSize: 20,

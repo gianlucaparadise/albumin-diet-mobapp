@@ -1,4 +1,4 @@
-import { GetMyAlbumsResponse, GetMyTagsResponse } from "albumin-diet-types";
+import { GetMyAlbumsResponse, GetMyTagsResponse, UserAlbumsResponse } from "albumin-diet-types";
 import { LoginHelper } from "./LoginHelper";
 import { Platform } from "react-native";
 
@@ -57,12 +57,29 @@ export class ConnectionHelper {
 		return result;
 	}
 
-	public async getTags() {
+	public async getTags(): Promise<GetMyTagsResponse> {
 		const url = this.getUrl(`/api/me/tag`);
 		const request = new Request(url);
 
 		const response = await this.send<GetMyTagsResponse>(request);
 
 		return response;
+	}
+
+	async getListeningList(offset = 0, limit = 20): Promise<UserAlbumsResponse> {
+		let params = '';
+		if (offset) {
+			params += `offset=${encodeURIComponent(offset.toString())}`;
+		}
+		if (limit) {
+			params += `limit=${limit.toString()}`;
+		}
+
+		const url = this.getUrl(`/api/me/listening-list?${params}`);
+		const request = new Request(url);
+
+		const result = await this.send<UserAlbumsResponse>(request);
+
+		return result;
 	}
 }

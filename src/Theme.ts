@@ -11,11 +11,8 @@ export const AlbuminColors = {
 	// disabled: '#00FF00',
 	// placeholder: '#0000FF',
 	appbar: '#212121',
+	chips: '#616161',
 }
-
-// chips: #616161
-// drawer: #424242
-// main background: #303030
 
 export const AlbuminTheme: Theme = {
 	...DefaultTheme,

@@ -5,6 +5,7 @@ import { ConnectionHelper } from '../helpers/ConnectionHelper';
 import { ITag } from 'albumin-diet-types';
 import { DrawerItemsProps } from 'react-navigation';
 import TagChip, { ITagSelectable } from '../widgets/TagChip';
+import { AlbuminColors } from '../Theme';
 
 interface Props extends DrawerItemsProps {
 }
@@ -84,7 +85,8 @@ export default class TagsFilterScreen extends Component<Props, State> {
 							tag={item}
 							onSelected={this.onTagSelected}
 							onDeselected={this.onTagDeselected}
-							style={styles.listItem} />
+							style={styles.listItem}
+							selectedStyle={styles.selectedListItem} />
 					)}
 					keyExtractor={(item, index) => item.uniqueId}
 					extraData={this.state}
@@ -105,6 +107,8 @@ const styles = StyleSheet.create({
 	listItem: {
 		marginTop: 7,
 		marginBottom: 7,
-		// backgroundColor: AlbuminColors.chips
+	},
+	selectedListItem: {
+		backgroundColor: AlbuminColors.primary
 	},
 });

@@ -12,11 +12,19 @@ interface Props {
 	tag: ITagSelectable,
 	onSelected?: (tag: ITagSelectable) => void,
 	onDeselected?: (tag: ITagSelectable) => void,
+	/**
+	 * This is the base style
+	 */
 	style?: StyleProp<ViewStyle>,
+	/**
+	 * This is the selected style to be added to base input style
+	 */
+	selectedStyle?: StyleProp<ViewStyle>,
 }
 
 interface State {
 	selected: boolean,
+	style?: StyleProp<ViewStyle>,
 }
 
 export default class TagChip extends Component<Props, State> {
@@ -24,7 +32,8 @@ export default class TagChip extends Component<Props, State> {
 		super(props);
 
 		this.state = {
-			selected: props.tag.selected
+			selected: props.tag.selected,
+			style: this.getStyle(props.tag),
 		};
 	}
 
@@ -35,14 +44,20 @@ export default class TagChip extends Component<Props, State> {
 	 * This is called the first time the component is shown
 	 */
 	componentWillMount() {
-		this.setState({ selected: this.props.tag.selected });
+		this.setState({
+			selected: this.props.tag.selected,
+			style: this.getStyle(this.props.tag),
+		});
 	}
 
 	/**
 	 * This is called every time the state change
 	 */
 	componentWillReceiveProps(nextProps: Props) {
-		this.setState({ selected: this.props.tag.selected });
+		this.setState({
+			selected: this.props.tag.selected,
+			style: this.getStyle(this.props.tag),
+		});
 	}
 
 	/**
@@ -65,6 +80,10 @@ export default class TagChip extends Component<Props, State> {
 		}
 	}
 
+	getStyle = (tag: ITagSelectable) => {
+		return tag.selected ? this.props.selectedStyle : null;
+	}
+
 	onTagPressed = () => {
 		console.log(`Tag pressed: ${this.props.tag.uniqueId}`);
 		this.setState((prevState) => {
@@ -72,7 +91,10 @@ export default class TagChip extends Component<Props, State> {
 			this.props.tag.selected = selected;
 			this.notifyChange(selected);
 
-			return { selected: selected };
+			return {
+				selected: selected,
+				style: this.getStyle(this.props.tag),
+			};
 		});
 	}
 
@@ -80,7 +102,7 @@ export default class TagChip extends Component<Props, State> {
 		return (
 			<Chip
 				selected={this.state.selected}
-				style={[styles.listItem, this.props.style]}
+				style={[styles.listItem, this.props.style, this.state.style]}
 				onPress={this.onTagPressed}>
 				{this.props.tag.name}
 			</Chip>

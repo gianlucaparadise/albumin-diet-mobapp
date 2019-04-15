@@ -1,14 +1,10 @@
-import WelcomeScreen from "./../screens/WelcomeScreen";
-import LoginScreen from "./../screens/LoginScreen";
+import { loginScreens as screens } from "../screens";
 
 import { createStackNavigator } from "react-navigation";
 import { commonStackConfig } from "./helpers";
 
 export const LoginStack = createStackNavigator(
-	{
-		Welcome: WelcomeScreen,
-		Login: LoginScreen,
-	},
+	screens,
 	{
 		initialRouteName: 'Welcome',
 		...commonStackConfig

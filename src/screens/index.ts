@@ -1,23 +1,23 @@
-// import { Navigation } from "react-native-navigation";
-
-import SplashScreen from "./SplashScreen";
-import LoginScreen from "./LoginScreen";
-import MyAlbumsScreen from "./MyAlbumsScreen";
-import MyListeningListScreen from "./MyListeningListScreen";
-import SearchScreen from "./SearchScreen";
-import MyProfileScreen from "./MyProfileScreen";
+import MyAlbumsScreen from "./../screens/MyAlbumsScreen";
+import MyListeningListScreen from "./../screens/MyListeningListScreen";
+import SearchScreen from "./../screens/SearchScreen";
+import MyProfileScreen from "./../screens/MyProfileScreen";
+import AlbumDetailScreen from "./../screens/AlbumDetailScreen";
 import WelcomeScreen from "./WelcomeScreen";
-import TagsFilterScreen from "./TagsFilterScreen";
-import AlbumDetailScreen from "./AlbumDetailScreen";
+import LoginScreen from "./LoginScreen";
 
-export function registerScreens() {
-	// Navigation.registerComponent(`navigation.SplashScreen`, () => SplashScreen);
-	// Navigation.registerComponent(`navigation.LoginScreen`, () => LoginScreen);
-	// Navigation.registerComponent(`navigation.WelcomeScreen`, () => WelcomeScreen);
-	// Navigation.registerComponent(`navigation.MyAlbumsScreen`, () => MyAlbumsScreen);
-	// Navigation.registerComponent(`navigation.AlbumDetailScreen`, () => AlbumDetailScreen);
-	// Navigation.registerComponent(`navigation.TagsFilterScreen`, () => TagsFilterScreen);
-	// Navigation.registerComponent(`navigation.MyListeningListScreen`, () => MyListeningListScreen);
-	// Navigation.registerComponent(`navigation.SearchScreen`, () => SearchScreen);
-	// Navigation.registerComponent(`navigation.MyProfileScreen`, () => MyProfileScreen);
+/**
+ * These are the screens that can be navigated in the main part of the app (Home)
+ */
+export const homeScreens = {
+	MyAlbums: MyAlbumsScreen,
+	AlbumDetail: AlbumDetailScreen,
+	MyListeningList: MyListeningListScreen,
+	Search: SearchScreen,
+	MyProfile: MyProfileScreen,
+}
+
+export const loginScreens = {
+	Welcome: WelcomeScreen,
+	Login: LoginScreen,
 }

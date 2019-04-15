@@ -1,4 +1,4 @@
-import { screens } from "./screens";
+import { homeScreens as screens } from "../screens";
 import { createStackNavigator } from "react-navigation";
 import { commonStackConfig } from "./helpers";
 

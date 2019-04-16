@@ -37,16 +37,16 @@ export class ConnectionHelper {
 	public async getAlbums(tags: string[] | null = null, showUntagged: boolean, offset = 0, limit = 20): Promise<GetMyAlbumsResponse> {
 		let params = '';
 		if (tags) {
-			params += `tags=${encodeURIComponent(JSON.stringify(tags))}`;
+			params += `&tags=${encodeURIComponent(JSON.stringify(tags))}`;
 		}
 		if (showUntagged) {
-			params += `untagged=true`;
+			params += `&untagged=true`;
 		}
 		if (offset) {
-			params += `offset=${offset}`;
+			params += `&offset=${offset}`;
 		}
 		if (limit) {
-			params += `limit=${limit}`;
+			params += `&limit=${limit}`;
 		}
 
 		const url = this.getUrl(`/api/me/album?${params}`);

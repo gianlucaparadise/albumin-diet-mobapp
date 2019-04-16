@@ -31,6 +31,8 @@ export default class MyAlbumsScreen extends Component<Props, State> {
 		};
 	}
 
+	selectedTags: string[] = [];
+
 	constructor(props: Props) {
 		super(props);
 
@@ -41,7 +43,18 @@ export default class MyAlbumsScreen extends Component<Props, State> {
 
 	componentDidMount() {
 		this.props.navigation.setParams({ onFilterClicked: this.onFilterClicked });
-		this.getAlbums();
+		this.getAlbums(this.selectedTags);
+	}
+
+	componentDidUpdate() {
+		const inputTags: string[] = this.props.navigation.getParam('tags');
+		const inputTag = inputTags ? inputTags[0] : null;
+		const selectedTag = this.selectedTags ? this.selectedTags[0] : null;
+
+		if (inputTag !== selectedTag) {
+			this.selectedTags = inputTags;
+			this.getAlbums(this.selectedTags);
+		}
 	}
 
 	onFilterClicked = () => {
@@ -49,9 +62,9 @@ export default class MyAlbumsScreen extends Component<Props, State> {
 		this.props.navigation.openDrawer();
 	}
 
-	getAlbums = async () => {
+	getAlbums = async (tags: string[]) => {
 		try {
-			const albumsResponse = await ConnectionHelper.Instance.getAlbums(null, false);
+			const albumsResponse = await ConnectionHelper.Instance.getAlbums(tags, false);
 			this.setState({ albumDescriptors: albumsResponse.data });
 		}
 		catch (error) {

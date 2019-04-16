@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
+import { StyleSheet, FlatList, StatusBar, SafeAreaView } from 'react-native';
 import { Button, Chip } from 'react-native-paper';
 import { ConnectionHelper } from '../helpers/ConnectionHelper';
 import { ITag } from 'albumin-diet-types';
-import { DrawerItemsProps } from 'react-navigation';
+import { DrawerItemsProps, NavigationActions } from 'react-navigation';
 import TagChip, { ITagSelectable } from '../widgets/TagChip';
 import { AlbuminColors } from '../Theme';
+import { NavigationState } from 'react-navigation';
 
 interface Props extends DrawerItemsProps {
 }
@@ -14,11 +15,22 @@ interface State {
 	tags: ITagSelectable[],
 }
 
+const getActiveRouteState = function (route: NavigationState): NavigationState {
+	if (!route.routes || route.routes.length === 0 || route.index >= route.routes.length) {
+		return route;
+	}
+
+	const childActiveRoute = route.routes[route.index] as NavigationState;
+	return getActiveRouteState(childActiveRoute);
+}
+
 export default class TagsFilterScreen extends Component<Props, State> {
 	selectedTags: ITagSelectable[] = [];
 
 	constructor(props: Props) {
 		super(props);
+
+		console.log(`StatusBar h: ${StatusBar.currentHeight}`);
 
 		this.state = {
 			tags: [],
@@ -43,6 +55,14 @@ export default class TagsFilterScreen extends Component<Props, State> {
 	}
 
 	onOkPress = () => {
+		const activeRoute = getActiveRouteState(this.props.navigation.state);
+
+		const tagIds = this.selectedTags.map(t => t.uniqueId);
+		const navigateAction = NavigationActions.setParams({
+			params: { tags: tagIds },
+			key: activeRoute.key,
+		});
+		this.props.navigation.dispatch(navigateAction);
 		this.props.navigation.closeDrawer();
 	}
 
@@ -75,7 +95,7 @@ export default class TagsFilterScreen extends Component<Props, State> {
 
 	render() {
 		return (
-			<View style={styles.container}>
+			<SafeAreaView style={styles.container}>
 				<Button onPress={this.onOkPress}>Ok</Button>
 				<FlatList
 					style={styles.list}
@@ -91,14 +111,15 @@ export default class TagsFilterScreen extends Component<Props, State> {
 					keyExtractor={(item, index) => item.uniqueId}
 					extraData={this.state}
 				/>
-			</View>
+			</SafeAreaView>
 		);
 	}
 }
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1
+		flex: 1,
+		marginTop: StatusBar.currentHeight,
 	},
 	list: {
 		paddingLeft: 14,

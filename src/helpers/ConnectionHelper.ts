@@ -69,13 +69,33 @@ export class ConnectionHelper {
 	async getListeningList(offset = 0, limit = 20): Promise<UserAlbumsResponse> {
 		let params = '';
 		if (offset) {
-			params += `offset=${encodeURIComponent(offset.toString())}`;
+			params += `&offset=${encodeURIComponent(offset.toString())}`;
 		}
 		if (limit) {
-			params += `limit=${limit.toString()}`;
+			params += `&limit=${limit.toString()}`;
 		}
 
 		const url = this.getUrl(`/api/me/listening-list?${params}`);
+		const request = new Request(url);
+
+		const result = await this.send<UserAlbumsResponse>(request);
+
+		return result;
+	}
+
+	async searchAlbums(keywords: string, offset = 0, limit = 20): Promise<UserAlbumsResponse> {
+		let params = '';
+		if (keywords) {
+			params += `&q=${encodeURIComponent(keywords)}`;
+		}
+		if (offset) {
+			params += `&offset=${offset.toString()}`;
+		}
+		if (limit) {
+			params += `&limit=${limit.toString()}`;
+		}
+
+		const url = this.getUrl(`/api/me/album/search?${params}`);
 		const request = new Request(url);
 
 		const result = await this.send<UserAlbumsResponse>(request);

@@ -16,6 +16,17 @@ interface State {
 	albumDescriptors: UserAlbum[]
 }
 
+export interface MyAlbumsNavigationParams {
+	/**
+	 * List of tag uniqueIds to use as a filter
+	 */
+	tags: string[],
+	/**
+	 * True if you want all the albums that are without tags
+	 */
+	untagged: boolean,
+}
+
 export default class MyAlbumsScreen extends Component<Props, State> {
 	// TODO: add react-native-paper AppBar.Header as custom Header: https://hackernoon.com/how-to-use-a-custom-header-and-custom-bottom-tab-bar-for-react-native-with-react-navigation-969a5d3cabb1
 	static navigationOptions: MyNavigationScreenOptionsGetter<NavigationScreenOptions> = (navigationOptions) => {
@@ -32,6 +43,7 @@ export default class MyAlbumsScreen extends Component<Props, State> {
 	}
 
 	selectedTags: string[] = [];
+	showUntagged: boolean = false;
 
 	constructor(props: Props) {
 		super(props);
@@ -43,17 +55,20 @@ export default class MyAlbumsScreen extends Component<Props, State> {
 
 	componentDidMount() {
 		this.props.navigation.setParams({ onFilterClicked: this.onFilterClicked });
-		this.getAlbums(this.selectedTags);
+		this.getAlbums(this.selectedTags, this.showUntagged);
 	}
 
 	componentDidUpdate() {
+		const untagged: boolean = this.props.navigation.getParam('untagged');
+
 		const inputTags: string[] = this.props.navigation.getParam('tags');
 		const inputTag = inputTags ? inputTags[0] : null;
 		const selectedTag = this.selectedTags ? this.selectedTags[0] : null;
 
-		if (inputTag !== selectedTag) {
+		if (inputTag !== selectedTag || this.showUntagged !== untagged) {
 			this.selectedTags = inputTags;
-			this.getAlbums(this.selectedTags);
+			this.showUntagged = untagged;
+			this.getAlbums(this.selectedTags, this.showUntagged);
 		}
 	}
 
@@ -62,9 +77,9 @@ export default class MyAlbumsScreen extends Component<Props, State> {
 		this.props.navigation.openDrawer();
 	}
 
-	getAlbums = async (tags: string[]) => {
+	getAlbums = async (tags: string[], showUntagged: boolean) => {
 		try {
-			const albumsResponse = await ConnectionHelper.Instance.getAlbums(tags, false);
+			const albumsResponse = await ConnectionHelper.Instance.getAlbums(tags, showUntagged);
 			this.setState({ albumDescriptors: albumsResponse.data });
 		}
 		catch (error) {

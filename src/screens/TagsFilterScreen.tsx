@@ -7,6 +7,10 @@ import { DrawerItemsProps, NavigationActions } from 'react-navigation';
 import TagChip, { ITagSelectable } from '../widgets/TagChip';
 import { AlbuminColors } from '../Theme';
 import { NavigationState } from 'react-navigation';
+import { MyAlbumsNavigationParams } from './MyAlbumsScreen';
+
+const UNTAGGED_NAME = 'Untagged';
+const UNTAGGED_ID = 'untagged';
 
 interface Props extends DrawerItemsProps {
 }
@@ -44,8 +48,17 @@ export default class TagsFilterScreen extends Component<Props, State> {
 	getTags = async () => {
 		try {
 			const response = await ConnectionHelper.Instance.getTags();
-			this.setState({ tags: response.data as ITagSelectable[] });
+			const allTags = response.data;
+
+			// Injecting the Untagged special tag
+			if (allTags && allTags.length > 0) {
+				const untaggedTag: ITag = { name: UNTAGGED_NAME, uniqueId: UNTAGGED_ID };
+				allTags.unshift(untaggedTag);
+			}
+
+			this.setState({ tags: allTags as ITagSelectable[] });
 			this.selectedTags = [];
+
 			console.log('Tags:');
 			console.log(response);
 		} catch (error) {
@@ -55,24 +68,28 @@ export default class TagsFilterScreen extends Component<Props, State> {
 	}
 
 	onOkPress = () => {
-		const activeRoute = getActiveRouteState(this.props.navigation.state);
+		let showUntagged = false;
+		const tagIds = this.selectedTags.reduce((accumulator, tag) => {
+			// If Untagged is selected, I don't add it as a tag, but I remember it in a boolean
+			if (tag.name === UNTAGGED_NAME) {
+				showUntagged = true;
+				return accumulator;
+			}
 
-		const tagIds = this.selectedTags.map(t => t.uniqueId);
+			accumulator.push(tag.uniqueId);
+			return accumulator;
+		}, [] as string[]);
+
+		const navigationParams: MyAlbumsNavigationParams = { tags: tagIds, untagged: showUntagged };
+
+		const activeRoute = getActiveRouteState(this.props.navigation.state);
 		const navigateAction = NavigationActions.setParams({
-			params: { tags: tagIds },
+			params: navigationParams,
 			key: activeRoute.key,
 		});
 		this.props.navigation.dispatch(navigateAction);
 		this.props.navigation.closeDrawer();
 	}
-
-	// https://codeburst.io/custom-drawer-using-react-navigation-80abbab489f7
-	// navigateToScreen = (route) => () => {
-	// 	const navigateAction = NavigationActions.navigate({
-	// 	  routeName: route
-	// 	});
-	// 	this.props.navigation.dispatch(navigateAction);
-	//   }
 
 	onTagSelected = (tag: ITagSelectable) => {
 		// I deselect previous selected tags

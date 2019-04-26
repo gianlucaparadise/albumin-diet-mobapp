@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Image, ScrollView } from 'react-native';
-import { UserAlbum } from 'albumin-diet-types';
+import { UserAlbum, TaggedAlbum } from 'albumin-diet-types';
 import { Headline, Subheading } from 'react-native-paper';
 import { TrackObjectSimplified } from 'spotify-web-api-node-typings';
 import { NavigationScreenProps } from 'react-navigation';
 import { MyNavigationScreenOptionsGetter } from '../../types/react-navigation-types';
 import { NavigationScreenOptions } from 'react-navigation';
+import TagCloud from '../widgets/TagCloud';
 
 interface Props extends NavigationScreenProps {
 }
@@ -26,7 +27,7 @@ export default class AlbumDetailScreen extends Component<Props> {
 	componentDidMount() {
 	}
 
-	get albumDescriptor() {
+	get albumDescriptor(): TaggedAlbum {
 		return this.props.navigation.getParam('albumDescriptor');
 	}
 
@@ -107,6 +108,9 @@ export default class AlbumDetailScreen extends Component<Props> {
 				<Subheading style={styles.text}>{this.artistName}</Subheading>
 				<Subheading style={styles.text}>{this.releaseYear}</Subheading>
 				<Subheading style={styles.text}>{this.totalTracks} tracks - {this.totalDuration}</Subheading>
+				<View style={{ height: 10 }} />
+				<Headline style={styles.text}>Tags</Headline>
+				<TagCloud tags={this.albumDescriptor.tags} />
 			</ScrollView>
 		);
 	}

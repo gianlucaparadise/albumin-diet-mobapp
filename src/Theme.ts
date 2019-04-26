@@ -9,7 +9,7 @@ export const AlbuminColors = {
 	text: '#fff',
 	// backdrop: '#FF0000',
 	// disabled: '#00FF00',
-	// placeholder: '#0000FF',
+	placeholder: 'rgba(255,255,255,0.7)',
 	appbar: '#212121',
 	chips: '#616161',
 }

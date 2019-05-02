@@ -110,7 +110,7 @@ export default class AlbumDetailScreen extends Component<Props> {
 				<Subheading style={styles.text}>{this.totalTracks} tracks - {this.totalDuration}</Subheading>
 				<View style={{ height: 10 }} />
 				<Headline style={styles.text}>Tags</Headline>
-				<TagCloud tags={this.albumDescriptor.tags} />
+				<TagCloud tags={this.albumDescriptor.tags} albumDescriptor={this.albumDescriptor} />
 			</ScrollView>
 		);
 	}

@@ -1,4 +1,4 @@
-import { GetMyAlbumsResponse, GetMyTagsResponse, UserAlbumsResponse } from "albumin-diet-types";
+import { GetMyAlbumsResponse, GetMyTagsResponse, UserAlbumsResponse, TagOnAlbumRequest } from "albumin-diet-types";
 import { LoginHelper } from "./LoginHelper";
 import { Platform } from "react-native";
 
@@ -24,14 +24,20 @@ export class ConnectionHelper {
 	private async send<T>(request: Request) {
 		const token = await LoginHelper.Instance.getToken();
 
-		request.headers.append('Authorization', `Bearer ${token}`);
+		request.headers.set('Authorization', `Bearer ${token}`);
+		request.headers.set('Content-Type', `application/json`);
 
 		const result = await fetch(request);
 
 		LoginHelper.Instance.refreshToken(result.headers);
 
-		const resposeBody: T = await result.json();
-		return resposeBody;
+		const responseBody: T = await result.json();
+
+		if (result.status < 200 || result.status > 299) {
+			throw new Error(`HTTP error: ${result.status} response: ${JSON.stringify(responseBody)}`);
+		}
+
+		return responseBody;
 	}
 
 	public async getAlbums(tags: string[] | null = null, showUntagged: boolean, offset = 0, limit = 20): Promise<GetMyAlbumsResponse> {
@@ -64,6 +70,34 @@ export class ConnectionHelper {
 		const response = await this.send<GetMyTagsResponse>(request);
 
 		return response;
+	}
+
+	async addTagToAlbum(tag: string, albumSpotifyId: string) {
+		const url = this.getUrl(`/api/me/tag`);
+
+		const requestBody: TagOnAlbumRequest = { tag: { name: tag }, album: { spotifyId: albumSpotifyId } };
+		const requestInit: RequestInit = {
+			method: 'POST',
+			body: JSON.stringify(requestBody),
+		};
+		const request = new Request(url, requestInit);
+
+		const result = await this.send<object>(request);
+		return result;
+	}
+
+	async deleteTagFromAlbum(tag: string, albumSpotifyId: string) {
+		const url = this.getUrl(`/api/me/tag`);
+
+		const requestBody: TagOnAlbumRequest = { tag: { name: tag }, album: { spotifyId: albumSpotifyId } };
+		const requestInit: RequestInit = {
+			method: 'DELETE',
+			body: JSON.stringify(requestBody),
+		};
+		const request = new Request(url, requestInit);
+
+		const result = await this.send<object>(request);
+		return result;
 	}
 
 	async getListeningList(offset = 0, limit = 20): Promise<UserAlbumsResponse> {

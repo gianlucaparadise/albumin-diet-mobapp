@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { StyleSheet, StyleProp, ViewStyle, View, NativeSyntheticEvent, TextInputSubmitEditingEventData } from 'react-native';
-import { ITag } from 'albumin-diet-types';
+import { ITag, TaggedAlbum } from 'albumin-diet-types';
 import { AlbuminColors } from '../Theme';
 import { Chip, TextInput } from 'react-native-paper';
+import { ConnectionHelper } from '../helpers/ConnectionHelper';
 
 interface Props {
 	tags: ITag[],
+	albumDescriptor: TaggedAlbum,
 	/**
 	 * This is the base style for the chips
 	 */
@@ -32,6 +34,7 @@ export default class TagCloud extends Component<Props, State> {
 		return (
 			<Chip
 				key={tag.uniqueId}
+				onClose={() => this.onDeleteTag(tag)}
 				style={[styles.listItem, styles.chip, this.props.chipStyle]}
 			>
 				{tag.name}
@@ -39,10 +42,41 @@ export default class TagCloud extends Component<Props, State> {
 		);
 	}
 
-	onTextInputSubmit = (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
-		this.props.tags.push({ name: this.state.newTag, uniqueId: this.state.newTag });
-		this.setState({ newTag: '' });
-		// TODO: make rest call to add tag
+	onDeleteTag = async (tag: ITag) => {
+		const albumId = this.props.albumDescriptor.album.id;
+
+		const tagIndex = this.props.tags.indexOf(tag);
+		this.props.tags.splice(tagIndex, 1);
+		this.forceUpdate(); // FIXME: this is not a nice way to do this
+
+		try {
+			const result = await ConnectionHelper.Instance.deleteTagFromAlbum(tag.name, albumId);
+		} catch (error) {
+			this.props.tags.push(tag);
+			this.forceUpdate(); // FIXME: this is not a nice way to do this
+
+			console.error('Error while adding the tag');
+			console.error(error);
+		}
+	}
+
+	onTextInputSubmit = async (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
+		const tag = { name: this.state.newTag, uniqueId: this.state.newTag };
+		const albumId = this.props.albumDescriptor.album.id;
+
+		try {
+			this.props.tags.push(tag);
+			this.setState({ newTag: '' });
+
+			const result = await ConnectionHelper.Instance.addTagToAlbum(tag.name, albumId);
+		} catch (error) {
+			const tagIndex = this.props.tags.indexOf(tag);
+			this.props.tags.splice(tagIndex, 1);
+			this.forceUpdate(); // FIXME: this is not a nice way to do this
+
+			console.error('Error while adding the tag');
+			console.error(error);
+		}
 	}
 
 	render() {

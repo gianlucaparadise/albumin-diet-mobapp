@@ -63,6 +63,9 @@ export class ConnectionHelper {
 		return result;
 	}
 
+	/**
+	 * Retrieve the list of the tags for the current user. Use TagManager if you want subscription updates.
+	 */
 	public async getTags(): Promise<GetMyTagsResponse> {
 		const url = this.getUrl(`/api/me/tag`);
 		const request = new Request(url);
@@ -72,6 +75,11 @@ export class ConnectionHelper {
 		return response;
 	}
 
+	/**
+	 * Add a tag to the input album. Use TagManager if you want subscription updates.
+	 * @param tag Tag name to add
+	 * @param albumSpotifyId Tagged album
+	 */
 	async addTagToAlbum(tag: string, albumSpotifyId: string) {
 		const url = this.getUrl(`/api/me/tag`);
 
@@ -86,6 +94,11 @@ export class ConnectionHelper {
 		return result;
 	}
 
+	/**
+	 * Delete a tag from the input album. Use TagManager if you want subscription updates.
+	 * @param tag Tag name to remove
+	 * @param albumSpotifyId Tagged album
+	 */
 	async deleteTagFromAlbum(tag: string, albumSpotifyId: string) {
 		const url = this.getUrl(`/api/me/tag`);
 

@@ -8,6 +8,7 @@ import TagChip, { ITagSelectable } from '../widgets/TagChip';
 import { AlbuminColors } from '../Theme';
 import { NavigationState } from 'react-navigation';
 import { MyAlbumsNavigationParams } from './MyAlbumsScreen';
+import { TagManager } from '../helpers/TagManager';
 
 const UNTAGGED_NAME = 'Untagged';
 const UNTAGGED_ID = 'untagged';
@@ -42,25 +43,27 @@ export default class TagsFilterScreen extends Component<Props, State> {
 	}
 
 	componentDidMount() {
-		this.getTags();
+		TagManager.Instance.tags.subscribe(this.getTags);
 	}
 
-	getTags = async () => {
+	getTags = (allTags?: ITag[]) => {
 		try {
-			const response = await ConnectionHelper.Instance.getTags();
-			const allTags = response.data;
-
+			const allTagsSelectable = allTags as ITagSelectable[];
+			
 			// Injecting the Untagged special tag
-			if (allTags && allTags.length > 0) {
-				const untaggedTag: ITag = { name: UNTAGGED_NAME, uniqueId: UNTAGGED_ID };
-				allTags.unshift(untaggedTag);
+			if (allTagsSelectable && allTagsSelectable.length > 0) {
+				const untaggedTag: ITagSelectable = { name: UNTAGGED_NAME, uniqueId: UNTAGGED_ID, selected: false };
+				allTagsSelectable.unshift(untaggedTag);
+
+				for (const tag of allTagsSelectable) {
+					tag.selected = this.selectedTags.findIndex(selectedTag => selectedTag.uniqueId === tag.uniqueId) !== -1;
+				}
 			}
 
-			this.setState({ tags: allTags as ITagSelectable[] });
-			this.selectedTags = [];
+			this.setState({ tags: allTagsSelectable });
 
 			console.log('Tags:');
-			console.log(response);
+			console.log(allTags);
 		} catch (error) {
 			console.error('Error while retrieving tags');
 			console.error(error);

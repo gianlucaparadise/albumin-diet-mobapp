@@ -31,7 +31,7 @@
     "@types/react-native-vector-icons": "^4.6.4",
     "@types/react-navigation-material-bottom-tabs": "^0.3.1",
     "@types/react-test-renderer": "^16.8.1",
-    "albumin-diet-types": "^0.0.15",
+    "albumin-diet-types": "^0.0.17",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "24.3.1",
     "jest": "24.3.1",

@@ -1,10 +1,6 @@
 import { GetMyAlbumsResponse, GetMyTagsResponse, UserAlbumsResponse, TagOnAlbumRequest } from "albumin-diet-types";
 import { LoginHelper } from "./LoginHelper";
-import { Platform } from "react-native";
-
-// Android emulator is on a virtual machine, this is why it needs a different host
-const BASE_PATH = Platform.OS === 'android' ? 'http://10.0.2.2:3000' : 'http://localhost:3000';
-// const BASE_PATH = 'https://albumin-diet-engine.herokuapp.com';
+import { MyUrlFactory } from "./MyUrlFactory";
 
 export class ConnectionHelper {
 	private static _instance: ConnectionHelper;
@@ -13,12 +9,6 @@ export class ConnectionHelper {
 
 	public static get Instance() {
 		return this._instance || (this._instance = new this());
-	}
-
-	// todo: use a url provider
-	private getUrl(endpoint: string): string {
-		const engineBaseUrl = BASE_PATH;
-		return engineBaseUrl + endpoint;
 	}
 
 	private async send<T>(request: Request) {
@@ -55,7 +45,7 @@ export class ConnectionHelper {
 			params += `&limit=${limit}`;
 		}
 
-		const url = this.getUrl(`/api/me/album?${params}`);
+		const url = MyUrlFactory.Instance.getUrl('albums', params);
 		const request = new Request(url);
 
 		const result = await this.send<GetMyAlbumsResponse>(request);
@@ -67,7 +57,7 @@ export class ConnectionHelper {
 	 * Retrieve the list of the tags for the current user. Use TagManager if you want subscription updates.
 	 */
 	public async getTags(): Promise<GetMyTagsResponse> {
-		const url = this.getUrl(`/api/me/tag`);
+		const url = MyUrlFactory.Instance.getUrl('tag');
 		const request = new Request(url);
 
 		const response = await this.send<GetMyTagsResponse>(request);
@@ -81,7 +71,7 @@ export class ConnectionHelper {
 	 * @param albumSpotifyId Tagged album
 	 */
 	async addTagToAlbum(tag: string, albumSpotifyId: string) {
-		const url = this.getUrl(`/api/me/tag`);
+		const url = MyUrlFactory.Instance.getUrl('tag');
 
 		const requestBody: TagOnAlbumRequest = { tag: { name: tag }, album: { spotifyId: albumSpotifyId } };
 		const requestInit: RequestInit = {
@@ -100,7 +90,7 @@ export class ConnectionHelper {
 	 * @param albumSpotifyId Tagged album
 	 */
 	async deleteTagFromAlbum(tag: string, albumSpotifyId: string) {
-		const url = this.getUrl(`/api/me/tag`);
+		const url = MyUrlFactory.Instance.getUrl('tag');
 
 		const requestBody: TagOnAlbumRequest = { tag: { name: tag }, album: { spotifyId: albumSpotifyId } };
 		const requestInit: RequestInit = {
@@ -122,7 +112,7 @@ export class ConnectionHelper {
 			params += `&limit=${limit.toString()}`;
 		}
 
-		const url = this.getUrl(`/api/me/listening-list?${params}`);
+		const url = MyUrlFactory.Instance.getUrl('listening-list', params);
 		const request = new Request(url);
 
 		const result = await this.send<UserAlbumsResponse>(request);
@@ -142,7 +132,7 @@ export class ConnectionHelper {
 			params += `&limit=${limit.toString()}`;
 		}
 
-		const url = this.getUrl(`/api/me/album/search?${params}`);
+		const url = MyUrlFactory.Instance.getUrl('search', params);
 		const request = new Request(url);
 
 		const result = await this.send<UserAlbumsResponse>(request);

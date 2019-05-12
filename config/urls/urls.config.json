@@ -1,0 +1,47 @@
+{
+    "$schema": "https://raw.githubusercontent.com/gianlucaparadise/urlfactory-js/master/urls.schema.json",
+    "hosts": {
+        "LOCAL-ANDROID": {
+            "default": "http://10.0.2.2:3000",
+            "albumin-engine": "http://10.0.2.2:3000"
+        },
+        "LOCAL-IOS": {
+            "default": "http://localhost:3000",
+            "albumin-engine": "http://localhost:3000"
+        },
+        "STAGE": {
+            "default": "https://albumin-diet-engine.gianlucaparadise.now.sh",
+            "albumin-engine": "https://albumin-diet-engine.gianlucaparadise.now.sh"
+        }
+    },
+    "urls": {
+        "profile": {
+            "hostKey": "albumin-engine",
+            "path": "/api/me/profile"
+        },
+        "tag": {
+            "hostKey": "albumin-engine",
+            "path": "/api/me/tag"
+        },
+        "albums": {
+            "hostKey": "albumin-engine",
+            "path": "/api/me/album?{0}"
+        },
+        "album": {
+            "hostKey": "albumin-engine",
+            "path": "/api/me/album/{0}"
+        },
+        "listening-list": {
+            "hostKey": "albumin-engine",
+            "path": "/api/me/listening-list?{0}"
+        },
+        "search": {
+            "hostKey": "albumin-engine",
+            "path": "/api/me/album/search?{0}"
+        },
+        "login": {
+            "hostKey": "albumin-engine",
+            "path": "/auth/spotify"
+        }
+    }
+}

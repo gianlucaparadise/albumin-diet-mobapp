@@ -1,10 +1,6 @@
 import { StorageHelper } from "./StorageHelper";
 import { SendTokenResponse } from "albumin-diet-types";
-import { Platform } from "react-native";
-
-// Android emulator is on a virtual machine, this is why it needs a different host
-const BASE_PATH = Platform.OS === 'android' ? 'http://10.0.2.2:3000' : 'http://localhost:3000';
-// const BASE_PATH = 'https://albumin-diet-engine.herokuapp.com';
+import { MyUrlFactory } from "./MyUrlFactory";
 
 export class LoginHelper {
 	private static _instance: LoginHelper;
@@ -19,8 +15,7 @@ export class LoginHelper {
 	 * Url to start Login Flow
 	 */
 	public get loginUrl() {
-		// TODO: move this to UrlFactory
-		return `${BASE_PATH}/auth/spotify`
+		return MyUrlFactory.Instance.getUrl('login');
 	}
 
 	/**

@@ -7,15 +7,35 @@ import { NavigationScreenProps } from 'react-navigation';
 import { MyNavigationScreenOptionsGetter } from '../../types/react-navigation-types';
 import { NavigationScreenOptions } from 'react-navigation';
 import TagCloud from '../widgets/TagCloud';
+import ToggleIconButton from '../widgets/ToggleIconButton';
 
 interface Props extends NavigationScreenProps {
+}
+
+interface State {
+	/**
+	 * Is saved to favorites?
+	 */
+	isSaved: boolean,
+	/**
+	 * Can save to favorites?
+	 */
+	canSave: boolean,
+	/**
+	 * Is in listening list?
+	 */
+	isEgged: boolean,
+	/**
+	 * Can be added to listening list?
+	 */
+    canBeEgged: boolean,
 }
 
 export interface AlbumDetailNavigationParams {
 	albumDescriptor: UserAlbum
 }
 
-export default class AlbumDetailScreen extends Component<Props> {
+export default class AlbumDetailScreen extends Component<Props, State> {
 	static navigationOptions: MyNavigationScreenOptionsGetter<NavigationScreenOptions> = (navigationOptions) => {
 		const albumDescriptor: UserAlbum = navigationOptions.navigation.getParam('albumDescriptor');
 		const options: NavigationScreenOptions = { title: albumDescriptor.album.name };
@@ -23,6 +43,17 @@ export default class AlbumDetailScreen extends Component<Props> {
 	};
 
 	// public static readonly IMAGE_ELEMENT_ID = 'detailImage';
+
+	constructor(props: Props) {
+		super(props);
+
+		this.state = {
+			isSaved: this.albumDescriptor.isSavedAlbum,
+			canSave: true,
+			isEgged: this.albumDescriptor.isInListeningList,
+			canBeEgged: true,
+		};
+	}
 
 	componentDidMount() {
 	}
@@ -93,6 +124,14 @@ export default class AlbumDetailScreen extends Component<Props> {
 		return duration;
 	}
 
+	onPressSave = () => {
+		this.setState({ isSaved: !this.state.isSaved });
+	}
+
+	onPressEgg = () => {
+		this.setState({ isEgged: !this.state.isEgged });
+	}
+
 	render() {
 		return (
 			<ScrollView contentContainerStyle={styles.container}>
@@ -108,7 +147,21 @@ export default class AlbumDetailScreen extends Component<Props> {
 				<Subheading style={styles.text}>{this.artistName}</Subheading>
 				<Subheading style={styles.text}>{this.releaseYear}</Subheading>
 				<Subheading style={styles.text}>{this.totalTracks} tracks - {this.totalDuration}</Subheading>
-				<View style={{ height: 10 }} />
+				<View style={styles.iconsContainer}>
+					<ToggleIconButton
+						type="save"
+						selected={this.state.isSaved}
+						enabled={this.state.canSave}
+						onPress={this.onPressSave}
+						/>
+					<ToggleIconButton
+						type="eggs"
+						selected={this.state.isEgged}
+						enabled={this.state.canBeEgged}
+						onPress={this.onPressEgg}
+						/>
+				</View>
+				<View style={styles.space} />
 				<Headline style={styles.text}>Tags</Headline>
 				<TagCloud tags={this.albumDescriptor.tags} albumDescriptor={this.albumDescriptor} />
 			</ScrollView>
@@ -120,6 +173,11 @@ const styles = StyleSheet.create({
 	container: {
 		padding: 15,
 		alignItems: 'center'
+	},
+	iconsContainer: {
+		display: 'flex',
+		flexDirection: 'row',
+		justifyContent: 'center'
 	},
 	cover: {
 		width: '100%',

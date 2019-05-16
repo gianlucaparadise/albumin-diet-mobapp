@@ -1,4 +1,4 @@
-import { GetMyAlbumsResponse, GetMyTagsResponse, UserAlbumsResponse, TagOnAlbumRequest } from "albumin-diet-types";
+import { GetMyAlbumsResponse, GetMyTagsResponse, UserAlbumsResponse, TagOnAlbumRequest, GetAlbumResponse } from "albumin-diet-types";
 import { LoginHelper } from "./LoginHelper";
 import { MyUrlFactory } from "./MyUrlFactory";
 
@@ -53,6 +53,13 @@ export class ConnectionHelper {
 		return result;
 	}
 
+	getAlbum(spotifyAlbumId: string): Promise<GetAlbumResponse> {
+		const url = MyUrlFactory.Instance.getUrl('album', spotifyAlbumId);
+		const request = new Request(url);
+
+		const response = this.send<GetAlbumResponse>(request);
+		return response;
+	}
 	/**
 	 * Retrieve the list of the tags for the current user. Use TagManager if you want subscription updates.
 	 */

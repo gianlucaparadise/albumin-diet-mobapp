@@ -8,11 +8,13 @@ import { MyNavigationScreenOptionsGetter } from '../../types/react-navigation-ty
 import { NavigationScreenOptions } from 'react-navigation';
 import TagCloud from '../widgets/TagCloud';
 import ToggleIconButton from '../widgets/ToggleIconButton';
+import { ConnectionHelper } from '../helpers/ConnectionHelper';
 
 interface Props extends NavigationScreenProps {
 }
 
 interface State {
+	albumDescriptor: TaggedAlbum,
 	/**
 	 * Is saved to favorites?
 	 */
@@ -47,27 +49,46 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 	constructor(props: Props) {
 		super(props);
 
+		const albumDescriptor = this.props.navigation.getParam('albumDescriptor');
 		this.state = {
-			isSaved: this.albumDescriptor.isSavedAlbum,
+			albumDescriptor: albumDescriptor,
+			isSaved: albumDescriptor.isSavedAlbum,
 			canSave: true,
-			isEgged: this.albumDescriptor.isInListeningList,
+			isEgged: albumDescriptor.isInListeningList,
 			canBeEgged: true,
 		};
 	}
 
 	componentDidMount() {
+		const spotifyId = this.state.albumDescriptor.album.id;
+		this.getAlbum(spotifyId);
 	}
 
-	get albumDescriptor(): TaggedAlbum {
-		return this.props.navigation.getParam('albumDescriptor');
+	getAlbum = async (spotifyId: string) => {
+		try {
+			const albumsResponse = await ConnectionHelper.Instance.getAlbum(spotifyId);
+			const albumDescriptor = albumsResponse.data;
+			
+			this.setState({ 
+				albumDescriptor: albumDescriptor,
+				canBeEgged: true,
+				isEgged: albumDescriptor.isInListeningList,
+				canSave: true,
+				isSaved: albumDescriptor.isSavedAlbum
+			});
+		}
+		catch (error) {
+			console.error('Error while retrieving the album');
+			console.error(error);
+		}
 	}
 
 	get artistName() {
-		return this.albumDescriptor.album.artists[0].name;
+		return this.state.albumDescriptor.album.artists[0].name;
 	}
 
 	get releaseYear() {
-		const releaseDate = this.albumDescriptor.album.release_date;
+		const releaseDate = this.state.albumDescriptor.album.release_date;
 		try {
 			const date = new Date(releaseDate);
 			return date.getFullYear();
@@ -79,15 +100,15 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 	}
 
 	get imageUrl() {
-		return this.albumDescriptor.album.images[0].url;
+		return this.state.albumDescriptor.album.images[0].url;
 	}
 
 	get albumName() {
-		return this.albumDescriptor.album.name;
+		return this.state.albumDescriptor.album.name;
 	}
 
 	get totalTracks() {
-		return this.albumDescriptor.album.tracks.total;
+		return this.state.albumDescriptor.album.tracks.total;
 	}
 
 	calculateDuration(trackList: TrackObjectSimplified[]) {
@@ -118,7 +139,7 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 	}
 
 	get totalDuration() {
-		const timespan = this.calculateDuration(this.albumDescriptor.album.tracks.items);
+		const timespan = this.calculateDuration(this.state.albumDescriptor.album.tracks.items);
 		const duration = this.timespanToString(timespan);
 
 		return duration;
@@ -163,7 +184,7 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 				</View>
 				<View style={styles.space} />
 				<Headline style={styles.text}>Tags</Headline>
-				<TagCloud tags={this.albumDescriptor.tags} albumDescriptor={this.albumDescriptor} />
+				<TagCloud tags={this.state.albumDescriptor.tags} albumDescriptor={this.state.albumDescriptor} />
 			</ScrollView>
 		);
 	}

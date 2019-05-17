@@ -30,7 +30,7 @@ interface State {
 	/**
 	 * Can be added to listening list?
 	 */
-    canBeEgged: boolean,
+	canBeEgged: boolean,
 }
 
 export interface AlbumDetailNavigationParams {
@@ -60,16 +60,15 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 	}
 
 	componentDidMount() {
-		const spotifyId = this.state.albumDescriptor.album.id;
-		this.getAlbum(spotifyId);
+		this.getAlbum(this.albumId);
 	}
 
 	getAlbum = async (spotifyId: string) => {
 		try {
 			const albumsResponse = await ConnectionHelper.Instance.getAlbum(spotifyId);
 			const albumDescriptor = albumsResponse.data;
-			
-			this.setState({ 
+
+			this.setState({
 				albumDescriptor: albumDescriptor,
 				canBeEgged: true,
 				isEgged: albumDescriptor.isInListeningList,
@@ -145,9 +144,51 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 		return duration;
 	}
 
-	onPressSave = () => {
-		this.setState({ isSaved: !this.state.isSaved });
+	get albumId() {
+		return this.state.albumDescriptor.album.id;
 	}
+
+	//#region Saving
+	onPressSave = async () => {
+		this.setState({ canSave: false });
+
+		let isSaved: boolean;
+		if (this.state.isSaved) {
+			await this.unsaveAlbum();
+			isSaved = false;
+		} else {
+			await this.saveAlbum();
+			isSaved = true;
+		}
+
+		this.setState({
+			canSave: true,
+			isSaved: isSaved
+		});
+	}
+
+	saveAlbum = async () => {
+		try {
+			const response = ConnectionHelper.Instance.saveAlbum(this.albumId);
+			return response;
+		}
+		catch (error) {
+			console.error(`Error while saving album`);
+			console.error(error);
+		}
+	}
+
+	unsaveAlbum = async () => {
+		try {
+			const response = ConnectionHelper.Instance.unsaveAlbum(this.albumId);
+			return response;
+		}
+		catch (error) {
+			console.error(`Error while unsaving album`);
+			console.error(error);
+		}
+	}
+	//#endregion
 
 	onPressEgg = () => {
 		this.setState({ isEgged: !this.state.isEgged });
@@ -174,13 +215,13 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 						selected={this.state.isSaved}
 						enabled={this.state.canSave}
 						onPress={this.onPressSave}
-						/>
+					/>
 					<ToggleIconButton
 						type="eggs"
 						selected={this.state.isEgged}
 						enabled={this.state.canBeEgged}
 						onPress={this.onPressEgg}
-						/>
+					/>
 				</View>
 				<View style={styles.space} />
 				<Headline style={styles.text}>Tags</Headline>

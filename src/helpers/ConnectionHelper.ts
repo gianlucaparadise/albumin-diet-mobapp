@@ -60,6 +60,43 @@ export class ConnectionHelper {
 		const response = this.send<GetAlbumResponse>(request);
 		return response;
 	}
+
+	/**
+	 * Add the input album to current user's favorites
+	 * @param spotifyAlbumId Album to save
+	 */
+	async saveAlbum(spotifyAlbumId: string) {
+		const url = MyUrlFactory.Instance.getUrl(`album`);
+
+		const requestBody = { album: { spotifyId: spotifyAlbumId } };
+		const requestInit: RequestInit = {
+			method: 'PUT',
+			body: JSON.stringify(requestBody),
+		};
+		const request = new Request(url, requestInit);
+
+		const result = await this.send<object>(request);
+		return result;
+	}
+
+	/**
+	 * Remove the input album from current user's favorites
+	 * @param spotifyAlbumId Album to unsave
+	 */
+	async unsaveAlbum(spotifyAlbumId: string) {
+		const url = MyUrlFactory.Instance.getUrl(`album`);
+
+		const requestBody = { album: { spotifyId: spotifyAlbumId } };
+		const requestInit: RequestInit = {
+			method: 'DELETE',
+			body: JSON.stringify(requestBody),
+		};
+		const request = new Request(url, requestInit);
+
+		const result = await this.send<object>(request);
+		return result;
+	}
+
 	/**
 	 * Retrieve the list of the tags for the current user. Use TagManager if you want subscription updates.
 	 */

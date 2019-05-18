@@ -6,7 +6,7 @@ import { Chip, TextInput } from 'react-native-paper';
 import { TagManager } from '../helpers/TagManager';
 
 interface Props {
-	tags: ITag[],
+	tags?: ITag[],
 	albumDescriptor: TaggedAlbum,
 	/**
 	 * This is the base style for the chips
@@ -30,19 +30,9 @@ export default class TagCloud extends Component<Props, State> {
 	componentDidMount() {
 	}
 
-	buildChip = (tag: ITag) => {
-		return (
-			<Chip
-				key={tag.uniqueId}
-				onClose={() => this.onDeleteTag(tag)}
-				style={[styles.listItem, styles.chip, this.props.chipStyle]}
-			>
-				{tag.name}
-			</Chip>
-		);
-	}
-
 	onDeleteTag = async (tag: ITag) => {
+		if (!this.props.tags) return;
+
 		const albumId = this.props.albumDescriptor.album.id;
 
 		const tagIndex = this.props.tags.indexOf(tag);
@@ -61,6 +51,8 @@ export default class TagCloud extends Component<Props, State> {
 	}
 
 	onTextInputSubmit = async (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
+		if (!this.props.tags) return;
+
 		const tag = { name: this.state.newTag, uniqueId: this.state.newTag };
 		const albumId = this.props.albumDescriptor.album.id;
 
@@ -79,19 +71,33 @@ export default class TagCloud extends Component<Props, State> {
 		}
 	}
 
-	render() {
-		const tagViews = this.props.tags.map(tag => this.buildChip(tag));
+	buildChip = (tag: ITag) => {
+		return (
+			<Chip
+				key={tag.uniqueId}
+				onClose={() => this.onDeleteTag(tag)}
+				style={[styles.listItem, styles.chip, this.props.chipStyle]}
+			>
+				{tag.name}
+			</Chip>
+		);
+	}
 
+	renderTagViews = () => {
+		return this.props.tags && this.props.tags.map(tag => this.buildChip(tag));
+	}
+
+	render() {
 		return (
 			<View style={styles.container}>
-				{tagViews}
+				{this.renderTagViews()}
 				<TextInput
 					placeholder="Add tag"
 					value={this.state.newTag}
 					onChangeText={text => this.setState({ newTag: text })}
 					onSubmitEditing={this.onTextInputSubmit}
 					style={[styles.listItem, styles.textInput]}
-				//  childStyle={styles.childStyle} // waiting for pull request #1021 to be merged
+				//  childStyle={styles.childStyle} // waiting for pull request #1020 to be merged
 				/>
 			</View>
 		);
@@ -106,6 +112,7 @@ const styles = StyleSheet.create({
 	},
 	listItem: {
 		margin: 2,
+		height: 35, // when pull request #1020 will be merged, I will set "dense: true" and remove this prop
 	},
 	chip: {
 		backgroundColor: AlbuminColors.chips,
@@ -113,7 +120,6 @@ const styles = StyleSheet.create({
 	textInput: {
 		backgroundColor: 'transparent',
 		minWidth: 80,
-		alignSelf: 'stretch',
 	},
 	childStyle: {
 		paddingVertical: 0,

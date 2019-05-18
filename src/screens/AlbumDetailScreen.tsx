@@ -16,19 +16,11 @@ interface Props extends NavigationScreenProps {
 interface State {
 	albumDescriptor: TaggedAlbum,
 	/**
-	 * Is saved to favorites?
-	 */
-	isSaved: boolean,
-	/**
 	 * Can save to favorites?
 	 */
 	canSave: boolean,
 	/**
-	 * Is in listening list?
-	 */
-	isEgged: boolean,
-	/**
-	 * Can be added to listening list?
+	 * Can add to listening list?
 	 */
 	canBeEgged: boolean,
 }
@@ -52,9 +44,7 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 		const albumDescriptor = this.props.navigation.getParam('albumDescriptor');
 		this.state = {
 			albumDescriptor: albumDescriptor,
-			isSaved: albumDescriptor.isSavedAlbum,
 			canSave: true,
-			isEgged: albumDescriptor.isInListeningList,
 			canBeEgged: true,
 		};
 	}
@@ -71,9 +61,7 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 			this.setState({
 				albumDescriptor: albumDescriptor,
 				canBeEgged: true,
-				isEgged: albumDescriptor.isInListeningList,
 				canSave: true,
-				isSaved: albumDescriptor.isSavedAlbum
 			});
 		}
 		catch (error) {
@@ -151,9 +139,10 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 	//#region Saving
 	onPressSave = async () => {
 		this.setState({ canSave: false });
+		const albumDescriptor = this.state.albumDescriptor;
 
 		let isSaved: boolean;
-		if (this.state.isSaved) {
+		if (albumDescriptor.isSavedAlbum) {
 			await this.unsaveAlbum();
 			isSaved = false;
 		} else {
@@ -161,9 +150,11 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 			isSaved = true;
 		}
 
+		albumDescriptor.isSavedAlbum = isSaved;
+
 		this.setState({
 			canSave: true,
-			isSaved: isSaved
+			albumDescriptor: albumDescriptor
 		});
 	}
 
@@ -191,7 +182,22 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 	//#endregion
 
 	onPressEgg = () => {
-		this.setState({ isEgged: !this.state.isEgged });
+		const albumDescriptor = this.state.albumDescriptor;
+		albumDescriptor.isInListeningList = !albumDescriptor.isInListeningList;
+
+		this.setState({ albumDescriptor: albumDescriptor });
+	}
+
+	renderTagCloud = () => {
+		if (this.state.albumDescriptor.isSavedAlbum) {
+			// const tags = [...this.state.albumDescriptor.tags, ...this.state.albumDescriptor.tags, ...this.state.albumDescriptor.tags];
+			return (
+				<View style={{ display: 'flex' }}>
+					<Headline style={styles.text}>Tags</Headline>
+					<TagCloud tags={this.state.albumDescriptor.tags} albumDescriptor={this.state.albumDescriptor} />
+				</View>
+			);
+		}
 	}
 
 	render() {
@@ -212,20 +218,19 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 				<View style={styles.iconsContainer}>
 					<ToggleIconButton
 						type="save"
-						selected={this.state.isSaved}
+						selected={this.state.albumDescriptor.isSavedAlbum}
 						enabled={this.state.canSave}
 						onPress={this.onPressSave}
 					/>
 					<ToggleIconButton
 						type="eggs"
-						selected={this.state.isEgged}
+						selected={this.state.albumDescriptor.isInListeningList}
 						enabled={this.state.canBeEgged}
 						onPress={this.onPressEgg}
 					/>
 				</View>
 				<View style={styles.space} />
-				<Headline style={styles.text}>Tags</Headline>
-				<TagCloud tags={this.state.albumDescriptor.tags} albumDescriptor={this.state.albumDescriptor} />
+				{this.renderTagCloud()}
 			</ScrollView>
 		);
 	}

@@ -181,12 +181,50 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 	}
 	//#endregion
 
-	onPressEgg = () => {
+	//#region Listening List
+	onPressEgg = async () => {
+		this.setState({ canBeEgged: false });
 		const albumDescriptor = this.state.albumDescriptor;
-		albumDescriptor.isInListeningList = !albumDescriptor.isInListeningList;
 
-		this.setState({ albumDescriptor: albumDescriptor });
+		let isEgged: boolean;
+		if (albumDescriptor.isInListeningList) {
+			await this.uneggAlbum();
+			isEgged = false;
+		} else {
+			await this.eggAlbum();
+			isEgged = true;
+		}
+
+		albumDescriptor.isInListeningList = isEgged;
+
+		this.setState({
+			canBeEgged: true,
+			albumDescriptor: albumDescriptor
+		});
 	}
+
+	eggAlbum = async () => {
+		try {
+			const response = await ConnectionHelper.Instance.addToListeningList(this.albumId);
+			return response;
+		}
+		catch (error) {
+			console.error(`Error while adding album to listening list`);
+			console.error(error);
+		}
+	}
+
+	uneggAlbum = async () => {
+		try {
+			const response = await ConnectionHelper.Instance.deleteFromListeningList(this.albumId);
+			return response
+		}
+		catch (error) {
+			console.error(`Error while removing album from listening list`);
+			console.error(error);
+		}
+	}
+	//#endregion
 
 	renderTagCloud = () => {
 		if (this.state.albumDescriptor.isSavedAlbum) {

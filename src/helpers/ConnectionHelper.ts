@@ -164,6 +164,42 @@ export class ConnectionHelper {
 		return result;
 	}
 
+	/**
+	 * Add the input album to current user's listening list
+	 * @param spotifyAlbumId Album to save
+	 */
+	async addToListeningList(albumSpotifyId: string) {
+		const url = MyUrlFactory.Instance.getUrl(`listening-list`);
+
+		const requestBody = { album: { spotifyId: albumSpotifyId } };
+		const requestInit: RequestInit = {
+			method: 'POST',
+			body: JSON.stringify(requestBody)
+		};
+		const request = new Request(url, requestInit);
+
+		const result = await this.send(request);
+		return result;
+	}
+
+	/**
+	 * Remove the input album from current user's listening list
+	 * @param spotifyAlbumId Album to unsave
+	 */
+	async deleteFromListeningList(albumSpotifyId: string) {
+		const url = MyUrlFactory.Instance.getUrl(`listening-list`);
+
+		const requestBody = { album: { spotifyId: albumSpotifyId } };
+		const requestInit: RequestInit = {
+			method: 'DELETE',
+			body: JSON.stringify(requestBody)
+		};
+		const request = new Request(url, requestInit);
+
+		const result = await this.send(request);
+		return result;
+	}
+
 	async searchAlbums(keywords: string, offset = 0, limit = 20): Promise<UserAlbumsResponse> {
 		let params = '';
 		if (keywords) {

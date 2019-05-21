@@ -54,6 +54,26 @@ export default class SearchScreen extends Component<Props, State> {
 		}
 	};
 
+	/**
+   	 * Here I append the next page
+     */
+	onPageFinishing = async () => {
+		try {
+			const albums = this.state.albumDescriptors
+			const offset = albums.length;
+			const response = await ConnectionHelper.Instance.searchAlbums(this.state.query, offset);
+			albums.push(...response.data);
+			this.setState({ albumDescriptors: albums });
+
+			console.log('added albums: ');
+			console.log(response.data);
+
+		} catch (error) {
+			console.log('error while loading next page: ');
+			console.log(error);
+		}
+	}
+
 	onTextChanged = (inputQuery: string) => {
 		this.setState({ query: inputQuery });
 
@@ -89,6 +109,8 @@ export default class SearchScreen extends Component<Props, State> {
 					data={this.state.albumDescriptors}
 					renderItem={({ item }) => <AlbumCardWidget onPress={this.goToDetail} style={styles.listItem} albumDescriptor={item} />}
 					keyExtractor={(item, index) => item.album.id}
+					onEndReached={this.onPageFinishing}
+					onEndReachedThreshold={5}
 				/>
 			</View>
 		);

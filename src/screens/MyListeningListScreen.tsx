@@ -46,6 +46,26 @@ export default class MyListeningListScreen extends Component<Props, State> {
 		}
 	}
 
+	/**
+	 * Here I append the next page
+	 */
+	onPageFinishing = async () => {
+		try {
+			const albums = this.state.albumDescriptors;
+			const offset = albums.length;
+			const response = await ConnectionHelper.Instance.getListeningList(offset);
+			albums.push(...response.data);
+			this.setState({ albumDescriptors: albums });
+
+			console.log('added albums: ');
+			console.log(response.data);
+
+		} catch (error) {
+			console.log('error while loading next page: ');
+			console.log(error);
+		}
+	}
+
 	goToDetail = (albumDescriptor: UserAlbum, elementId: string) => {
 		const navigationParams: AlbumDetailNavigationParams = { albumDescriptor: albumDescriptor };
 		this.props.navigation.navigate('AlbumDetail', navigationParams);
@@ -59,6 +79,8 @@ export default class MyListeningListScreen extends Component<Props, State> {
 					data={this.state.albumDescriptors}
 					renderItem={({ item }) => <AlbumCardWidget onPress={this.goToDetail} style={styles.listItem} albumDescriptor={item} />}
 					keyExtractor={(item, index) => item.album.id}
+					onEndReached={this.onPageFinishing}
+					onEndReachedThreshold={5}
 				/>
 			</View>
 		);

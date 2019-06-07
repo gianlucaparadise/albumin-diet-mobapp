@@ -1,4 +1,4 @@
-declare module 'react-navigation-stack/dist/views/StackView/StackViewStyleInterpolator' {
+declare module 'react-navigation-stack/src/views/StackView/StackViewStyleInterpolator' {
 	import { NavigationTransitionProps } from "react-navigation";
 
 	export = index;

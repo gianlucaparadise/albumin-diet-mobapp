@@ -9,7 +9,7 @@ import { initStore } from './src/redux/store';
 
 const AppContainer = createAppContainer(RootStack);
 
-const store = initStore();
+export const store = initStore();
 
 export default class App extends React.Component {
   render() {

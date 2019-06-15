@@ -1,6 +1,8 @@
 import { GetMyAlbumsResponse, GetMyTagsResponse, UserAlbumsResponse, TagOnAlbumRequest, GetAlbumResponse } from "albumin-diet-types";
 import { LoginHelper } from "./LoginHelper";
 import { MyUrlFactory } from "./MyUrlFactory";
+import { loadTags } from "../redux/thunks/tag.thunk";
+import { store } from "../../App";
 
 export class ConnectionHelper {
 	private static _instance: ConnectionHelper;
@@ -125,6 +127,7 @@ export class ConnectionHelper {
 		const request = new Request(url, requestInit);
 
 		const result = await this.send<object>(request);
+		this.refreshTags();
 		return result;
 	}
 
@@ -144,7 +147,12 @@ export class ConnectionHelper {
 		const request = new Request(url, requestInit);
 
 		const result = await this.send<object>(request);
+		this.refreshTags();
 		return result;
+	}
+
+	refreshTags() {
+		store.dispatch(loadTags());
 	}
 
 	async getListeningList(offset = 0, limit = 20): Promise<UserAlbumsResponse> {

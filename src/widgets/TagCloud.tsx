@@ -3,7 +3,7 @@ import { StyleSheet, StyleProp, ViewStyle, View, NativeSyntheticEvent, TextInput
 import { ITag, TaggedAlbum } from 'albumin-diet-types';
 import { AlbuminColors } from '../Theme';
 import { Chip, TextInput } from 'react-native-paper';
-import { TagManager } from '../helpers/TagManager';
+import { ConnectionHelper } from '../helpers/ConnectionHelper';
 
 interface Props {
 	tags?: ITag[],
@@ -40,7 +40,7 @@ export default class TagCloud extends Component<Props, State> {
 		this.forceUpdate(); // FIXME: this is not a nice way to do this
 
 		try {
-			const result = await TagManager.Instance.deleteTagFromAlbum(tag.name, albumId);
+			const result = await ConnectionHelper.Instance.deleteTagFromAlbum(tag.name, albumId);
 		} catch (error) {
 			this.props.tags.push(tag);
 			this.forceUpdate(); // FIXME: this is not a nice way to do this
@@ -60,7 +60,7 @@ export default class TagCloud extends Component<Props, State> {
 			this.props.tags.push(tag);
 			this.setState({ newTag: '' });
 
-			const result = await TagManager.Instance.addTagToAlbum(tag.name, albumId);
+			const result = await ConnectionHelper.Instance.addTagToAlbum(tag.name, albumId);
 		} catch (error) {
 			const tagIndex = this.props.tags.indexOf(tag);
 			this.props.tags.splice(tagIndex, 1);

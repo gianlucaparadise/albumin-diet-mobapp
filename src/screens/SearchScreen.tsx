@@ -6,19 +6,34 @@ import { MyNavigationScreenOptionsGetter } from 'react-navigation-types';
 import { UserAlbum } from 'albumin-diet-types';
 import AlbumCardWidget from '../widgets/AlbumCardWidget';
 import { AlbumDetailNavigationParams } from './AlbumDetailScreen';
-import { ConnectionHelper } from '../helpers/ConnectionHelper';
+import { connect } from 'react-redux';
+import { AppState } from '../redux/reducers/root.reducer';
+import { loadSearch, clearSearch, loadSearchNext } from '../redux/thunks/search.thunk';
 
 const WAIT_TIME: number = 500;
 
-interface Props extends NavigationScreenProps {
+//#region Props
+interface OwnProps extends NavigationScreenProps {
 }
+
+interface StateProps {
+	albumDescriptors: UserAlbum[],
+}
+
+interface DispatchProps {
+	loadSearch: (query: string) => void,
+	loadSearchNext: () => void,
+	clearSearch: () => void,
+}
+
+type Props = StateProps & DispatchProps & OwnProps;
+//#endregion
 
 interface State {
 	query: string,
-	albumDescriptors: UserAlbum[]
 }
 
-export default class SearchScreen extends Component<Props, State> {
+class SearchScreen extends Component<Props, State> {
 	static navigationOptions: MyNavigationScreenOptionsGetter<NavigationScreenOptions> = (navigationOptions) => {
 		return {
 			title: 'Search',
@@ -31,8 +46,7 @@ export default class SearchScreen extends Component<Props, State> {
 		super(props);
 
 		this.state = {
-			query: "",
-			albumDescriptors: []
+			query: ""
 		};
 	}
 
@@ -44,34 +58,15 @@ export default class SearchScreen extends Component<Props, State> {
 	}
 
 	search = async (query: string) => {
-		try {
-			const albumsResponse = await ConnectionHelper.Instance.searchAlbums(query);
-			this.setState({ albumDescriptors: albumsResponse.data });
-		}
-		catch (error) {
-			console.error('Error while searching albums');
-			console.error(error);
-		}
+		this.props.loadSearch(query);
 	};
 
 	/**
    	 * Here I append the next page
      */
 	onPageFinishing = async () => {
-		try {
-			const albums = this.state.albumDescriptors
-			const offset = albums.length;
-			const response = await ConnectionHelper.Instance.searchAlbums(this.state.query, offset);
-			albums.push(...response.data);
-			this.setState({ albumDescriptors: albums });
-
-			console.log('added albums: ');
-			console.log(response.data);
-
-		} catch (error) {
-			console.log('error while loading next page: ');
-			console.log(error);
-		}
+		console.log('onPageFinishing');
+		this.props.loadSearchNext();
 	}
 
 	onTextChanged = (inputQuery: string) => {
@@ -83,7 +78,7 @@ export default class SearchScreen extends Component<Props, State> {
 
 		// When I clear the searchbar, I clear the result immediately
 		if (!inputQuery || inputQuery.length === 0) {
-			this.setState({ albumDescriptors: [] });
+			this.props.clearSearch();
 			return;
 		}
 
@@ -106,7 +101,7 @@ export default class SearchScreen extends Component<Props, State> {
 				/>
 				<FlatList
 					style={styles.list}
-					data={this.state.albumDescriptors}
+					data={this.props.albumDescriptors}
 					renderItem={({ item }) => <AlbumCardWidget onPress={this.goToDetail} style={styles.listItem} albumDescriptor={item} />}
 					keyExtractor={(item, index) => item.album.id}
 					onEndReached={this.onPageFinishing}
@@ -130,3 +125,16 @@ const styles = StyleSheet.create({
 		marginBottom: 7,
 	},
 });
+
+const mapStateToProps = (state: AppState): StateProps => ({
+	albumDescriptors: state.searchReducer.albumDescriptors || []
+});
+
+//Map your action creators to your props.
+const mapDispatchToProps: DispatchProps = {
+	loadSearch: loadSearch,
+	loadSearchNext: loadSearchNext,
+	clearSearch: clearSearch,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchScreen);

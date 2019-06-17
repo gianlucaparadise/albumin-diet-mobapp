@@ -1,8 +1,9 @@
-import { GetMyAlbumsResponse, GetMyTagsResponse, UserAlbumsResponse, TagOnAlbumRequest, GetAlbumResponse } from "albumin-diet-types";
+import { GetMyAlbumsResponse, GetMyTagsResponse, UserAlbumsResponse, TagOnAlbumRequest, GetAlbumResponse, TaggedAlbum } from "albumin-diet-types";
 import { LoginHelper } from "./LoginHelper";
 import { MyUrlFactory } from "./MyUrlFactory";
 import { loadTags } from "../redux/thunks/tag.thunk";
 import { store } from "../../App";
+import { addToListeningList, removeFromListeningList } from "../redux/thunks/listening-list.thunk";
 
 export class ConnectionHelper {
 	private static _instance: ConnectionHelper;
@@ -152,6 +153,7 @@ export class ConnectionHelper {
 	}
 
 	refreshTags() {
+		// TODO: to be fully converted to Redux
 		store.dispatch(loadTags());
 	}
 
@@ -176,10 +178,11 @@ export class ConnectionHelper {
 	 * Add the input album to current user's listening list
 	 * @param spotifyAlbumId Album to save
 	 */
-	async addToListeningList(albumSpotifyId: string) {
+	async addToListeningList(albumDescriptor: TaggedAlbum) {
+		// TODO: to be fully converted to Redux
 		const url = MyUrlFactory.Instance.getUrl(`listening-list`);
 
-		const requestBody = { album: { spotifyId: albumSpotifyId } };
+		const requestBody = { album: { spotifyId: albumDescriptor.album.id } };
 		const requestInit: RequestInit = {
 			method: 'POST',
 			body: JSON.stringify(requestBody)
@@ -187,6 +190,7 @@ export class ConnectionHelper {
 		const request = new Request(url, requestInit);
 
 		const result = await this.send(request);
+		store.dispatch(addToListeningList(albumDescriptor));
 		return result;
 	}
 
@@ -195,6 +199,7 @@ export class ConnectionHelper {
 	 * @param spotifyAlbumId Album to unsave
 	 */
 	async deleteFromListeningList(albumSpotifyId: string) {
+		// TODO: to be fully converted to Redux
 		const url = MyUrlFactory.Instance.getUrl(`listening-list`);
 
 		const requestBody = { album: { spotifyId: albumSpotifyId } };
@@ -205,6 +210,7 @@ export class ConnectionHelper {
 		const request = new Request(url, requestInit);
 
 		const result = await this.send(request);
+		store.dispatch(removeFromListeningList(albumSpotifyId));
 		return result;
 	}
 

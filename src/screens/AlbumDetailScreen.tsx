@@ -205,7 +205,7 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 
 	eggAlbum = async () => {
 		try {
-			const response = await ConnectionHelper.Instance.addToListeningList(this.albumId);
+			const response = await ConnectionHelper.Instance.addToListeningList(this.state.albumDescriptor);
 			return response;
 		}
 		catch (error) {

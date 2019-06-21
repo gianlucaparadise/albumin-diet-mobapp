@@ -8,12 +8,28 @@ import { AlbumDetailNavigationParams } from './AlbumDetailScreen';
 import { NavigationScreenProps } from 'react-navigation';
 import { NavigationScreenOptions } from 'react-navigation';
 import { MyNavigationScreenOptionsGetter } from '../../types/react-navigation-types';
+import { AppState } from '../redux/reducers/root.reducer';
+import { loadMyAlbums } from '../redux/thunks/my-albums.thunk';
+import { loadMyAlbumsNext } from '../redux/thunks/my-albums.thunk';
+import { connect } from 'react-redux';
 
-interface Props extends NavigationScreenProps {
+//#region Props
+interface OwnProps extends NavigationScreenProps {
 }
 
+interface StateProps {
+	albumDescriptors: UserAlbum[],
+}
+
+interface DispatchProps {
+	loadMyAlbums: (tags: string[], showUntagged: boolean) => void,
+	loadMyAlbumsNext: () => void,
+}
+
+type Props = StateProps & DispatchProps & OwnProps;
+//#endregion
+
 interface State {
-	albumDescriptors: UserAlbum[]
 }
 
 export interface MyAlbumsNavigationParams {
@@ -27,7 +43,7 @@ export interface MyAlbumsNavigationParams {
 	untagged: boolean,
 }
 
-export default class MyAlbumsScreen extends Component<Props, State> {
+class MyAlbumsScreen extends Component<Props, State> {
 	// TODO: add react-native-paper AppBar.Header as custom Header: https://hackernoon.com/how-to-use-a-custom-header-and-custom-bottom-tab-bar-for-react-native-with-react-navigation-969a5d3cabb1
 	static navigationOptions: MyNavigationScreenOptionsGetter<NavigationScreenOptions> = (navigationOptions) => {
 		return {
@@ -77,35 +93,16 @@ export default class MyAlbumsScreen extends Component<Props, State> {
 		this.props.navigation.openDrawer();
 	}
 
-	getAlbums = async (tags: string[], showUntagged: boolean) => {
-		try {
-			const albumsResponse = await ConnectionHelper.Instance.getAlbums(tags, showUntagged);
-			this.setState({ albumDescriptors: albumsResponse.data });
-		}
-		catch (error) {
-			console.error('Error while retrieving albums');
-			console.error(error);
-		}
+	getAlbums = (tags: string[], showUntagged: boolean) => {
+		this.props.loadMyAlbums(tags, showUntagged);
 	}
 
 	/**
 	 * Here I append the next page
 	 */
-	onPageFinishing = async () => {
-		try {
-			const albums = this.state.albumDescriptors;
-			const offset = albums.length;
-			const response = await ConnectionHelper.Instance.getAlbums(this.selectedTags, this.showUntagged, offset);
-			albums.push(...response.data);
-			this.setState({ albumDescriptors: albums });
-
-			console.log('added albums: ');
-			console.log(response.data);
-
-		} catch (error) {
-			console.log('error while loading next page: ');
-			console.log(error);
-		}
+	onPageFinishing = () => {
+		console.log('onPageFinishing');
+		this.props.loadMyAlbumsNext();
 	}
 
 	goToDetail = (albumDescriptor: UserAlbum, elementId: string) => {
@@ -134,7 +131,7 @@ export default class MyAlbumsScreen extends Component<Props, State> {
 			<View>
 				<FlatList
 					style={styles.list}
-					data={this.state.albumDescriptors}
+					data={this.props.albumDescriptors}
 					renderItem={({ item }) => <AlbumCardWidget onPress={this.goToDetail} style={styles.listItem} albumDescriptor={item} />}
 					keyExtractor={(item, index) => item.album.id}
 					onEndReached={this.onPageFinishing}
@@ -155,3 +152,15 @@ const styles = StyleSheet.create({
 		marginBottom: 7,
 	},
 });
+
+const mapStateToProps = (state: AppState): StateProps => ({
+	albumDescriptors: state.myAlbumsReducer.albumDescriptors || []
+});
+
+//Map your action creators to your props.
+const mapDispatchToProps: DispatchProps = {
+	loadMyAlbums: loadMyAlbums,
+	loadMyAlbumsNext: loadMyAlbumsNext,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MyAlbumsScreen);

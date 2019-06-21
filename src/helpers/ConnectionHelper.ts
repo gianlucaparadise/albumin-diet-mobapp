@@ -4,6 +4,7 @@ import { MyUrlFactory } from "./MyUrlFactory";
 import { loadTags } from "../redux/thunks/tag.thunk";
 import { store } from "../../App";
 import { addToListeningList, removeFromListeningList } from "../redux/thunks/listening-list.thunk";
+import { removeFromMyAlbums } from "../redux/thunks/my-albums.thunk";
 
 export class ConnectionHelper {
 	private static _instance: ConnectionHelper;
@@ -97,6 +98,7 @@ export class ConnectionHelper {
 		const request = new Request(url, requestInit);
 
 		const result = await this.send<object>(request);
+		store.dispatch(removeFromMyAlbums(spotifyAlbumId));
 		return result;
 	}
 

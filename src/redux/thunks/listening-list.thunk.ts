@@ -3,7 +3,7 @@ import { AppState } from "../reducers/root.reducer";
 import { AnyAction } from "redux";
 import { ConnectionHelper } from "../../helpers/ConnectionHelper";
 import { loadListeningListAction, loadNextListeningListAction, errorListeningListAction } from "../actions/listening-list.actions";
-import { TaggedAlbum } from "albumin-diet-types";
+import { UserAlbum } from "albumin-diet-types";
 
 export const loadListeningList = (): ThunkAction<void, AppState, null, AnyAction> => async dispatch => {
     try {
@@ -39,7 +39,7 @@ export const loadListeningListNext = (): ThunkAction<void, AppState, null, AnyAc
     }
 }
 
-export const addToListeningList = (albumDescriptor: TaggedAlbum): ThunkAction<void, AppState, null, AnyAction> => async (dispatch, getState) => {
+export const addToListeningList = (albumDescriptor: UserAlbum): ThunkAction<void, AppState, null, AnyAction> => async (dispatch, getState) => {
     try {
         const listeningListState = getState().listeningListReducer;
         const listeningList = listeningListState.albumDescriptors || [];

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, StyleProp, ViewStyle, Image } from 'react-native';
 import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
 import { UserAlbum } from 'albumin-diet-types';
+import ToggleIconButton from './ToggleIconButton';
+import { ConnectionHelper } from '../helpers/ConnectionHelper';
 // import { Navigation } from 'react-native-navigation';
 
 interface Props {
@@ -18,12 +20,20 @@ interface Props {
 }
 
 interface State {
+	/**
+	 * This property tells whether the egg button can be pressed or not
+	 */
+	canBeEgged: boolean,
 }
 
 export default class AlbumCardWidget extends Component<Props, State> {
-	// constructor(props: Props) {
-	// 	super(props);
-	// }
+	constructor(props: Props) {
+		super(props);
+
+		this.state = {
+			canBeEgged: true
+		}
+	}
 
 	componentDidMount() {
 	}
@@ -59,10 +69,58 @@ export default class AlbumCardWidget extends Component<Props, State> {
 		return `image${this.props.albumDescriptor.album.id}`;
 	}
 
+	get isInListeningList() {
+		return this.props.albumDescriptor.isInListeningList;
+	}
+
 	onPressed = () => {
 		if (!this.props.onPress) return;
 		this.props.onPress(this.props.albumDescriptor, this.elementId);
 	}
+
+	//#region Listening List
+	onPressEgg = async () => {
+		this.setState({ canBeEgged: false });
+
+		let isEgged: boolean;
+		if (this.props.albumDescriptor.isInListeningList) {
+			await this.uneggAlbum(this.props.albumDescriptor);
+			isEgged = false;
+		} else {
+			await this.eggAlbum(this.props.albumDescriptor);
+			isEgged = true;
+		}
+
+		this.props.albumDescriptor.isInListeningList = isEgged;
+
+		this.setState({
+			canBeEgged: true,
+			//albumDescriptor: albumDescriptor
+		});
+	}
+
+	eggAlbum = async (albumDescriptor: UserAlbum) => {
+		try {
+			const response = await ConnectionHelper.Instance.addToListeningList(albumDescriptor);
+			return response;
+		}
+		catch (error) {
+			console.error(`Error while adding album to listening list`);
+			console.error(error);
+		}
+	}
+
+	uneggAlbum = async (albumDescriptor: UserAlbum) => {
+		try {
+			const response = await ConnectionHelper.Instance.deleteFromListeningList(albumDescriptor.album.id);
+			return response
+		}
+		catch (error) {
+			console.error(`Error while removing album from listening list`);
+			console.error(error);
+		}
+	}
+	//#endregion
 
 	render() {
 		return (
@@ -79,9 +137,14 @@ export default class AlbumCardWidget extends Component<Props, State> {
 					<Paragraph>{this.releaseYear}</Paragraph>
 					<Title>{this.albumName}</Title>
 				</Card.Content>
-				{/* <Card.Actions>
-					<Button>Ok</Button>
-				</Card.Actions> */}
+				<Card.Actions>
+					<ToggleIconButton
+						type="eggs"
+						selected={this.isInListeningList}
+						enabled={this.state.canBeEgged}
+						onPress={this.onPressEgg}
+					/>
+				</Card.Actions>
 			</Card>
 		);
 	}

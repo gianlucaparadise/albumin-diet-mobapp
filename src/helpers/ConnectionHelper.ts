@@ -1,4 +1,4 @@
-import { GetMyAlbumsResponse, GetMyTagsResponse, UserAlbumsResponse, TagOnAlbumRequest, GetAlbumResponse, TaggedAlbum } from "albumin-diet-types";
+import { GetMyAlbumsResponse, GetMyTagsResponse, UserAlbumsResponse, TagOnAlbumRequest, GetAlbumResponse, TaggedAlbum, UserAlbum } from "albumin-diet-types";
 import { LoginHelper } from "./LoginHelper";
 import { MyUrlFactory } from "./MyUrlFactory";
 import { loadTags } from "../redux/thunks/tag.thunk";
@@ -179,7 +179,7 @@ export class ConnectionHelper {
 	 * Add the input album to current user's listening list
 	 * @param spotifyAlbumId Album to save
 	 */
-	async addToListeningList(albumDescriptor: TaggedAlbum) {
+	async addToListeningList(albumDescriptor: UserAlbum) {
 		// TODO: to be fully converted to Redux
 		const url = MyUrlFactory.Instance.getUrl(`listening-list`);
 

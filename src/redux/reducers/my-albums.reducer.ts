@@ -36,6 +36,12 @@ export function myAlbumsReducer(
                 albumDescriptors: [...(state.albumDescriptors || []), ...action.payload.albumDescriptors],
             };
 
+        case MyAlbumsActionTypes.Error:
+            return {
+                ...state,
+                errorMessage: 'Error'
+            };
+
         default:
             return state
     }

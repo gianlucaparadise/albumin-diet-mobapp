@@ -2,27 +2,43 @@ import { ThunkAction } from "redux-thunk";
 import { AppState } from "../reducers/root.reducer";
 import { AnyAction } from "redux";
 import { ConnectionHelper } from "../../helpers/ConnectionHelper";
-import { loadMyAlbumsAction, loadNextMyAlbumsAction } from "../actions/my-albums.actions";
+import { loadMyAlbumsAction, loadNextMyAlbumsAction, errorMyAlbumsAction } from "../actions/my-albums.actions";
 import { TaggedAlbum } from "albumin-diet-types";
 
 export const loadMyAlbums = (tags: string[], showUntagged: boolean): ThunkAction<void, AppState, null, AnyAction> => async dispatch => {
-    const response = await ConnectionHelper.Instance.getAlbums(tags, showUntagged);
-    dispatch(
-        loadMyAlbumsAction(tags, showUntagged, response.data)
-    );
+    try {
+        const response = await ConnectionHelper.Instance.getAlbums(tags, showUntagged);
+        dispatch(
+            loadMyAlbumsAction(tags, showUntagged, response.data)
+        );
+    } catch (error) {
+        console.log('Error while loadMyAlbums');
+        console.log(error);
+        dispatch(
+            errorMyAlbumsAction(error)
+        );
+    }
 }
 
 export const loadMyAlbumsNext = (): ThunkAction<void, AppState, null, AnyAction> => async (dispatch, getState) => {
-    const myAlbumsState = getState().myAlbumsReducer;
-    const tags = myAlbumsState.tags;
-    const showUntagged = myAlbumsState.showUntagged || false;
-    const prevMyAlbums = myAlbumsState.albumDescriptors || [];
-    const offset = prevMyAlbums.length;
+    try {
+        const myAlbumsState = getState().myAlbumsReducer;
+        const tags = myAlbumsState.tags;
+        const showUntagged = myAlbumsState.showUntagged || false;
+        const prevMyAlbums = myAlbumsState.albumDescriptors || [];
+        const offset = prevMyAlbums.length;
 
-    const response = await ConnectionHelper.Instance.getAlbums(tags, showUntagged, offset);
-    dispatch(
-        loadNextMyAlbumsAction(response.data)
-    );
+        const response = await ConnectionHelper.Instance.getAlbums(tags, showUntagged, offset);
+        dispatch(
+            loadNextMyAlbumsAction(response.data)
+        );
+    } catch (error) {
+        console.log('Error while loadMyAlbumsNext');
+        console.log(error);
+        dispatch(
+            errorMyAlbumsAction(error)
+        );
+    }
 }
 
 // export const addToMyAlbums = (albumDescriptor: TaggedAlbum): ThunkAction<void, AppState, null, AnyAction> => async (dispatch, getState) => {
@@ -35,15 +51,23 @@ export const loadMyAlbumsNext = (): ThunkAction<void, AppState, null, AnyAction>
 // }
 
 export const removeFromMyAlbums = (albumId: string): ThunkAction<void, AppState, null, AnyAction> => async (dispatch, getState) => {
-    const myAlbumsState = getState().myAlbumsReducer;
-    const tags = myAlbumsState.tags;
-    const showUntagged = myAlbumsState.showUntagged || false;
-    const myAlbums = myAlbumsState.albumDescriptors || [];
+    try {
+        const myAlbumsState = getState().myAlbumsReducer;
+        const tags = myAlbumsState.tags;
+        const showUntagged = myAlbumsState.showUntagged || false;
+        const myAlbums = myAlbumsState.albumDescriptors || [];
 
-    const toBeRemoved = myAlbums.findIndex(a => a.album.id === albumId);
-    const removed = myAlbums.splice(toBeRemoved, 1);
+        const toBeRemoved = myAlbums.findIndex(a => a.album.id === albumId);
+        const removed = myAlbums.splice(toBeRemoved, 1);
 
-    dispatch(
-        loadMyAlbumsAction(tags, showUntagged, myAlbums)
-    );
+        dispatch(
+            loadMyAlbumsAction(tags, showUntagged, myAlbums)
+        );
+    } catch (error) {
+        console.log('Error while removeFromMyAlbums');
+        console.log(error);
+        dispatch(
+            errorMyAlbumsAction(error)
+        );
+    }
 }

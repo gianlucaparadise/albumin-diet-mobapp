@@ -19,6 +19,13 @@ export function tagReducer(
             return {
                 tags: action.payload.tags
             }
+
+        case TagActionTypes.Error:
+            return {
+                ...state,
+                errorMessage: 'Error'
+            };
+
         default:
             return state
     }

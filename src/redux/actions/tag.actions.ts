@@ -29,3 +29,12 @@ export function loadTagsAction(tags: ITag[]): TagActions {
         }
     };
 }
+
+export function errorTagAction(err: any): TagActions {
+    return {
+        type: TagActionTypes.Error,
+        payload: {
+            err
+        }
+    }
+}

@@ -79,3 +79,12 @@ export function removeFromListeningListAction(albumId: string): ListeningListAct
         }
     };
 }
+
+export function errorListeningListAction(err: any): ListeningListActions {
+    return {
+        type: ListeningListActionTypes.Error,
+        payload: {
+            err
+        }
+    }
+}

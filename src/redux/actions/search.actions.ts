@@ -57,3 +57,12 @@ export function clearSearchAction(): SearchActions {
         type: SearchActionTypes.Clear
     };
 }
+
+export function errorSearchAction(err: any): SearchActions {
+    return {
+        type: SearchActionTypes.Error,
+        payload: {
+            err
+        }
+    }
+}

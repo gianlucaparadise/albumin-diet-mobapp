@@ -31,6 +31,12 @@ export function listeningListReducer(
                 albumDescriptors: [...(state.albumDescriptors || []), ...action.payload.albumDescriptors],
             };
 
+        case ListeningListActionTypes.Error:
+            return {
+                ...state,
+                errorMessage: 'Error'
+            };
+
         default:
             return state
     }

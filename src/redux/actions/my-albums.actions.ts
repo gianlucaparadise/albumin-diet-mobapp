@@ -85,3 +85,13 @@ export function removeFromMyAlbumsAction(albumId: string): MyAlbumsActions {
         }
     };
 }
+
+export function errorMyAlbumsAction(err: any): MyAlbumsActions {
+    return {
+        type: MyAlbumsActionTypes.Error,
+        payload: {
+            err
+        }
+    }
+}
+

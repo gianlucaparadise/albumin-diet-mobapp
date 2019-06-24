@@ -34,6 +34,12 @@ export function searchReducer(
                 albumDescriptors: []
             };
 
+        case SearchActionTypes.Error:
+            return {
+                ...state,
+                errorMessage: 'Error'
+            };
+
         default:
             return state
     }

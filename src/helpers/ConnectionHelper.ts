@@ -23,14 +23,13 @@ export class ConnectionHelper {
 
 		const result = await fetch(request);
 
-		LoginHelper.Instance.refreshToken(result.headers);
-
-		const responseBody: T = await result.json();
-
 		if (result.status < 200 || result.status > 299) {
-			throw new Error(`HTTP error: ${result.status} response: ${JSON.stringify(responseBody)}`);
+			let responseString = await result.text();
+			throw new Error(`HTTP error: ${result.status} response: ${responseString}`);
 		}
 
+		LoginHelper.Instance.refreshToken(result.headers);
+		const responseBody: T = await result.json();
 		return responseBody;
 	}
 

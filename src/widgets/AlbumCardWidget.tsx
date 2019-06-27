@@ -27,6 +27,8 @@ interface State {
 }
 
 export default class AlbumCardWidget extends Component<Props, State> {
+	_isMounted = false;
+
 	constructor(props: Props) {
 		super(props);
 
@@ -36,6 +38,11 @@ export default class AlbumCardWidget extends Component<Props, State> {
 	}
 
 	componentDidMount() {
+		this._isMounted = true;
+	}
+
+	componentWillUnmount() {
+		this._isMounted = false;
 	}
 
 	get artistName() {
@@ -92,11 +99,13 @@ export default class AlbumCardWidget extends Component<Props, State> {
 		}
 
 		this.props.albumDescriptor.isInListeningList = isEgged;
-
-		this.setState({
-			canBeEgged: true,
-			//albumDescriptor: albumDescriptor
-		});
+		
+		if (this._isMounted) {
+			this.setState({
+				canBeEgged: true,
+				//albumDescriptor: albumDescriptor
+			});
+		}
 	}
 
 	eggAlbum = async (albumDescriptor: UserAlbum) => {

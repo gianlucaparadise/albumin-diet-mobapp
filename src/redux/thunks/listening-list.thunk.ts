@@ -42,8 +42,18 @@ export const loadListeningListNext = (): ThunkAction<void, AppState, null, AnyAc
 export const addToListeningList = (albumDescriptor: UserAlbum): ThunkAction<void, AppState, null, AnyAction> => async (dispatch, getState) => {
     try {
         const listeningListState = getState().listeningListReducer;
-        const listeningList = listeningListState.albumDescriptors || [];
-        listeningList.push(albumDescriptor);
+        let listeningList: UserAlbum[];
+        if (listeningListState.albumDescriptors) {
+            listeningList = [...listeningListState.albumDescriptors];
+        }
+        else {
+            listeningList = [];
+        }
+
+        listeningList.push({
+            ...albumDescriptor,
+            isInListeningList: true,
+        });
         dispatch(
             loadListeningListAction(listeningList)
         );
@@ -59,7 +69,9 @@ export const addToListeningList = (albumDescriptor: UserAlbum): ThunkAction<void
 export const removeFromListeningList = (albumId: string): ThunkAction<void, AppState, null, AnyAction> => async (dispatch, getState) => {
     try {
         const listeningListState = getState().listeningListReducer;
-        const listeningList = listeningListState.albumDescriptors || [];
+        if (!listeningListState.albumDescriptors) return;
+
+        const listeningList = [...listeningListState.albumDescriptors];
 
         const toBeRemoved = listeningList.findIndex(a => a.album.id === albumId);
         const removed = listeningList.splice(toBeRemoved, 1);

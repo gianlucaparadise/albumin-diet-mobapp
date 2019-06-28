@@ -24,7 +24,7 @@ export const loadMyAlbumsNext = (): ThunkAction<void, AppState, null, AnyAction>
     try {
         const myAlbumsState = getState().myAlbumsReducer;
         const tags = myAlbumsState.tags;
-        const showUntagged = myAlbumsState.showUntagged || false;
+        const showUntagged = myAlbumsState.showUntagged;
         const prevMyAlbums = myAlbumsState.albumDescriptors || [];
         const offset = prevMyAlbums.length;
 
@@ -54,7 +54,7 @@ export const removeFromMyAlbums = (albumId: string): ThunkAction<void, AppState,
     try {
         const myAlbumsState = getState().myAlbumsReducer;
         const tags = myAlbumsState.tags;
-        const showUntagged = myAlbumsState.showUntagged || false;
+        const showUntagged = myAlbumsState.showUntagged;
         const myAlbums = myAlbumsState.albumDescriptors || [];
 
         const toBeRemoved = myAlbums.findIndex(a => a.album.id === albumId);
@@ -65,6 +65,46 @@ export const removeFromMyAlbums = (albumId: string): ThunkAction<void, AppState,
         );
     } catch (error) {
         console.log('Error while removeFromMyAlbums');
+        console.log(error);
+        dispatch(
+            errorMyAlbumsAction(error)
+        );
+    }
+}
+
+/**
+ * This action sets the input props to the input album
+ */
+export const updateMyAlbum = (albumId: string, props: any): ThunkAction<void, AppState, null, AnyAction> => async (dispatch, getState) => {
+    try {
+        const state = getState().myAlbumsReducer;
+        if (!state.albumDescriptors) {
+            return;
+        }
+
+        const albums = [...state.albumDescriptors];
+
+        const albumIndex = albums.findIndex(a => a.album.id === albumId);
+        if (albumIndex < 0) {
+            return;
+        }
+
+        const albumDescriptor = albums[albumIndex];
+        albums[albumIndex] = {
+            ...albumDescriptor,
+            ...props
+        };
+
+        dispatch(
+            loadMyAlbumsAction(
+                state.tags,
+                state.showUntagged,
+                albums,
+            )
+        );
+
+    } catch (error) {
+        console.log('Error while updateMyAlbum');
         console.log(error);
         dispatch(
             errorMyAlbumsAction(error)

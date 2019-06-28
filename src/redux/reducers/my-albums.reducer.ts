@@ -3,13 +3,14 @@ import { MyAlbumsActionTypes, MyAlbumsActions } from "../actions/my-albums.actio
 
 export interface MyAlbumsState {
     tags: string[] | null;
-    showUntagged?: boolean;
+    showUntagged: boolean;
     albumDescriptors?: UserAlbum[];
     errorMessage?: string;
 }
 
 const initialState: MyAlbumsState = {
     tags: [],
+    showUntagged: false,
     albumDescriptors: [],
 }
 

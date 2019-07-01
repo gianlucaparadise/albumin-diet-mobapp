@@ -5,6 +5,7 @@ import { ConnectionHelper } from "../../helpers/ConnectionHelper";
 import { loadListeningListAction, loadNextListeningListAction, errorListeningListAction } from "../actions/listening-list.actions";
 import { UserAlbum } from "albumin-diet-types";
 import { updateMyAlbum } from "./my-albums.thunk";
+import { updateSearchAlbum } from "./search.thunk";
 
 export const loadListeningList = (): ThunkAction<void, AppState, null, AnyAction> => async dispatch => {
     try {
@@ -64,6 +65,11 @@ export const addToListeningList = (albumDescriptor: UserAlbum): ThunkAction<void
             updateMyAlbum(albumDescriptor.album.id, { isInListeningList: true }),
         );
 
+        // Refresh Search
+        dispatch(
+            updateSearchAlbum(albumDescriptor.album.id, { isInListeningList: true }),
+        );
+
     } catch (error) {
         console.log('Error while addToListeningList');
         console.log(error);
@@ -90,6 +96,11 @@ export const removeFromListeningList = (albumId: string): ThunkAction<void, AppS
         // Refresh MyAlbums
         dispatch(
             updateMyAlbum(albumId, { isInListeningList: false })
+        );
+
+        // Refresh SearchAlbums
+        dispatch(
+            updateSearchAlbum(albumId, { isInListeningList: false })
         );
 
     } catch (error) {

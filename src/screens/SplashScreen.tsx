@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { LoginHelper } from '../helpers/LoginHelper';
 import { NavigationScreenProps } from 'react-navigation';
-import { Button, Text } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import { AlbuminColors } from '../Theme';
 
 interface Props extends NavigationScreenProps {
@@ -10,7 +10,19 @@ interface Props extends NavigationScreenProps {
 
 export default class SplashScreen extends Component<Props> {
 
-	onPressGo = async () => {
+	timeout?: number;
+
+	onPressGo = () => {
+		if (this.timeout) {
+			clearTimeout(this.timeout);
+		}
+		
+		this.navigate();
+
+		return true;
+	}
+
+	navigate = async () => {
 		const isLoggedIn = await LoginHelper.Instance.isLoggedIn();
 
 		if (isLoggedIn) {
@@ -21,13 +33,16 @@ export default class SplashScreen extends Component<Props> {
 		}
 	}
 
+	componentWillMount() {
+		this.timeout = setTimeout(() => {
+			this.onPressGo();
+		}, 1500);
+	}
+
 	render() {
 		return (
-			<View style={styles.container}>
-				<Text style={styles.welcome}>Albumin Diet</Text>
-				<Button onPress={this.onPressGo}>
-					Go
-				</Button>
+			<View style={styles.container} onStartShouldSetResponder={() => this.onPressGo()}>
+					<Text style={styles.welcome}>Albumin Diet</Text>
 			</View>
 		);
 	}

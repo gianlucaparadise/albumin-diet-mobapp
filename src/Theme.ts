@@ -12,6 +12,8 @@ export const AlbuminColors = {
 	placeholder: 'rgba(255,255,255,0.7)',
 	appbar: '#212121',
 	chips: '#616161',
+	
+	surfaceAlpha50: 'rgba(66,66,66, 0.7)'
 }
 
 export const AlbuminTheme: Theme = {

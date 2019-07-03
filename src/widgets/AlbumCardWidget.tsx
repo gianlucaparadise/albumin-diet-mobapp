@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, StyleProp, ViewStyle, Image } from 'react-native';
-import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
+import { StyleSheet, View, StyleProp, ViewStyle, Image } from 'react-native';
+import { Card, Text } from 'react-native-paper';
 import { UserAlbum } from 'albumin-diet-types';
 import ToggleIconButton from './ToggleIconButton';
 import { ConnectionHelper } from '../helpers/ConnectionHelper';
+import { AlbuminColors } from '../Theme';
 // import { Navigation } from 'react-native-navigation';
 
 interface Props {
@@ -99,7 +100,7 @@ export default class AlbumCardWidget extends Component<Props, State> {
 		}
 
 		this.props.albumDescriptor.isInListeningList = isEgged;
-		
+
 		if (this._isMounted) {
 			this.setState({
 				canBeEgged: true,
@@ -134,26 +135,43 @@ export default class AlbumCardWidget extends Component<Props, State> {
 	render() {
 		return (
 			<Card onPress={this.onPressed} style={this.props.style} elevation={3}>
-				{/* <Navigation.Element elementId={this.elementId}> */}
-				<Image
-					resizeMode="cover"
-					style={styles.cover}
-					source={{ uri: this.imageUrl }}
-				/>
-				{/* </Navigation.Element> */}
-				<Card.Content style={styles.content}>
-					<Paragraph>{this.artistName}</Paragraph>
-					<Paragraph>{this.releaseYear}</Paragraph>
-					<Title>{this.albumName}</Title>
-				</Card.Content>
-				<Card.Actions>
-					<ToggleIconButton
-						type="eggs"
-						selected={this.isInListeningList}
-						enabled={this.state.canBeEgged}
-						onPress={this.onPressEgg}
+				<View style={styles.row}>
+					{/* <Navigation.Element elementId={this.elementId}> */}
+					<Image
+						resizeMode="cover"
+						style={styles.cover}
+						source={{ uri: this.imageUrl }}
 					/>
-				</Card.Actions>
+					{/* </Navigation.Element> */}
+					<View style={styles.content}>
+						<Text
+							numberOfLines={1}
+							ellipsizeMode={'tail'}
+							style={styles.small}>
+							{this.artistName}
+						</Text>
+						<Text
+							numberOfLines={1}
+							ellipsizeMode={'tail'}
+							style={styles.small}>
+							{this.releaseYear}
+						</Text>
+						<Text
+							numberOfLines={2}
+							ellipsizeMode={'tail'}
+							style={styles.big}>
+							{this.albumName}
+						</Text>
+						<Card.Actions>
+							<ToggleIconButton
+								type="eggs"
+								selected={this.isInListeningList}
+								enabled={this.state.canBeEgged}
+								onPress={this.onPressEgg}
+							/>
+						</Card.Actions>
+					</View>
+				</View>
 			</Card>
 		);
 	}
@@ -161,10 +179,33 @@ export default class AlbumCardWidget extends Component<Props, State> {
 
 const styles = StyleSheet.create({
 	content: {
-		marginTop: 5,
+		padding: 5,
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		width: '100%',
+		height: '100%',
+		backgroundColor: AlbuminColors.surfaceAlpha50,
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	row: {
+		flex: 1,
+		flexDirection: 'row'
 	},
 	cover: {
 		width: '100%',
 		aspectRatio: 1,
+		position: 'relative',
+	},
+	small: {
+		fontSize: 20,
+		textAlign: 'center'
+	},
+	big: {
+		marginVertical: 5,
+		fontSize: 40,
+		textAlign: 'center',
 	}
 });

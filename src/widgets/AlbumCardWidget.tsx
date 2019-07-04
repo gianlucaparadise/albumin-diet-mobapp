@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, StyleProp, ViewStyle, Image } from 'react-native';
+import { StyleSheet, View, StyleProp, ViewStyle, Image, Animated, LayoutChangeEvent } from 'react-native';
 import { Card, Text } from 'react-native-paper';
 import { UserAlbum } from 'albumin-diet-types';
 import ToggleIconButton from './ToggleIconButton';
@@ -18,6 +18,11 @@ interface Props {
 	onPress?: (albumDescriptor: UserAlbum, elementId: string) => any,
 
 	style?: StyleProp<ViewStyle>
+
+	/**
+	 * Y Offset of the scrollview
+	 */
+	yOffset?: Animated.Value,
 }
 
 interface State {
@@ -25,16 +30,22 @@ interface State {
 	 * This property tells whether the egg button can be pressed or not
 	 */
 	canBeEgged: boolean,
+
+	yScreenOffset: number,
 }
 
 export default class AlbumCardWidget extends Component<Props, State> {
 	_isMounted = false;
 
+	contentView?: View;
+	viewHeight: number = 0;
+
 	constructor(props: Props) {
 		super(props);
 
 		this.state = {
-			canBeEgged: true
+			canBeEgged: true,
+			yScreenOffset: 0,
 		}
 	}
 
@@ -132,10 +143,38 @@ export default class AlbumCardWidget extends Component<Props, State> {
 	}
 	//#endregion
 
+	onLayout = (event: LayoutChangeEvent) => {
+		this.viewHeight = event.nativeEvent.layout.height;
+
+		if (this.contentView) {
+			this.contentView.measure((x, y, width, height, pageX, pageY) => {
+				this.setState({ yScreenOffset: pageY - 88});
+			});
+		}
+	};
+
+	opacityTransform = (yScreenOffset: number) => {
+		if (!this.props.yOffset) return {};
+
+		return {
+			opacity: this.props.yOffset.interpolate({
+				inputRange: [
+					yScreenOffset - this.viewHeight,
+					yScreenOffset - this.viewHeight / 2,
+					yScreenOffset,
+					yScreenOffset + this.viewHeight / 2,
+					yScreenOffset + this.viewHeight,
+				],
+				outputRange: [0.3, 0.7, 1, 0.7, 0.3],
+				extrapolate: "clamp"
+			})
+		};
+	}
+
 	render() {
 		return (
-			<Card onPress={this.onPressed} style={this.props.style} elevation={3}>
-				<View style={styles.row}>
+			<View ref={(ref: View) => { this.contentView = ref }} onLayout={this.onLayout}>
+				<Card onPress={this.onPressed} style={this.props.style} elevation={3}>
 					{/* <Navigation.Element elementId={this.elementId}> */}
 					<Image
 						resizeMode="cover"
@@ -143,7 +182,7 @@ export default class AlbumCardWidget extends Component<Props, State> {
 						source={{ uri: this.imageUrl }}
 					/>
 					{/* </Navigation.Element> */}
-					<View style={styles.content}>
+					<Animated.View style={[styles.content, this.opacityTransform(this.state.yScreenOffset)]}>
 						<Text
 							numberOfLines={1}
 							ellipsizeMode={'tail'}
@@ -170,9 +209,9 @@ export default class AlbumCardWidget extends Component<Props, State> {
 								onPress={this.onPressEgg}
 							/>
 						</Card.Actions>
-					</View>
-				</View>
-			</Card>
+					</Animated.View>
+				</Card>
+			</View>
 		);
 	}
 }
@@ -189,10 +228,6 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
-	},
-	row: {
-		flex: 1,
-		flexDirection: 'row'
 	},
 	cover: {
 		width: '100%',

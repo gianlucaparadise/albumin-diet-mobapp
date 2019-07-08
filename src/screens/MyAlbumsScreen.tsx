@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList, Animated } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import { ConnectionHelper } from '../helpers/ConnectionHelper';
 import AlbumCardWidget from '../widgets/AlbumCardWidget';
@@ -57,6 +57,9 @@ class MyAlbumsScreen extends Component<Props, State> {
 			drawerLockMode: "unlocked",
 		};
 	}
+
+	yOffset = new Animated.Value(0);
+	onScroll = Animated.event([{ nativeEvent: { contentOffset: { y: this.yOffset } } }]);
 
 	selectedTags: string[] = [];
 	showUntagged: boolean = false;
@@ -132,7 +135,9 @@ class MyAlbumsScreen extends Component<Props, State> {
 				<FlatList
 					style={styles.list}
 					data={this.props.albumDescriptors}
-					renderItem={({ item }) => <AlbumCardWidget onPress={this.goToDetail} style={styles.listItem} albumDescriptor={item} />}
+					scrollEventThrottle={16}
+					onScroll={this.onScroll}
+					renderItem={({ item }) => <AlbumCardWidget onPress={this.goToDetail} style={styles.listItem} albumDescriptor={item} yOffset={this.yOffset} />}
 					keyExtractor={(item, index) => item.album.id}
 					onEndReached={this.onPageFinishing}
 					onEndReachedThreshold={5}

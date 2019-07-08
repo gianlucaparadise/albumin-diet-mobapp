@@ -143,12 +143,13 @@ export default class AlbumCardWidget extends Component<Props, State> {
 	}
 	//#endregion
 
+	//#region Animation
 	onLayout = (event: LayoutChangeEvent) => {
 		this.viewHeight = event.nativeEvent.layout.height;
 
 		if (this.contentView) {
 			this.contentView.measure((x, y, width, height, pageX, pageY) => {
-				this.setState({ yScreenOffset: pageY - 88});
+				this.setState({ yScreenOffset: pageY - 88 });
 			});
 		}
 	};
@@ -170,18 +171,17 @@ export default class AlbumCardWidget extends Component<Props, State> {
 			})
 		};
 	}
+	//#endregion
 
 	render() {
 		return (
 			<View ref={(ref: View) => { this.contentView = ref }} onLayout={this.onLayout}>
 				<Card onPress={this.onPressed} style={this.props.style} elevation={3}>
-					{/* <Navigation.Element elementId={this.elementId}> */}
 					<Image
 						resizeMode="cover"
 						style={styles.cover}
 						source={{ uri: this.imageUrl }}
 					/>
-					{/* </Navigation.Element> */}
 					<Animated.View style={[styles.content, this.opacityTransform(this.state.yScreenOffset)]}>
 						<Text
 							numberOfLines={1}

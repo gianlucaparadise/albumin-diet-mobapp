@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Animated } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 import { FlatList } from 'react-native-gesture-handler';
 import { UserAlbum } from 'albumin-diet-types';
@@ -38,6 +38,9 @@ class MyListeningListScreen extends Component<Props, State> {
 		};
 	}
 
+	yOffset = new Animated.Value(0);
+	onScroll = Animated.event([{ nativeEvent: { contentOffset: { y: this.yOffset } } }]);
+
 	constructor(props: Props) {
 		super(props);
 
@@ -72,7 +75,9 @@ class MyListeningListScreen extends Component<Props, State> {
 				<FlatList
 					style={styles.list}
 					data={this.props.albumDescriptors}
-					renderItem={({ item }) => <AlbumCardWidget onPress={this.goToDetail} style={styles.listItem} albumDescriptor={item} />}
+					scrollEventThrottle={16}
+					onScroll={this.onScroll}
+					renderItem={({ item }) => <AlbumCardWidget onPress={this.goToDetail} style={styles.listItem} albumDescriptor={item} yOffset={this.yOffset} />}
 					keyExtractor={(item, index) => item.album.id}
 					onEndReached={this.onPageFinishing}
 					onEndReachedThreshold={5}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Animated } from 'react-native';
 import { NavigationScreenProps, NavigationScreenOptions, FlatList } from 'react-navigation';
 import { Searchbar } from 'react-native-paper';
 import { MyNavigationScreenOptionsGetter } from 'react-navigation-types';
@@ -41,6 +41,9 @@ class SearchScreen extends Component<Props, State> {
 	}
 
 	timeout?: NodeJS.Timeout;
+
+	yOffset = new Animated.Value(0);
+	onScroll = Animated.event([{ nativeEvent: { contentOffset: { y: this.yOffset } } }]);
 
 	constructor(props: Props) {
 		super(props);
@@ -102,7 +105,9 @@ class SearchScreen extends Component<Props, State> {
 				<FlatList
 					style={styles.list}
 					data={this.props.albumDescriptors}
-					renderItem={({ item }) => <AlbumCardWidget onPress={this.goToDetail} style={styles.listItem} albumDescriptor={item} />}
+					scrollEventThrottle={16}
+					onScroll={this.onScroll}
+					renderItem={({ item }) => <AlbumCardWidget onPress={this.goToDetail} style={styles.listItem} albumDescriptor={item} yOffset={this.yOffset} />}
 					keyExtractor={(item, index) => item.album.id}
 					onEndReached={this.onPageFinishing}
 					onEndReachedThreshold={5}

@@ -9,6 +9,7 @@ import { NavigationScreenOptions } from 'react-navigation';
 import TagCloud from '../widgets/TagCloud';
 import ToggleIconButton from '../widgets/ToggleIconButton';
 import { ConnectionHelper } from '../helpers/ConnectionHelper';
+import TrackList from '../widgets/TrackList';
 
 interface Props extends NavigationScreenProps {
 }
@@ -35,8 +36,6 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 		const options: NavigationScreenOptions = { title: albumDescriptor.album.name };
 		return options;
 	};
-
-	// public static readonly IMAGE_ELEMENT_ID = 'detailImage';
 
 	constructor(props: Props) {
 		super(props);
@@ -230,7 +229,7 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 		if (this.state.albumDescriptor.isSavedAlbum) {
 			// const tags = [...this.state.albumDescriptor.tags, ...this.state.albumDescriptor.tags, ...this.state.albumDescriptor.tags];
 			return (
-				<View style={{ display: 'flex' }}>
+				<View>
 					<Headline style={styles.text}>Tags</Headline>
 					<TagCloud tags={this.state.albumDescriptor.tags} albumDescriptor={this.state.albumDescriptor} />
 				</View>
@@ -241,13 +240,11 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 	render() {
 		return (
 			<ScrollView contentContainerStyle={styles.container}>
-				{/* <Navigation.Element elementId={AlbumDetailScreen.IMAGE_ELEMENT_ID}> */}
 				<Image
 					resizeMode="cover"
 					style={styles.cover}
 					source={{ uri: this.imageUrl }}
 				/>
-				{/* </Navigation.Element> */}
 				<View style={styles.space} />
 				<Headline style={styles.text}>{this.albumName}</Headline>
 				<Subheading style={styles.text}>{this.artistName}</Subheading>
@@ -269,6 +266,11 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 				</View>
 				<View style={styles.space} />
 				{this.renderTagCloud()}
+				<View style={styles.space} />
+				<View style={styles.trackListContainer}>
+					<Headline style={styles.text}>Tracks</Headline>
+					<TrackList albumDescriptor={this.state.albumDescriptor}></TrackList>
+				</View>
 			</ScrollView>
 		);
 	}
@@ -294,5 +296,9 @@ const styles = StyleSheet.create({
 	},
 	text: {
 		textAlign: 'center'
+	},
+	trackListContainer: {
+		flex: 1,
+		alignSelf: 'stretch'
 	}
 });

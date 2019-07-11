@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, StyleProp, ViewStyle, Image, Animated, LayoutChangeEvent } from 'react-native';
-import { Card, Text } from 'react-native-paper';
-import { UserAlbum } from 'albumin-diet-types';
+import { StyleSheet, View, StyleProp, ViewStyle, Image, Animated, LayoutChangeEvent, FlatList, findNodeHandle } from 'react-native';
 import ToggleIconButton from './ToggleIconButton';
 import { ConnectionHelper } from '../helpers/ConnectionHelper';
 import { AlbuminColors } from '../Theme';
@@ -23,6 +21,10 @@ interface Props {
 	 * Y Offset of the scrollview
 	 */
 	yOffset?: Animated.Value,
+	/**
+	 * parent scrollview or flatlist
+	 */
+	scrollView?: FlatList<UserAlbum>;
 }
 
 interface State {
@@ -147,11 +149,19 @@ export default class AlbumCardWidget extends Component<Props, State> {
 	onLayout = (event: LayoutChangeEvent) => {
 		this.viewHeight = event.nativeEvent.layout.height;
 
-		if (this.contentView) {
-			this.contentView.measure((x, y, width, height, pageX, pageY) => {
-				this.setState({ yScreenOffset: pageY - 88 });
-			});
+		if (this.contentView && this.props.scrollView) {
+			const parentNode = findNodeHandle(this.props.scrollView);
+			if (parentNode) {
+				this.contentView.measureLayout(
+					parentNode,
+					this.onMeasured,
+					() => { console.log(`measurament failed`) });
+			}
 		}
+	};
+
+	onMeasured = (left: number, top: number, width: number, height: number) => {
+		this.setState({ yScreenOffset: top });
 	};
 
 	opacityTransform = (yScreenOffset: number) => {

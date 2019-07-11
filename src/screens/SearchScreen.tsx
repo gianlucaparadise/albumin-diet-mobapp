@@ -42,6 +42,7 @@ class SearchScreen extends Component<Props, State> {
 
 	timeout?: NodeJS.Timeout;
 
+	scrollView?: FlatList<UserAlbum>;
 	yOffset = new Animated.Value(0);
 	onScroll = Animated.event([{ nativeEvent: { contentOffset: { y: this.yOffset } } }]);
 
@@ -103,11 +104,12 @@ class SearchScreen extends Component<Props, State> {
 					value={this.state.query}
 				/>
 				<FlatList
+					ref={(v: FlatList<UserAlbum>) => { this.scrollView = v }}
 					style={styles.list}
 					data={this.props.albumDescriptors}
 					scrollEventThrottle={16}
 					onScroll={this.onScroll}
-					renderItem={({ item }) => <AlbumCardWidget onPress={this.goToDetail} style={styles.listItem} albumDescriptor={item} yOffset={this.yOffset} />}
+					renderItem={({ item }) => <AlbumCardWidget scrollView={this.scrollView} onPress={this.goToDetail} style={styles.listItem} albumDescriptor={item} yOffset={this.yOffset} />}
 					keyExtractor={(item, index) => item.album.id}
 					onEndReached={this.onPageFinishing}
 					onEndReachedThreshold={5}

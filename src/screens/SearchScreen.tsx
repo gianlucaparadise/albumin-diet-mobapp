@@ -60,14 +60,14 @@ class SearchScreen extends Component<Props, State> {
 		if (this.timeout) clearTimeout(this.timeout);
 	}
 
-	search = async (query: string) => {
+	search = (query: string) => {
 		this.props.loadSearch(query);
 	};
 
 	/**
    	 * Here I append the next page
      */
-	onPageFinishing = async () => {
+	onPageFinishing = () => {
 		console.log('onPageFinishing');
 		this.props.loadSearchNext();
 	}

@@ -159,7 +159,7 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 
 	saveAlbum = async () => {
 		try {
-			const response = ConnectionHelper.Instance.saveAlbum(this.albumId);
+			const response = await ConnectionHelper.Instance.saveAlbum(this.albumId);
 			return response;
 		}
 		catch (error) {
@@ -170,7 +170,7 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 
 	unsaveAlbum = async () => {
 		try {
-			const response = ConnectionHelper.Instance.unsaveAlbum(this.albumId);
+			const response = await ConnectionHelper.Instance.unsaveAlbum(this.albumId);
 			return response;
 		}
 		catch (error) {

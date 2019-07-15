@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, StyleProp, ViewStyle, Image, Animated, LayoutChangeEvent, FlatList, findNodeHandle } from 'react-native';
+import { Card, Text, Chip } from 'react-native-paper';
+import { UserAlbum, TaggedAlbum } from 'albumin-diet-types';
 import ToggleIconButton from './ToggleIconButton';
 import { ConnectionHelper } from '../helpers/ConnectionHelper';
 import { AlbuminColors } from '../Theme';
@@ -183,6 +185,33 @@ export default class AlbumCardWidget extends Component<Props, State> {
 	}
 	//#endregion
 
+	renderTags() {
+		const albumDescriptor = this.props.albumDescriptor as TaggedAlbum;
+		if (albumDescriptor.tags) {
+			return (
+				<FlatList
+					nestedScrollEnabled={true}
+					showsHorizontalScrollIndicator={false}
+					style={styles.tagList}
+					horizontal={true}
+					data={albumDescriptor.tags}
+					// data={[...albumDescriptor.tags, ...albumDescriptor.tags, ...albumDescriptor.tags]}
+					renderItem={({ item }) => (
+						<View onStartShouldSetResponder={() => true}>
+							<Chip
+								textStyle={styles.listItemText}
+								style={[styles.listItem]}>
+								{item.name}
+							</Chip>
+						</View>
+					)}
+					keyExtractor={(item, index) => item.uniqueId}
+					extraData={this.state}
+				/>
+			);
+		}
+	}
+
 	render() {
 		return (
 			<View ref={(ref: View) => { this.contentView = ref }} onLayout={this.onLayout}>
@@ -219,6 +248,7 @@ export default class AlbumCardWidget extends Component<Props, State> {
 								onPress={this.onPressEgg}
 							/>
 						</Card.Actions>
+						{this.renderTags()}
 					</Animated.View>
 				</Card>
 			</View>
@@ -226,9 +256,10 @@ export default class AlbumCardWidget extends Component<Props, State> {
 	}
 }
 
+const contentPadding = 5;
 const styles = StyleSheet.create({
 	content: {
-		padding: 5,
+		padding: contentPadding,
 		position: 'absolute',
 		top: 0,
 		left: 0,
@@ -252,5 +283,16 @@ const styles = StyleSheet.create({
 		marginVertical: 5,
 		fontSize: 40,
 		textAlign: 'center',
+	},
+	tagList: {
+		flexGrow: 0,
+		marginHorizontal: -contentPadding
+	},
+	listItem: {
+		backgroundColor: AlbuminColors.text,
+		marginHorizontal: 5
+	},
+	listItemText: {
+		color: AlbuminColors.chips,
 	}
 });

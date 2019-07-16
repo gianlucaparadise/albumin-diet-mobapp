@@ -1,10 +1,14 @@
-import { GetMyAlbumsResponse, GetMyTagsResponse, UserAlbumsResponse, TagOnAlbumRequest, GetAlbumResponse, TaggedAlbum, UserAlbum } from "albumin-diet-types";
+import { GetMyAlbumsResponse, GetMyTagsResponse, UserAlbumsResponse, TagOnAlbumRequest, GetAlbumResponse, TaggedAlbum, UserAlbum, EmptyResponse } from "albumin-diet-types";
 import { LoginHelper } from "./LoginHelper";
 import { MyUrlFactory } from "./MyUrlFactory";
 import { loadTags } from "../redux/thunks/tag.thunk";
 import { store } from "../../App";
 import { addToListeningList, removeFromListeningList } from "../redux/thunks/listening-list.thunk";
 import { removeFromMyAlbums } from "../redux/thunks/my-albums.thunk";
+import { USE_STUB } from 'react-native-dotenv';
+
+console.log(`USE_STUB: ${USE_STUB}`);
+const isInStub = USE_STUB === 'true'; // TODO: use a real mocking system
 
 export class ConnectionHelper {
 	private static _instance: ConnectionHelper;
@@ -34,6 +38,11 @@ export class ConnectionHelper {
 	}
 
 	public async getAlbums(tags: string[] | null = null, showUntagged: boolean, offset = 0, limit = 20): Promise<GetMyAlbumsResponse> {
+		if (isInStub && offset === 0) {
+			const response: GetMyAlbumsResponse = require('../../config/mocks/getAlbums.json');
+			return response;
+		}
+
 		let params = '';
 		if (tags) {
 			params += `&tags=${encodeURIComponent(JSON.stringify(tags))}`;
@@ -56,11 +65,16 @@ export class ConnectionHelper {
 		return result;
 	}
 
-	getAlbum(spotifyAlbumId: string): Promise<GetAlbumResponse> {
+	public async getAlbum(spotifyAlbumId: string): Promise<GetAlbumResponse> {
+		if (isInStub) {
+			const response: GetAlbumResponse = require('../../config/mocks/getAlbum.json');
+			return response;
+		}
+
 		const url = MyUrlFactory.Instance.getUrl('album', spotifyAlbumId);
 		const request = new Request(url);
 
-		const response = this.send<GetAlbumResponse>(request);
+		const response = await this.send<GetAlbumResponse>(request);
 		return response;
 	}
 
@@ -69,6 +83,11 @@ export class ConnectionHelper {
 	 * @param spotifyAlbumId Album to save
 	 */
 	async saveAlbum(spotifyAlbumId: string) {
+		if (isInStub) {
+			const response: GetAlbumResponse = require('../../config/mocks/getAlbum.json');
+			return response;
+		}
+
 		const url = MyUrlFactory.Instance.getUrl(`album`);
 
 		const requestBody = { album: { spotifyId: spotifyAlbumId } };
@@ -87,6 +106,11 @@ export class ConnectionHelper {
 	 * @param spotifyAlbumId Album to unsave
 	 */
 	async unsaveAlbum(spotifyAlbumId: string) {
+		if (isInStub) {
+			const response: EmptyResponse = require('../../config/mocks/empty.json');
+			return response;
+		}
+
 		const url = MyUrlFactory.Instance.getUrl(`album`);
 
 		const requestBody = { album: { spotifyId: spotifyAlbumId } };
@@ -105,6 +129,11 @@ export class ConnectionHelper {
 	 * Retrieve the list of the tags for the current user. Use TagManager if you want subscription updates.
 	 */
 	public async getTags(): Promise<GetMyTagsResponse> {
+		if (isInStub) {
+			const response: GetMyTagsResponse = require('../../config/mocks/getTags.json');
+			return response;
+		}
+
 		const url = MyUrlFactory.Instance.getUrl('tag');
 		const request = new Request(url);
 
@@ -119,6 +148,11 @@ export class ConnectionHelper {
 	 * @param albumSpotifyId Tagged album
 	 */
 	async addTagToAlbum(tag: string, albumSpotifyId: string) {
+		if (isInStub) {
+			const response: EmptyResponse = require('../../config/mocks/empty.json');
+			return response;
+		}
+
 		const url = MyUrlFactory.Instance.getUrl('tag');
 
 		const requestBody: TagOnAlbumRequest = { tag: { name: tag }, album: { spotifyId: albumSpotifyId } };
@@ -139,6 +173,11 @@ export class ConnectionHelper {
 	 * @param albumSpotifyId Tagged album
 	 */
 	async deleteTagFromAlbum(tag: string, albumSpotifyId: string) {
+		if (isInStub) {
+			const response: EmptyResponse = require('../../config/mocks/empty.json');
+			return response;
+		}
+
 		const url = MyUrlFactory.Instance.getUrl('tag');
 
 		const requestBody: TagOnAlbumRequest = { tag: { name: tag }, album: { spotifyId: albumSpotifyId } };
@@ -159,6 +198,11 @@ export class ConnectionHelper {
 	}
 
 	async getListeningList(offset = 0, limit = 20): Promise<UserAlbumsResponse> {
+		if (isInStub && offset === 0) {
+			const response: UserAlbumsResponse = require('../../config/mocks/getListeningList.json');
+			return response;
+		}
+
 		let params = '';
 		if (offset) {
 			params += `&offset=${encodeURIComponent(offset.toString())}`;
@@ -180,6 +224,11 @@ export class ConnectionHelper {
 	 * @param spotifyAlbumId Album to save
 	 */
 	async addToListeningList(albumDescriptor: UserAlbum) {
+		if (isInStub) {
+			const response: EmptyResponse = require('../../config/mocks/empty.json');
+			return response;
+		}
+
 		// TODO: to be fully converted to Redux
 		const url = MyUrlFactory.Instance.getUrl(`listening-list`);
 
@@ -200,6 +249,11 @@ export class ConnectionHelper {
 	 * @param spotifyAlbumId Album to unsave
 	 */
 	async deleteFromListeningList(albumSpotifyId: string) {
+		if (isInStub) {
+			const response: EmptyResponse = require('../../config/mocks/empty.json');
+			return response;
+		}
+
 		// TODO: to be fully converted to Redux
 		const url = MyUrlFactory.Instance.getUrl(`listening-list`);
 
@@ -216,6 +270,11 @@ export class ConnectionHelper {
 	}
 
 	async searchAlbums(keywords: string, offset = 0, limit = 20): Promise<UserAlbumsResponse> {
+		if (isInStub && offset === 0) {
+			const response: UserAlbumsResponse = require('../../config/mocks/search.json');
+			return response;
+		}
+
 		let params = '';
 		if (keywords) {
 			params += `&q=${encodeURIComponent(keywords)}`;

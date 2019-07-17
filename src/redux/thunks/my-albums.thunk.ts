@@ -41,14 +41,19 @@ export const loadMyAlbumsNext = (): ThunkAction<void, AppState, null, AnyAction>
     }
 }
 
-// export const addToMyAlbums = (albumDescriptor: TaggedAlbum): ThunkAction<void, AppState, null, AnyAction> => async (dispatch, getState) => {
-//     const myAlbumsState = getState().myAlbumsReducer;
-//     const myAlbums = myAlbumsState.albumDescriptors || [];
-//     myAlbums.push(albumDescriptor);
-//     dispatch(
-//         loadMyAlbumsAction(myAlbums)
-//     );
-// }
+export const addToMyAlbums = (albumDescriptor: TaggedAlbum): ThunkAction<void, AppState, null, AnyAction> => async (dispatch, getState) => {
+    const myAlbumsState = getState().myAlbumsReducer;
+    const tags = myAlbumsState.tags || [];
+    const showUntagged = myAlbumsState.showUntagged;
+
+    // I can't add the saved album to myAlbums because I need to satify the active filters
+    // and the filters are calculated backend side and not frontend side
+
+    // FIXME: this may break pagination: if I have already loaded 100 items, this goes back to 20 items. Expose API to check if album matches input filters?
+    dispatch(
+        loadMyAlbums(tags, showUntagged)
+    );
+}
 
 export const removeFromMyAlbums = (albumId: string): ThunkAction<void, AppState, null, AnyAction> => async (dispatch, getState) => {
     try {

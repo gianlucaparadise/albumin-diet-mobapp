@@ -4,7 +4,6 @@ import { MyUrlFactory } from "./MyUrlFactory";
 import { loadTags } from "../redux/thunks/tag.thunk";
 import { store } from "../../App";
 import { addToListeningList, removeFromListeningList } from "../redux/thunks/listening-list.thunk";
-import { removeFromMyAlbums } from "../redux/thunks/my-albums.thunk";
 import { USE_STUB } from 'react-native-dotenv';
 
 console.log(`USE_STUB: ${USE_STUB}`);
@@ -82,7 +81,7 @@ export class ConnectionHelper {
 	 * Add the input album to current user's favorites
 	 * @param spotifyAlbumId Album to save
 	 */
-	async saveAlbum(spotifyAlbumId: string) {
+	async saveAlbum(spotifyAlbumId: string): Promise<GetAlbumResponse> {
 		if (isInStub) {
 			const response: GetAlbumResponse = require('../../config/mocks/getAlbum.json');
 			return response;
@@ -97,7 +96,7 @@ export class ConnectionHelper {
 		};
 		const request = new Request(url, requestInit);
 
-		const result = await this.send<object>(request);
+		const result = await this.send<GetAlbumResponse>(request);
 		return result;
 	}
 
@@ -121,7 +120,6 @@ export class ConnectionHelper {
 		const request = new Request(url, requestInit);
 
 		const result = await this.send<object>(request);
-		store.dispatch(removeFromMyAlbums(spotifyAlbumId));
 		return result;
 	}
 

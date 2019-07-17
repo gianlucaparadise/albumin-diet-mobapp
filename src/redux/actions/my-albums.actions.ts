@@ -5,14 +5,11 @@ export enum MyAlbumsActionTypes {
 
     Load = '[MyAlbums Page] Load MyAlbums',
     LoadNext = '[MyAlbums Page] Load Next Page MyAlbums',
-
-    Add = '[MyAlbums API] Add to MyAlbums',
-    Remove = '[MyAlbums API] Remove from MyAlbums',
 }
 
 export interface MyAlbumsLoadAction {
     type: typeof MyAlbumsActionTypes.Load;
-    payload: { 
+    payload: {
         tags: string[] | null,
         showUntagged: boolean,
         albumDescriptors: UserAlbum[],
@@ -24,18 +21,6 @@ export interface MyAlbumsLoadNextAction {
     payload: { albumDescriptors: UserAlbum[] }
 }
 
-export interface MyAlbumsAddAction {
-    type: typeof MyAlbumsActionTypes.Add;
-
-    payload: { albumDescriptor: TaggedAlbum };
-}
-
-export interface MyAlbumsRemoveAction {
-    type: typeof MyAlbumsActionTypes.Remove;
-
-    payload: { albumId: string };
-}
-
 export interface MyAlbumsErrorAction {
     type: typeof MyAlbumsActionTypes.Error;
     payload: { err: any }
@@ -43,8 +28,7 @@ export interface MyAlbumsErrorAction {
 
 export type MyAlbumsActions =
     MyAlbumsErrorAction |
-    MyAlbumsLoadAction | MyAlbumsLoadNextAction |
-    MyAlbumsAddAction | MyAlbumsRemoveAction;
+    MyAlbumsLoadAction | MyAlbumsLoadNextAction;
 
 // Action creator
 // TODO: to be converted to action constructors
@@ -64,24 +48,6 @@ export function loadNextMyAlbumsAction(albumDescriptors: UserAlbum[]): MyAlbumsA
         type: MyAlbumsActionTypes.LoadNext,
         payload: {
             albumDescriptors
-        }
-    };
-}
-
-export function addToMyAlbumsAction(albumDescriptor: TaggedAlbum): MyAlbumsActions {
-    return {
-        type: MyAlbumsActionTypes.Add,
-        payload: {
-            albumDescriptor
-        }
-    };
-}
-
-export function removeFromMyAlbumsAction(albumId: string): MyAlbumsActions {
-    return {
-        type: MyAlbumsActionTypes.Remove,
-        payload: {
-            albumId
         }
     };
 }

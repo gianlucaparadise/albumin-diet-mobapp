@@ -10,16 +10,32 @@ import TagCloud from '../widgets/TagCloud';
 import ToggleIconButton from '../widgets/ToggleIconButton';
 import { ConnectionHelper } from '../helpers/ConnectionHelper';
 import TrackList from '../widgets/TrackList';
+import { AppState } from '../redux/reducers/root.reducer';
+import { selectAlbumAndUpdate, unsaveAlbum, saveAlbum } from '../redux/thunks/album-detail.thunk';
+import { connect } from 'react-redux';
 
-interface Props extends NavigationScreenProps {
+//#region Props
+interface OwnProps extends NavigationScreenProps {
 }
 
-interface State {
-	albumDescriptor: TaggedAlbum,
+interface StateProps {
+	albumDescriptor?: TaggedAlbum,
 	/**
 	 * Can save to favorites?
 	 */
 	canSave: boolean,
+}
+
+interface DispatchProps {
+	selectAlbumAndUpdate: (albumDescriptor: TaggedAlbum) => void,
+	unsaveAlbum: (albumDescriptor: TaggedAlbum) => void,
+	saveAlbum: (albumDescriptor: TaggedAlbum) => void,
+}
+
+type Props = StateProps & DispatchProps & OwnProps;
+//#endregion
+
+interface State {
 	/**
 	 * Can add to listening list?
 	 */
@@ -30,7 +46,7 @@ export interface AlbumDetailNavigationParams {
 	albumDescriptor: UserAlbum
 }
 
-export default class AlbumDetailScreen extends Component<Props, State> {
+class AlbumDetailScreen extends Component<Props, State> {
 	static navigationOptions: MyNavigationScreenOptionsGetter<NavigationScreenOptions> = (navigationOptions) => {
 		const albumDescriptor: UserAlbum = navigationOptions.navigation.getParam('albumDescriptor');
 		const options: NavigationScreenOptions = { title: albumDescriptor.album.name };
@@ -41,40 +57,22 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 		super(props);
 
 		const albumDescriptor = this.props.navigation.getParam('albumDescriptor');
+		this.props.selectAlbumAndUpdate(albumDescriptor);
+
 		this.state = {
-			albumDescriptor: albumDescriptor,
-			canSave: true,
 			canBeEgged: true,
 		};
 	}
 
 	componentDidMount() {
-		this.getAlbum(this.albumId);
-	}
-
-	getAlbum = async (spotifyId: string) => {
-		try {
-			const albumsResponse = await ConnectionHelper.Instance.getAlbum(spotifyId);
-			const albumDescriptor = albumsResponse.data;
-
-			this.setState({
-				albumDescriptor: albumDescriptor,
-				canBeEgged: true,
-				canSave: true,
-			});
-		}
-		catch (error) {
-			console.error('Error while retrieving the album');
-			console.error(error);
-		}
 	}
 
 	get artistName() {
-		return this.state.albumDescriptor.album.artists[0].name;
+		return this.props.albumDescriptor ? this.props.albumDescriptor.album.artists[0].name : "";
 	}
 
 	get releaseYear() {
-		const releaseDate = this.state.albumDescriptor.album.release_date;
+		const releaseDate = this.props.albumDescriptor ? this.props.albumDescriptor.album.release_date : "";
 		try {
 			const date = new Date(releaseDate);
 			return date.getFullYear();
@@ -86,15 +84,15 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 	}
 
 	get imageUrl() {
-		return this.state.albumDescriptor.album.images[0].url;
+		return this.props.albumDescriptor ? this.props.albumDescriptor.album.images[0].url : "";
 	}
 
 	get albumName() {
-		return this.state.albumDescriptor.album.name;
+		return this.props.albumDescriptor ? this.props.albumDescriptor.album.name : "";
 	}
 
 	get totalTracks() {
-		return this.state.albumDescriptor.album.tracks.total;
+		return this.props.albumDescriptor ? this.props.albumDescriptor.album.tracks.total : 0;
 	}
 
 	calculateDuration(trackList: TrackObjectSimplified[]) {
@@ -125,65 +123,40 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 	}
 
 	get totalDuration() {
-		const timespan = this.calculateDuration(this.state.albumDescriptor.album.tracks.items);
+		const timespan = this.calculateDuration(this.props.albumDescriptor ? this.props.albumDescriptor.album.tracks.items : []);
 		const duration = this.timespanToString(timespan);
 
 		return duration;
 	}
 
 	get albumId() {
-		return this.state.albumDescriptor.album.id;
+		return this.props.albumDescriptor ? this.props.albumDescriptor.album.id : "";
 	}
 
-	//#region Saving
+	get isSaved() {
+		return this.props.albumDescriptor ? this.props.albumDescriptor.isSavedAlbum : false;
+	}
+
+	get isEgged() {
+		return this.props.albumDescriptor ? this.props.albumDescriptor.isInListeningList : false;
+	}
+
 	onPressSave = async () => {
-		this.setState({ canSave: false });
-		const albumDescriptor = this.state.albumDescriptor;
+		const albumDescriptor = this.props.albumDescriptor;
+		if (!albumDescriptor) return;
 
-		let isSaved: boolean;
 		if (albumDescriptor.isSavedAlbum) {
-			await this.unsaveAlbum();
-			isSaved = false;
+			this.props.unsaveAlbum(albumDescriptor);
 		} else {
-			await this.saveAlbum();
-			isSaved = true;
-		}
-
-		albumDescriptor.isSavedAlbum = isSaved;
-
-		this.setState({
-			canSave: true,
-			albumDescriptor: albumDescriptor
-		});
-	}
-
-	saveAlbum = async () => {
-		try {
-			const response = await ConnectionHelper.Instance.saveAlbum(this.albumId);
-			return response;
-		}
-		catch (error) {
-			console.error(`Error while saving album`);
-			console.error(error);
+			this.props.saveAlbum(albumDescriptor);
 		}
 	}
-
-	unsaveAlbum = async () => {
-		try {
-			const response = await ConnectionHelper.Instance.unsaveAlbum(this.albumId);
-			return response;
-		}
-		catch (error) {
-			console.error(`Error while unsaving album`);
-			console.error(error);
-		}
-	}
-	//#endregion
 
 	//#region Listening List
 	onPressEgg = async () => {
 		this.setState({ canBeEgged: false });
-		const albumDescriptor = this.state.albumDescriptor;
+		const albumDescriptor = this.props.albumDescriptor;
+		if (!albumDescriptor) return;
 
 		let isEgged: boolean;
 		if (albumDescriptor.isInListeningList) {
@@ -198,13 +171,16 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 
 		this.setState({
 			canBeEgged: true,
-			albumDescriptor: albumDescriptor
+			// albumDescriptor: albumDescriptor
 		});
 	}
 
 	eggAlbum = async () => {
+		const albumDescriptor = this.props.albumDescriptor;
+		if (!albumDescriptor) return;
+
 		try {
-			const response = await ConnectionHelper.Instance.addToListeningList(this.state.albumDescriptor);
+			const response = await ConnectionHelper.Instance.addToListeningList(albumDescriptor);
 			return response;
 		}
 		catch (error) {
@@ -226,12 +202,12 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 	//#endregion
 
 	renderTagCloud = () => {
-		if (this.state.albumDescriptor.isSavedAlbum) {
+		if (this.props.albumDescriptor && this.props.albumDescriptor.isSavedAlbum) {
 			// const tags = [...this.state.albumDescriptor.tags, ...this.state.albumDescriptor.tags, ...this.state.albumDescriptor.tags];
 			return (
 				<View>
 					<Headline style={styles.text}>Tags</Headline>
-					<TagCloud tags={this.state.albumDescriptor.tags} albumDescriptor={this.state.albumDescriptor} />
+					<TagCloud tags={this.props.albumDescriptor.tags} albumDescriptor={this.props.albumDescriptor} />
 				</View>
 			);
 		}
@@ -253,13 +229,13 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 				<View style={styles.iconsContainer}>
 					<ToggleIconButton
 						type="save"
-						selected={this.state.albumDescriptor.isSavedAlbum}
-						enabled={this.state.canSave}
+						selected={this.isSaved}
+						enabled={this.props.canSave}
 						onPress={this.onPressSave}
 					/>
 					<ToggleIconButton
 						type="eggs"
-						selected={this.state.albumDescriptor.isInListeningList}
+						selected={this.isEgged}
 						enabled={this.state.canBeEgged}
 						onPress={this.onPressEgg}
 					/>
@@ -269,7 +245,7 @@ export default class AlbumDetailScreen extends Component<Props, State> {
 				<View style={styles.space} />
 				<View style={styles.trackListContainer}>
 					<Headline style={styles.text}>Tracks</Headline>
-					<TrackList albumDescriptor={this.state.albumDescriptor}></TrackList>
+					<TrackList albumDescriptor={this.props.albumDescriptor}></TrackList>
 				</View>
 			</ScrollView>
 		);
@@ -302,3 +278,17 @@ const styles = StyleSheet.create({
 		alignSelf: 'stretch'
 	}
 });
+
+const mapStateToProps = (state: AppState): StateProps => ({
+	albumDescriptor: state.albumDetailReducer.albumDescriptor,
+	canSave: state.albumDetailReducer.canSave,
+});
+
+//Map your action creators to your props.
+const mapDispatchToProps: DispatchProps = {
+	selectAlbumAndUpdate: selectAlbumAndUpdate,
+	unsaveAlbum: unsaveAlbum,
+	saveAlbum: saveAlbum
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AlbumDetailScreen);

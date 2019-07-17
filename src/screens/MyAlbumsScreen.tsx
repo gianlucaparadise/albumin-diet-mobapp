@@ -69,7 +69,6 @@ class MyAlbumsScreen extends Component<Props, State> {
 		super(props);
 
 		this.state = {
-			albumDescriptors: []
 		};
 	}
 

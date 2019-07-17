@@ -5,7 +5,7 @@ import { TrackObjectSimplified } from "spotify-web-api-node-typings";
 import { Paragraph } from "react-native-paper";
 
 interface Props {
-    albumDescriptor: TaggedAlbum,
+    albumDescriptor?: TaggedAlbum,
     style?: StyleProp<ViewStyle>,
 }
 
@@ -46,6 +46,7 @@ export default class TrackList extends Component<Props, State> {
     }
 
     renderTrackViews = () => {
+        if (!this.props.albumDescriptor) return;
         return this.props.albumDescriptor.album.tracks.items.map(track => this.buildTrack(track));
     }
 

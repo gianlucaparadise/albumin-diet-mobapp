@@ -3,11 +3,15 @@ import { StyleSheet, View, StyleProp, ViewStyle, Image, Animated, LayoutChangeEv
 import { Card, Text, Chip } from 'react-native-paper';
 import { UserAlbum, TaggedAlbum } from 'albumin-diet-types';
 import ToggleIconButton from './ToggleIconButton';
-import { ConnectionHelper } from '../helpers/ConnectionHelper';
 import { AlbuminColors } from '../Theme';
+import { AppState } from '../redux/reducers/root.reducer';
+import { addToListeningList, deleteFromListeningList } from '../redux/thunks/album-detail.thunk';
+import { connect } from 'react-redux';
+import { AlbumEggableMap, getCanBeEgged } from '../redux/reducers/album-detail.reducer';
 // import { Navigation } from 'react-native-navigation';
 
-interface Props {
+//#region Props
+interface OwnProps {
 	albumDescriptor: UserAlbum,
 
 	/**
@@ -29,16 +33,26 @@ interface Props {
 	scrollView?: FlatList<UserAlbum>;
 }
 
-interface State {
+interface StateProps {
 	/**
 	 * This property tells whether the egg button can be pressed or not
 	 */
-	canBeEgged: boolean,
+	canAlbumBeEggedMap: AlbumEggableMap,
+}
 
+interface DispatchProps {
+	addToListeningList: (albumDescriptor: UserAlbum) => void,
+	deleteFromListeningList: (albumDescriptor: UserAlbum) => void,
+}
+
+type Props = StateProps & DispatchProps & OwnProps;
+//#endregion
+
+interface State {
 	yScreenOffset: number,
 }
 
-export default class AlbumCardWidget extends Component<Props, State> {
+class AlbumCardWidget extends Component<Props, State> {
 	_isMounted = false;
 
 	contentView?: View;
@@ -48,7 +62,6 @@ export default class AlbumCardWidget extends Component<Props, State> {
 		super(props);
 
 		this.state = {
-			canBeEgged: true,
 			yScreenOffset: 0,
 		}
 	}
@@ -101,51 +114,16 @@ export default class AlbumCardWidget extends Component<Props, State> {
 		this.props.onPress(this.props.albumDescriptor, this.elementId);
 	}
 
-	//#region Listening List
 	onPressEgg = async () => {
-		this.setState({ canBeEgged: false });
+		const albumDescriptor = this.props.albumDescriptor;
+		if (!albumDescriptor) return;
 
-		let isEgged: boolean;
 		if (this.props.albumDescriptor.isInListeningList) {
-			await this.uneggAlbum(this.props.albumDescriptor);
-			isEgged = false;
+			this.props.deleteFromListeningList(albumDescriptor);
 		} else {
-			await this.eggAlbum(this.props.albumDescriptor);
-			isEgged = true;
-		}
-
-		this.props.albumDescriptor.isInListeningList = isEgged;
-
-		if (this._isMounted) {
-			this.setState({
-				canBeEgged: true,
-				//albumDescriptor: albumDescriptor
-			});
+			this.props.addToListeningList(albumDescriptor);
 		}
 	}
-
-	eggAlbum = async (albumDescriptor: UserAlbum) => {
-		try {
-			const response = await ConnectionHelper.Instance.addToListeningList(albumDescriptor);
-			return response;
-		}
-		catch (error) {
-			console.error(`Error while adding album to listening list`);
-			console.error(error);
-		}
-	}
-
-	uneggAlbum = async (albumDescriptor: UserAlbum) => {
-		try {
-			const response = await ConnectionHelper.Instance.deleteFromListeningList(albumDescriptor.album.id);
-			return response
-		}
-		catch (error) {
-			console.error(`Error while removing album from listening list`);
-			console.error(error);
-		}
-	}
-	//#endregion
 
 	//#region Animation
 	onLayout = (event: LayoutChangeEvent) => {
@@ -244,7 +222,7 @@ export default class AlbumCardWidget extends Component<Props, State> {
 							<ToggleIconButton
 								type="eggs"
 								selected={this.isInListeningList}
-								enabled={this.state.canBeEgged}
+								enabled={getCanBeEgged(this.props.canAlbumBeEggedMap, this.props.albumDescriptor)}
 								onPress={this.onPressEgg}
 							/>
 						</Card.Actions>
@@ -296,3 +274,15 @@ const styles = StyleSheet.create({
 		color: AlbuminColors.chips,
 	}
 });
+
+const mapStateToProps = (state: AppState): StateProps => ({
+	canAlbumBeEggedMap: state.albumDetailReducer.canAlbumBeEggedMap,
+});
+
+//Map your action creators to your props.
+const mapDispatchToProps: DispatchProps = {
+	addToListeningList: addToListeningList,
+	deleteFromListeningList: deleteFromListeningList,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AlbumCardWidget);

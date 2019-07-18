@@ -41,7 +41,7 @@ export const loadListeningListNext = (): ThunkAction<void, AppState, null, AnyAc
     }
 }
 
-export const addToListeningList = (albumDescriptor: UserAlbum): ThunkAction<void, AppState, null, AnyAction> => async (dispatch, getState) => {
+export const addToLocalListeningList = (albumDescriptor: UserAlbum): ThunkAction<void, AppState, null, AnyAction> => async (dispatch, getState) => {
     try {
         const listeningListState = getState().listeningListReducer;
         let listeningList: UserAlbum[];
@@ -79,7 +79,7 @@ export const addToListeningList = (albumDescriptor: UserAlbum): ThunkAction<void
     }
 }
 
-export const removeFromListeningList = (albumId: string): ThunkAction<void, AppState, null, AnyAction> => async (dispatch, getState) => {
+export const removeFromLocalListeningList = (albumId: string): ThunkAction<void, AppState, null, AnyAction> => async (dispatch, getState) => {
     try {
         const listeningListState = getState().listeningListReducer;
         if (!listeningListState.albumDescriptors) return;

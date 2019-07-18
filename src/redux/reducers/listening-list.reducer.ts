@@ -2,7 +2,7 @@ import { UserAlbum } from "albumin-diet-types";
 import { ListeningListActionTypes, ListeningListActions } from "../actions/listening-list.actions";
 
 export interface ListeningListState {
-    albumDescriptors?: UserAlbum[];
+    albumDescriptors: UserAlbum[];
     errorMessage?: string;
 }
 

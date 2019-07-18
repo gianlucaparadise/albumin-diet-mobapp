@@ -3,7 +3,6 @@ import { LoginHelper } from "./LoginHelper";
 import { MyUrlFactory } from "./MyUrlFactory";
 import { loadTags } from "../redux/thunks/tag.thunk";
 import { store } from "../../App";
-import { addToListeningList, removeFromListeningList } from "../redux/thunks/listening-list.thunk";
 import { USE_STUB } from 'react-native-dotenv';
 
 console.log(`USE_STUB: ${USE_STUB}`);
@@ -238,7 +237,6 @@ export class ConnectionHelper {
 		const request = new Request(url, requestInit);
 
 		const result = await this.send(request);
-		store.dispatch(addToListeningList(albumDescriptor));
 		return result;
 	}
 
@@ -263,7 +261,6 @@ export class ConnectionHelper {
 		const request = new Request(url, requestInit);
 
 		const result = await this.send(request);
-		store.dispatch(removeFromListeningList(albumSpotifyId));
 		return result;
 	}
 

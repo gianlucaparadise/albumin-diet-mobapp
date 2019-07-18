@@ -2,14 +2,15 @@ import { ThunkAction } from "redux-thunk";
 import { AppState } from "../reducers/root.reducer";
 import { AnyAction } from "redux";
 import { ConnectionHelper } from "../../helpers/ConnectionHelper";
-import { TaggedAlbum } from "albumin-diet-types";
+import { TaggedAlbum, UserAlbum } from "albumin-diet-types";
 import { removeFromMyAlbums, addToMyAlbums } from "./my-albums.thunk";
-import { selectAlbumAction, errorAlbumDetailAction, changeCanSaveAction } from "../actions/album-detail.actions";
+import { selectAlbumAction, errorAlbumDetailAction, changeCanSaveAction, changeCanEggAction } from "../actions/album-detail.actions";
+import { removeFromLocalListeningList, addToLocalListeningList } from "./listening-list.thunk";
 
 /**
- * This thunk saves the input album as selected and refreshes it from web
+ * This thunk saves the input album as selected and refreshes it from backend
  */
-export const selectAlbumAndUpdate = (albumDescriptor: TaggedAlbum): ThunkAction<void, AppState, null, AnyAction> => async dispatch => {
+export const loadAlbum = (albumDescriptor: TaggedAlbum): ThunkAction<void, AppState, null, AnyAction> => async dispatch => {
     try {
         dispatch(selectAlbumAction(albumDescriptor));
 
@@ -19,7 +20,28 @@ export const selectAlbumAndUpdate = (albumDescriptor: TaggedAlbum): ThunkAction<
         dispatch(selectAlbumAction(albumDescriptorResponse));
 
     } catch (error) {
-        console.log('Error while selectAlbumAndUpdate');
+        console.log('Error while loadAlbum');
+        console.log(error);
+        dispatch(
+            errorAlbumDetailAction(error)
+        );
+    }
+};
+
+/**
+ * This thunk saves the input album as selected, but only if the previous selected is the same as the input
+ */
+export const updateCurrentAlbum = (albumDescriptor: TaggedAlbum): ThunkAction<void, AppState, null, AnyAction> => async (dispatch, getState) => {
+    try {
+        const prevAlbumDescriptor = getState().albumDetailReducer.albumDescriptor;
+        const prevAlbumId = prevAlbumDescriptor ? prevAlbumDescriptor.album.id : "";
+
+        if (prevAlbumId != albumDescriptor.album.id) return;
+
+        dispatch(selectAlbumAction(albumDescriptor));
+
+    } catch (error) {
+        console.log('Error while updateCurrentAlbum');
         console.log(error);
         dispatch(
             errorAlbumDetailAction(error)
@@ -39,15 +61,18 @@ export const unsaveAlbum = (albumDescriptor: TaggedAlbum): ThunkAction<void, App
             isSavedAlbum: false
         };
 
-        dispatch(selectAlbumAction(newAlbumDescriptor));
+        dispatch(updateCurrentAlbum(newAlbumDescriptor));
         dispatch(removeFromMyAlbums(albumId));
-        dispatch(changeCanSaveAction(true));
+
     } catch (error) {
         console.log('Error while unsaveAlbum');
         console.log(error);
         dispatch(
             errorAlbumDetailAction(error)
         );
+
+    } finally {
+        dispatch(changeCanSaveAction(true));
     }
 }
 
@@ -60,14 +85,70 @@ export const saveAlbum = (albumDescriptor: TaggedAlbum): ThunkAction<void, AppSt
 
         const newAlbumDescriptor: TaggedAlbum = response.data;
 
-        dispatch(selectAlbumAction(newAlbumDescriptor));
+        dispatch(updateCurrentAlbum(newAlbumDescriptor));
         dispatch(addToMyAlbums(newAlbumDescriptor));
-        dispatch(changeCanSaveAction(true));
+
     } catch (error) {
-        console.log('Error while unsaveAlbum');
+        console.log('Error while saveAlbum');
         console.log(error);
         dispatch(
             errorAlbumDetailAction(error)
         );
+
+    } finally {
+        dispatch(changeCanSaveAction(true));
+    }
+}
+
+export const deleteFromListeningList = (albumDescriptor: UserAlbum): ThunkAction<void, AppState, null, AnyAction> => async dispatch => {
+    try {
+        dispatch(changeCanEggAction(albumDescriptor.album.id, false));
+
+        const albumId = albumDescriptor.album.id;
+        const response = await ConnectionHelper.Instance.deleteFromListeningList(albumId);
+
+        const newAlbumDescriptor: TaggedAlbum = {
+            ...(albumDescriptor as TaggedAlbum),
+            isInListeningList: false
+        };
+
+        dispatch(updateCurrentAlbum(newAlbumDescriptor));
+        dispatch(removeFromLocalListeningList(albumId));
+
+    } catch (error) {
+        console.log('Error while uneggAlbum');
+        console.log(error);
+        dispatch(
+            errorAlbumDetailAction(error)
+        );
+
+    } finally {
+        dispatch(changeCanEggAction(albumDescriptor.album.id, true));
+    }
+}
+
+export const addToListeningList = (albumDescriptor: UserAlbum): ThunkAction<void, AppState, null, AnyAction> => async dispatch => {
+    try {
+        dispatch(changeCanEggAction(albumDescriptor.album.id, false));
+
+        const response = await ConnectionHelper.Instance.addToListeningList(albumDescriptor);
+
+        const newAlbumDescriptor: TaggedAlbum = {
+            ...(albumDescriptor as TaggedAlbum),
+            isInListeningList: true
+        };
+
+        dispatch(updateCurrentAlbum(newAlbumDescriptor));
+        dispatch(addToLocalListeningList(newAlbumDescriptor));
+
+    } catch (error) {
+        console.log('Error while eggAlbum');
+        console.log(error);
+        dispatch(
+            errorAlbumDetailAction(error)
+        );
+
+    } finally {
+        dispatch(changeCanEggAction(albumDescriptor.album.id, true));
     }
 }

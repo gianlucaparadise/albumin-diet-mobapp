@@ -8,11 +8,11 @@ import { MyNavigationScreenOptionsGetter } from '../../types/react-navigation-ty
 import { NavigationScreenOptions } from 'react-navigation';
 import TagCloud from '../widgets/TagCloud';
 import ToggleIconButton from '../widgets/ToggleIconButton';
-import { ConnectionHelper } from '../helpers/ConnectionHelper';
 import TrackList from '../widgets/TrackList';
 import { AppState } from '../redux/reducers/root.reducer';
-import { selectAlbumAndUpdate, unsaveAlbum, saveAlbum } from '../redux/thunks/album-detail.thunk';
+import { loadAlbum, unsaveAlbum, saveAlbum, addToListeningList, deleteFromListeningList } from '../redux/thunks/album-detail.thunk';
 import { connect } from 'react-redux';
+import { getCanBeEgged } from '../redux/reducers/album-detail.reducer';
 
 //#region Props
 interface OwnProps extends NavigationScreenProps {
@@ -24,22 +24,24 @@ interface StateProps {
 	 * Can save to favorites?
 	 */
 	canSave: boolean,
+	/**
+	 * Can add to listening list?
+	 */
+	canBeEgged: boolean,
 }
 
 interface DispatchProps {
-	selectAlbumAndUpdate: (albumDescriptor: TaggedAlbum) => void,
+	loadAlbum: (albumDescriptor: TaggedAlbum) => void,
 	unsaveAlbum: (albumDescriptor: TaggedAlbum) => void,
 	saveAlbum: (albumDescriptor: TaggedAlbum) => void,
+	addToListeningList: (albumDescriptor: TaggedAlbum) => void,
+	deleteFromListeningList: (albumDescriptor: TaggedAlbum) => void,
 }
 
 type Props = StateProps & DispatchProps & OwnProps;
 //#endregion
 
 interface State {
-	/**
-	 * Can add to listening list?
-	 */
-	canBeEgged: boolean,
 }
 
 export interface AlbumDetailNavigationParams {
@@ -57,7 +59,7 @@ class AlbumDetailScreen extends Component<Props, State> {
 		super(props);
 
 		const albumDescriptor = this.props.navigation.getParam('albumDescriptor');
-		this.props.selectAlbumAndUpdate(albumDescriptor);
+		this.props.loadAlbum(albumDescriptor);
 
 		this.state = {
 			canBeEgged: true,
@@ -141,7 +143,7 @@ class AlbumDetailScreen extends Component<Props, State> {
 		return this.props.albumDescriptor ? this.props.albumDescriptor.isInListeningList : false;
 	}
 
-	onPressSave = async () => {
+	onPressSave = () => {
 		const albumDescriptor = this.props.albumDescriptor;
 		if (!albumDescriptor) return;
 
@@ -152,54 +154,16 @@ class AlbumDetailScreen extends Component<Props, State> {
 		}
 	}
 
-	//#region Listening List
-	onPressEgg = async () => {
-		this.setState({ canBeEgged: false });
+	onPressEgg = () => {
 		const albumDescriptor = this.props.albumDescriptor;
 		if (!albumDescriptor) return;
 
-		let isEgged: boolean;
 		if (albumDescriptor.isInListeningList) {
-			await this.uneggAlbum();
-			isEgged = false;
+			this.props.deleteFromListeningList(albumDescriptor);
 		} else {
-			await this.eggAlbum();
-			isEgged = true;
-		}
-
-		albumDescriptor.isInListeningList = isEgged;
-
-		this.setState({
-			canBeEgged: true,
-			// albumDescriptor: albumDescriptor
-		});
-	}
-
-	eggAlbum = async () => {
-		const albumDescriptor = this.props.albumDescriptor;
-		if (!albumDescriptor) return;
-
-		try {
-			const response = await ConnectionHelper.Instance.addToListeningList(albumDescriptor);
-			return response;
-		}
-		catch (error) {
-			console.error(`Error while adding album to listening list`);
-			console.error(error);
+			this.props.addToListeningList(albumDescriptor);
 		}
 	}
-
-	uneggAlbum = async () => {
-		try {
-			const response = await ConnectionHelper.Instance.deleteFromListeningList(this.albumId);
-			return response
-		}
-		catch (error) {
-			console.error(`Error while removing album from listening list`);
-			console.error(error);
-		}
-	}
-	//#endregion
 
 	renderTagCloud = () => {
 		if (this.props.albumDescriptor && this.props.albumDescriptor.isSavedAlbum) {
@@ -236,7 +200,7 @@ class AlbumDetailScreen extends Component<Props, State> {
 					<ToggleIconButton
 						type="eggs"
 						selected={this.isEgged}
-						enabled={this.state.canBeEgged}
+						enabled={this.props.canBeEgged}
 						onPress={this.onPressEgg}
 					/>
 				</View>
@@ -282,13 +246,16 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state: AppState): StateProps => ({
 	albumDescriptor: state.albumDetailReducer.albumDescriptor,
 	canSave: state.albumDetailReducer.canSave,
+	canBeEgged: getCanBeEgged(state.albumDetailReducer.canAlbumBeEggedMap, state.albumDetailReducer.albumDescriptor),
 });
 
 //Map your action creators to your props.
 const mapDispatchToProps: DispatchProps = {
-	selectAlbumAndUpdate: selectAlbumAndUpdate,
+	loadAlbum: loadAlbum,
 	unsaveAlbum: unsaveAlbum,
-	saveAlbum: saveAlbum
+	saveAlbum: saveAlbum,
+	addToListeningList: addToListeningList,
+	deleteFromListeningList: deleteFromListeningList,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AlbumDetailScreen);

@@ -5,6 +5,7 @@ export enum AlbumDetailActionTypes {
 
     SelectAlbum = '[AlbumDetail Page] Select AlbumDetail',
     ChangeCanSave = '[AlbumDetail Page] ChangeCanSave AlbumDetail',
+    ChangeCanEgg = '[AlbumDetail Page] ChangeCanEgg AlbumDetail',
 }
 
 export interface SelectAlbumAction {
@@ -21,6 +22,14 @@ export interface ChangeCanSaveAlbumAction {
     }
 }
 
+export interface ChangeCanEggAlbumAction {
+    type: typeof AlbumDetailActionTypes.ChangeCanEgg;
+    payload: {
+        albumId: string,
+        canEgg: boolean
+    }
+}
+
 export interface AlbumDetailErrorAction {
     type: typeof AlbumDetailActionTypes.Error;
     payload: { err: any }
@@ -28,7 +37,7 @@ export interface AlbumDetailErrorAction {
 
 export type AlbumDetailActions =
     AlbumDetailErrorAction |
-    ChangeCanSaveAlbumAction |
+    ChangeCanSaveAlbumAction | ChangeCanEggAlbumAction |
     SelectAlbumAction;
 
 export function selectAlbumAction(albumDescriptor: TaggedAlbum): AlbumDetailActions {
@@ -45,6 +54,16 @@ export function changeCanSaveAction(canSave: boolean): AlbumDetailActions {
         type: AlbumDetailActionTypes.ChangeCanSave,
         payload: {
             canSave
+        }
+    }
+}
+
+export function changeCanEggAction(albumId: string, canEgg: boolean): AlbumDetailActions {
+    return {
+        type: AlbumDetailActionTypes.ChangeCanEgg,
+        payload: {
+            albumId,
+            canEgg
         }
     }
 }

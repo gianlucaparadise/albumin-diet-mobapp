@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Animated } from 'react-native';
-import { NavigationScreenProps } from 'react-navigation';
-import { FlatList } from 'react-native-gesture-handler';
+import { NavigationScreenProps, FlatList } from 'react-navigation';
 import { UserAlbum } from 'albumin-diet-types';
 import { AlbumDetailNavigationParams } from './AlbumDetailScreen';
 import { MyNavigationScreenOptionsGetter } from 'react-navigation-types';
@@ -101,7 +100,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state: AppState): StateProps => ({
-	albumDescriptors: state.listeningListReducer.albumDescriptors || []
+	albumDescriptors: state.listeningListReducer.albumDescriptors
 });
 
 //Map your action creators to your props.

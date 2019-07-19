@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, FlatList, Animated } from 'react-native';
 import { IconButton } from 'react-native-paper';
-import { ConnectionHelper } from '../helpers/ConnectionHelper';
 import AlbumCardWidget from '../widgets/AlbumCardWidget';
 import { UserAlbum } from 'albumin-diet-types';
 import { AlbumDetailNavigationParams } from './AlbumDetailScreen';

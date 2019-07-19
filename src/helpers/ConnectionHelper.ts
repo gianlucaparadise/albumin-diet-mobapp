@@ -1,8 +1,6 @@
 import { GetMyAlbumsResponse, GetMyTagsResponse, UserAlbumsResponse, TagOnAlbumRequest, GetAlbumResponse, TaggedAlbum, UserAlbum, EmptyResponse } from "albumin-diet-types";
 import { LoginHelper } from "./LoginHelper";
 import { MyUrlFactory } from "./MyUrlFactory";
-import { loadTags } from "../redux/thunks/tag.thunk";
-import { store } from "../../App";
 import { USE_STUB } from 'react-native-dotenv';
 
 console.log(`USE_STUB: ${USE_STUB}`);
@@ -160,7 +158,6 @@ export class ConnectionHelper {
 		const request = new Request(url, requestInit);
 
 		const result = await this.send<object>(request);
-		this.refreshTags();
 		return result;
 	}
 
@@ -185,13 +182,7 @@ export class ConnectionHelper {
 		const request = new Request(url, requestInit);
 
 		const result = await this.send<object>(request);
-		this.refreshTags();
 		return result;
-	}
-
-	refreshTags() {
-		// TODO: to be fully converted to Redux
-		store.dispatch(loadTags());
 	}
 
 	async getListeningList(offset = 0, limit = 20): Promise<UserAlbumsResponse> {

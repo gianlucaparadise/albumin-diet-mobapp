@@ -3,9 +3,12 @@ import { StyleSheet, StyleProp, ViewStyle, View, NativeSyntheticEvent, TextInput
 import { ITag, TaggedAlbum } from 'albumin-diet-types';
 import { AlbuminColors } from '../Theme';
 import { Chip, TextInput } from 'react-native-paper';
-import { ConnectionHelper } from '../helpers/ConnectionHelper';
+import { AppState } from '../redux/reducers/root.reducer';
+import { addTag, deleteTag } from '../redux/thunks/tag.thunk';
+import { connect } from 'react-redux';
 
-interface Props {
+//#region Props
+interface OwnProps {
 	tags?: ITag[],
 	albumDescriptor: TaggedAlbum,
 	/**
@@ -14,11 +17,22 @@ interface Props {
 	chipStyle?: StyleProp<ViewStyle>,
 }
 
+interface StateProps {
+}
+
+interface DispatchProps {
+	addTag: (tagName: string, albumId: string) => void,
+	deleteTag: (tag: ITag, albumId: string) => void,
+}
+
+type Props = StateProps & DispatchProps & OwnProps;
+//#endregion
+
 interface State {
 	newTag: string
 }
 
-export default class TagCloud extends Component<Props, State> {
+class TagCloud extends Component<Props, State> {
 	constructor(props: Props) {
 		super(props);
 
@@ -31,44 +45,14 @@ export default class TagCloud extends Component<Props, State> {
 	}
 
 	onDeleteTag = async (tag: ITag) => {
-		if (!this.props.tags) return;
-
 		const albumId = this.props.albumDescriptor.album.id;
-
-		const tagIndex = this.props.tags.indexOf(tag);
-		this.props.tags.splice(tagIndex, 1);
-		this.forceUpdate(); // FIXME: this is not a nice way to do this
-
-		try {
-			const result = await ConnectionHelper.Instance.deleteTagFromAlbum(tag.name, albumId);
-		} catch (error) {
-			this.props.tags.push(tag);
-			this.forceUpdate(); // FIXME: this is not a nice way to do this
-
-			console.error('Error while adding the tag');
-			console.error(error);
-		}
+		this.props.deleteTag(tag, albumId);
 	}
 
 	onTextInputSubmit = async (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
-		if (!this.props.tags) return;
-
-		const tag = { name: this.state.newTag, uniqueId: this.state.newTag };
 		const albumId = this.props.albumDescriptor.album.id;
-
-		try {
-			this.props.tags.push(tag);
-			this.setState({ newTag: '' });
-
-			const result = await ConnectionHelper.Instance.addTagToAlbum(tag.name, albumId);
-		} catch (error) {
-			const tagIndex = this.props.tags.indexOf(tag);
-			this.props.tags.splice(tagIndex, 1);
-			this.forceUpdate(); // FIXME: this is not a nice way to do this
-
-			console.error('Error while adding the tag');
-			console.error(error);
-		}
+		this.props.addTag(this.state.newTag, albumId);
+		this.setState({ newTag: '' });
 	}
 
 	buildChip = (tag: ITag) => {
@@ -126,3 +110,13 @@ const styles = StyleSheet.create({
 	},
 });
 
+const mapStateToProps = (state: AppState): StateProps => ({
+});
+
+//Map your action creators to your props.
+const mapDispatchToProps: DispatchProps = {
+	addTag: addTag,
+	deleteTag: deleteTag,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TagCloud);

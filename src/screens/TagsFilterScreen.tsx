@@ -70,15 +70,21 @@ class TagsFilterScreen extends Component<Props, State> {
 	 */
 	modifyTags = (allTags?: ITag[]) => {
 		try {
+			// TODO: should this be in thunk or actions?
 			const allTagsSelectable = allTags as ITagSelectable[];
 
 			// Injecting the Untagged special tag
 			if (allTagsSelectable && allTagsSelectable.length > 0) {
-				const untaggedTag: ITagSelectable = { name: UNTAGGED_NAME, uniqueId: UNTAGGED_ID, selected: false };
-				allTagsSelectable.unshift(untaggedTag);
 
-				for (const tag of allTagsSelectable) {
-					tag.selected = this.state.selectedTags.findIndex(selectedTag => selectedTag.uniqueId === tag.uniqueId) !== -1;
+				const hasUntaggedTag = allTagsSelectable.findIndex(t => t.uniqueId === UNTAGGED_ID) >= 0;
+
+				if (!hasUntaggedTag) {
+					const untaggedTag: ITagSelectable = { name: UNTAGGED_NAME, uniqueId: UNTAGGED_ID, selected: false };
+					allTagsSelectable.unshift(untaggedTag);
+
+					for (const tag of allTagsSelectable) {
+						tag.selected = this.state.selectedTags.findIndex(selectedTag => selectedTag.uniqueId === tag.uniqueId) !== -1;
+					}
 				}
 			}
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, ScrollView } from 'react-native';
+import { StyleSheet, View, Image, ScrollView, Linking, Platform } from 'react-native';
 import { UserAlbum, TaggedAlbum } from 'albumin-diet-types';
-import { Headline, Subheading } from 'react-native-paper';
+import { Headline, Subheading, Button } from 'react-native-paper';
 import { TrackObjectSimplified } from 'spotify-web-api-node-typings';
 import { NavigationScreenProps } from 'react-navigation';
 import { MyNavigationScreenOptionsGetter } from '../../types/react-navigation-types';
@@ -62,7 +62,6 @@ class AlbumDetailScreen extends Component<Props, State> {
 		this.props.loadAlbum(albumDescriptor);
 
 		this.state = {
-			canBeEgged: true,
 		};
 	}
 
@@ -165,6 +164,31 @@ class AlbumDetailScreen extends Component<Props, State> {
 		}
 	}
 
+	onPressPlay = async () => {
+		if (this.props.albumDescriptor) {
+			try {
+				await Linking.openURL(this.props.albumDescriptor.album.uri);
+			} catch (error) {
+				// TODO: show a snackbar to inform that spotify is missing with an action to install spotify
+				this.onInstallSpotify();
+			}
+		}
+	}
+
+	onInstallSpotify = async () => {
+		try {
+			let marketUri: string;
+			if (Platform.OS === 'android') {
+				marketUri = 'market://details?id=com.spotify.music';
+			} else {
+				marketUri = 'itms://itunes.apple.com/app/apple-store/id324684580?mt=8';
+			}
+			await Linking.openURL(marketUri);
+		} catch (error) {
+			console.log(error);
+		}
+	}
+
 	renderTagCloud = () => {
 		if (this.props.albumDescriptor && this.props.albumDescriptor.isSavedAlbum) {
 			// const tags = [...this.state.albumDescriptor.tags, ...this.state.albumDescriptor.tags, ...this.state.albumDescriptor.tags];
@@ -203,6 +227,15 @@ class AlbumDetailScreen extends Component<Props, State> {
 						enabled={this.props.canBeEgged}
 						onPress={this.onPressEgg}
 					/>
+				</View>
+				<View style={styles.iconsContainer}>
+					<Button
+						mode="contained"
+						icon="play-arrow"
+						uppercase={false}
+						onPress={this.onPressPlay}>
+						Play in Spotify
+					</Button>
 				</View>
 				<View style={styles.space} />
 				{this.renderTagCloud()}

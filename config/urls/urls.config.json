@@ -17,31 +17,31 @@
     "urls": {
         "profile": {
             "hostKey": "albumin-engine",
-            "path": "/api/me/profile"
+            "path": "/api/v1/me/profile"
         },
         "tag": {
             "hostKey": "albumin-engine",
-            "path": "/api/me/tag"
+            "path": "/api/v1/me/tag"
         },
         "albums": {
             "hostKey": "albumin-engine",
-            "path": "/api/me/album?{0}"
+            "path": "/api/v1/me/album?{0}"
         },
         "album": {
             "hostKey": "albumin-engine",
-            "path": "/api/me/album/{0}"
+            "path": "/api/v1/me/album/{0}"
         },
         "listening-list": {
             "hostKey": "albumin-engine",
-            "path": "/api/me/listening-list?{0}"
+            "path": "/api/v1/me/listening-list?{0}"
         },
         "search": {
             "hostKey": "albumin-engine",
-            "path": "/api/me/album/search?{0}"
+            "path": "/api/v1/me/album/search?{0}"
         },
         "login": {
             "hostKey": "albumin-engine",
-            "path": "/auth/spotify"
+            "path": "/auth/v1/spotify"
         }
     }
 }

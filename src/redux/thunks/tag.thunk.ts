@@ -3,7 +3,7 @@ import { AppState } from "../reducers/root.reducer";
 import { AnyAction } from "redux";
 import { ConnectionHelper } from "../../helpers/ConnectionHelper";
 import { loadTagsAction, errorTagAction } from "../actions/tag.actions";
-import { ITag, TaggedAlbum } from "albumin-diet-types";
+import { ITag, TaggedAlbum, TagDescriptor } from "albumin-diet-types";
 import { updateCurrentAlbum } from "./album-detail.thunk";
 import { updateMyAlbum } from "./my-albums.thunk";
 
@@ -28,16 +28,25 @@ export const addTag = (tagName: string, albumId: string): ThunkAction<void, AppS
     const albumDescriptor = getState().albumDetailReducer.albumDescriptor;
 
     try {
-        const tag = { name: tagName, uniqueId: tagName };
+        const tagDescriptor: TagDescriptor = { tag: { name: tagName, uniqueId: tagName }, count: 1 };
         //#region Temporarily add this tag to the list
-        const newTags = [...tags, tag];
-        dispatch(loadTagsAction(newTags));
+        const newTags = [...tags];
+        const tagIndex = newTags.findIndex(t => t.tag.name.trim().toLowerCase() === tagName.trim().toLowerCase());
+        if (tagIndex >= 0) {
+            const tagDescriptor = newTags[tagIndex];
+            if (tagDescriptor.count > 1) {
+                newTags[tagIndex] = { ...tagDescriptor, count: tagDescriptor.count + 1 };
+            } else {
+                newTags.push(tagDescriptor);
+            }
+            dispatch(loadTagsAction(newTags));
+        }
         //#endregion
 
         //#region Temporarily add this tag to the album
         let newAlbumTags: ITag[] | null = null;
         if (albumDescriptor) {
-            newAlbumTags = [...albumDescriptor.tags, tag];
+            newAlbumTags = [...albumDescriptor.tags, tagDescriptor.tag];
             const newAlbumDescriptor: TaggedAlbum = { ...albumDescriptor, tags: newAlbumTags };
             dispatch(updateCurrentAlbum(newAlbumDescriptor));
         }
@@ -80,10 +89,17 @@ export const deleteTag = (tag: ITag, albumId: string): ThunkAction<void, AppStat
 
     try {
         //#region Temporarily remove this tag from the list
-        const newTags = [...tags];
-        const tagIndex = newTags.indexOf(tag);
-        newTags.splice(tagIndex, 1);
-        dispatch(loadTagsAction(newTags));
+        const newTags: TagDescriptor[] = [...tags];
+        const tagIndex = newTags.findIndex(t => t.tag.uniqueId === tag.uniqueId);
+        if (tagIndex >= 0) {
+            const tagDescriptor = newTags[tagIndex];
+            if (tagDescriptor.count > 1) {
+                newTags[tagIndex] = { ...tagDescriptor, count: tagDescriptor.count - 1 };
+            } else {
+                newTags.splice(tagIndex, 1);
+            }
+            dispatch(loadTagsAction(newTags));
+        }
         //#endregion
 
         //#region Temporarily remove this tag from the album

@@ -6,7 +6,8 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
     "tsc": "tsc",
-    "emulator": "~/Library/Android/sdk/emulator/emulator @Pixel_2_API_28"
+    "emulator": "~/Library/Android/sdk/emulator/emulator @Pixel_2_API_28",
+    "update-types": "yarn add --dev albumin-diet-types@latest"
   },
   "rnpm": {
     "assets": [
@@ -40,7 +41,7 @@
     "@types/react-navigation-material-bottom-tabs": "^0.3.1",
     "@types/react-redux": "^7.0.9",
     "@types/react-test-renderer": "^16.8.3",
-    "albumin-diet-types": "^0.0.17",
+    "albumin-diet-types": "^0.0.19",
     "babel-jest": "^24.8.0",
     "jest": "^24.8.0",
     "metro-react-native-babel-preset": "^0.54.0",

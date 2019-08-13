@@ -1,4 +1,4 @@
-import { ITag } from 'albumin-diet-types';
+import { ITag, TagDescriptor } from 'albumin-diet-types';
 
 export enum TagActionTypes {
     Error = '[Tags API] Tags API Error',
@@ -8,7 +8,7 @@ export enum TagActionTypes {
 
 export interface TagsLoadAction {
     type: typeof TagActionTypes.Load;
-    payload: { tags: ITag[] }
+    payload: { tags: TagDescriptor[] }
 }
 
 export interface TagsErrorAction {
@@ -21,7 +21,7 @@ export type TagActions =
     TagsLoadAction;
 
 // Action creator
-export function loadTagsAction(tags: ITag[]): TagActions {
+export function loadTagsAction(tags: TagDescriptor[]): TagActions {
     return {
         type: TagActionTypes.Load,
         payload: {

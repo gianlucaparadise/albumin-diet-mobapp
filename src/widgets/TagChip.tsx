@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { Chip } from 'react-native-paper';
-import { ITag } from 'albumin-diet-types';
+import { TagDescriptor } from 'albumin-diet-types';
 import { AlbuminColors } from '../Theme';
 
-export interface ITagSelectable extends ITag {
+export interface ITagSelectable extends TagDescriptor {
 	selected: boolean
 }
 
@@ -85,7 +85,7 @@ export default class TagChip extends Component<Props, State> {
 	}
 
 	onTagPressed = () => {
-		console.log(`Tag pressed: ${this.props.tag.uniqueId}`);
+		console.log(`Tag pressed: ${this.props.tag.tag.uniqueId}`);
 		this.setState((prevState) => {
 			const selected = !prevState.selected;
 			this.props.tag.selected = selected;
@@ -104,7 +104,7 @@ export default class TagChip extends Component<Props, State> {
 				selected={this.state.selected}
 				style={[styles.listItem, this.props.style, this.state.style]}
 				onPress={this.onTagPressed}>
-				{this.props.tag.name}
+				{this.props.tag.tag.name} ({this.props.tag.count})
 			</Chip>
 		);
 	}

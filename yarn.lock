@@ -1084,10 +1084,10 @@ ajv@^6.5.5:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-albumin-diet-types@^0.0.17:
-  version "0.0.17"
-  resolved "https://registry.yarnpkg.com/albumin-diet-types/-/albumin-diet-types-0.0.17.tgz#45d3011a13fac383ac49401953be052b05b690f5"
-  integrity sha512-SWlHrVqbWTZbedz4g2dwVt8EjAbmS9wAlUVaEwWnvmAQZ3PyUBnuPu6cjiDYrjT0LNDAuugmXeY+zke2RhDPoQ==
+albumin-diet-types@^0.0.19:
+  version "0.0.19"
+  resolved "https://registry.yarnpkg.com/albumin-diet-types/-/albumin-diet-types-0.0.19.tgz#80111a488e59cfffb3bd44c84294d819ecf4465d"
+  integrity sha512-5LbdNEjG+nNGYPD/SPAoSEOdd/hhlw/I5Ms6mr3bFVq/QygbEcbHvNT7/yjtO8yoFrjTvdi5Odrot89FTjZ+0Q==
   dependencies:
     spotify-web-api-node-typings "^0.0.6"
 

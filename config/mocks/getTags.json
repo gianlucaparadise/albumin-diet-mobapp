@@ -1,68 +1,103 @@
 {
     "data": [
         {
-            "_id": "5c028a71c5f0fdedc1708e79",
-            "uniqueId": "jazz-tronica",
-            "name": "Jazz-Tronica",
-            "createdAt": "2018-12-01T13:19:45.653Z",
-            "updatedAt": "2018-12-01T13:19:45.653Z",
-            "__v": 0
+            "tag": {
+                "_id": "5c028a71c5f0fdedc1708e79",
+                "uniqueId": "jazz-tronica",
+                "name": "Jazz-Tronica",
+                "createdAt": "2018-12-01T13:19:45.653Z",
+                "updatedAt": "2018-12-01T13:19:45.653Z",
+                "__v": 0
+            },
+            "count": 1
         },
         {
-            "_id": "5c36e23c28cbee25c85151ed",
-            "uniqueId": "work",
-            "name": "Work",
-            "createdAt": "2019-01-10T06:12:12.467Z",
-            "updatedAt": "2019-01-10T06:12:12.467Z",
-            "__v": 0
+            "tag": {
+                "_id": "5c36e23c28cbee25c85151ed",
+                "uniqueId": "work",
+                "name": "Work",
+                "createdAt": "2019-01-10T06:12:12.467Z",
+                "updatedAt": "2019-01-10T06:12:12.467Z",
+                "__v": 0
+            },
+            "count": 3
         },
         {
-            "_id": "5c3d74f293f040f5f32d1b32",
-            "uniqueId": "instrumental",
-            "name": "Instrumental",
-            "createdAt": "2019-01-15T05:51:46.520Z",
-            "updatedAt": "2019-01-15T05:51:46.520Z",
-            "__v": 0
+            "tag": {
+                "_id": "5c3d74f293f040f5f32d1b32",
+                "uniqueId": "instrumental",
+                "name": "Instrumental",
+                "createdAt": "2019-01-15T05:51:46.520Z",
+                "updatedAt": "2019-01-15T05:51:46.520Z",
+                "__v": 0
+            },
+            "count": 1
         },
         {
-            "_id": "5c416c67bab1d70bb3073c8d",
-            "uniqueId": "relax",
-            "name": "relax",
-            "createdAt": "2019-01-18T06:04:23.797Z",
-            "updatedAt": "2019-01-18T06:04:23.797Z",
-            "__v": 0
+            "tag": {
+                "_id": "5c416c67bab1d70bb3073c8d",
+                "uniqueId": "relax",
+                "name": "relax",
+                "createdAt": "2019-01-18T06:04:23.797Z",
+                "updatedAt": "2019-01-18T06:04:23.797Z",
+                "__v": 0
+            },
+            "count": 1
         },
         {
-            "_id": "5c535c0736fefa67177923a5",
-            "uniqueId": "live",
-            "name": "live",
-            "createdAt": "2019-01-31T20:35:19.992Z",
-            "updatedAt": "2019-01-31T20:35:19.992Z",
-            "__v": 0
+            "tag": {
+                "_id": "5c535c0736fefa67177923a5",
+                "uniqueId": "live",
+                "name": "live",
+                "createdAt": "2019-01-31T20:35:19.992Z",
+                "updatedAt": "2019-01-31T20:35:19.992Z",
+                "__v": 0
+            },
+            "count": 1
         },
         {
-            "_id": "5ccd957dfe784deb865e0e20",
-            "uniqueId": "tribal",
-            "name": "Tribal",
-            "createdAt": "2019-05-04T13:37:01.202Z",
-            "updatedAt": "2019-05-04T13:37:01.202Z",
-            "__v": 0
+            "tag": {
+                "_id": "5ccd957dfe784deb865e0e20",
+                "uniqueId": "tribal",
+                "name": "Tribal",
+                "createdAt": "2019-05-04T13:37:01.202Z",
+                "updatedAt": "2019-05-04T13:37:01.202Z",
+                "__v": 0
+            },
+            "count": 1
         },
         {
-            "_id": "5ccd95bdfe784deb865e0e22",
-            "uniqueId": "rock-opera",
-            "name": "Rock-opera",
-            "createdAt": "2019-05-04T13:38:05.333Z",
-            "updatedAt": "2019-05-04T13:38:05.333Z",
-            "__v": 0
+            "tag": {
+                "_id": "5ccd95bdfe784deb865e0e22",
+                "uniqueId": "rock-opera",
+                "name": "Rock-opera",
+                "createdAt": "2019-05-04T13:38:05.333Z",
+                "updatedAt": "2019-05-04T13:38:05.333Z",
+                "__v": 0
+            },
+            "count": 1
         },
         {
-            "_id": "5ccd9820fe784deb865e0e27",
-            "uniqueId": "classics",
-            "name": "Classics",
-            "createdAt": "2019-05-04T13:48:16.268Z",
-            "updatedAt": "2019-05-04T13:48:16.268Z",
-            "__v": 0
+            "tag": {
+                "_id": "5ccd9820fe784deb865e0e27",
+                "uniqueId": "classics",
+                "name": "Classics",
+                "createdAt": "2019-05-04T13:48:16.268Z",
+                "updatedAt": "2019-05-04T13:48:16.268Z",
+                "__v": 0
+            },
+            "count": 1
+        },
+        {
+            "tag": {
+                "_id": "5d2d530b20c7dd07ababb7fc",
+                "uniqueId": "rap",
+                "name": "Rap",
+                "createdAt": "2019-07-16T04:31:07.792Z",
+                "updatedAt": "2019-07-16T04:31:07.792Z",
+                "__v": 0
+            },
+            "count": 1
         }
     ]
 }

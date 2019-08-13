@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, FlatList, StatusBar, SafeAreaView } from 'react-native';
 import { Button } from 'react-native-paper';
-import { ITag } from 'albumin-diet-types';
+import { ITag, TagDescriptor } from 'albumin-diet-types';
 import { DrawerItemsProps, NavigationActions } from 'react-navigation';
 import TagChip, { ITagSelectable } from '../widgets/TagChip';
 import { AlbuminColors } from '../Theme';
@@ -68,7 +68,7 @@ class TagsFilterScreen extends Component<Props, State> {
 	/**
 	 * This method appends the Untagged tag updates the selected prop with the correct state
 	 */
-	modifyTags = (allTags?: ITag[]) => {
+	modifyTags = (allTags?: TagDescriptor[]) => {
 		try {
 			// TODO: should this be in thunk or actions?
 			const allTagsSelectable = allTags as ITagSelectable[];
@@ -76,14 +76,14 @@ class TagsFilterScreen extends Component<Props, State> {
 			// Injecting the Untagged special tag
 			if (allTagsSelectable && allTagsSelectable.length > 0) {
 
-				const hasUntaggedTag = allTagsSelectable.findIndex(t => t.uniqueId === UNTAGGED_ID) >= 0;
+				const hasUntaggedTag = allTagsSelectable.findIndex(t => t.tag.uniqueId === UNTAGGED_ID) >= 0;
 
 				if (!hasUntaggedTag) {
-					const untaggedTag: ITagSelectable = { name: UNTAGGED_NAME, uniqueId: UNTAGGED_ID, selected: false };
+					const untaggedTag: ITagSelectable = { tag: { name: UNTAGGED_NAME, uniqueId: UNTAGGED_ID }, count: 1, selected: false };
 					allTagsSelectable.unshift(untaggedTag);
 
-					for (const tag of allTagsSelectable) {
-						tag.selected = this.state.selectedTags.findIndex(selectedTag => selectedTag.uniqueId === tag.uniqueId) !== -1;
+					for (const tagDescriptor of allTagsSelectable) {
+						tagDescriptor.selected = this.state.selectedTags.findIndex(selectedTag => selectedTag.tag.uniqueId === tagDescriptor.tag.uniqueId) !== -1;
 					}
 				}
 			}
@@ -98,14 +98,14 @@ class TagsFilterScreen extends Component<Props, State> {
 
 	onOkPress = () => {
 		let showUntagged = false;
-		const tagIds = this.state.selectedTags.reduce((accumulator, tag) => {
+		const tagIds = this.state.selectedTags.reduce((accumulator, tagDescriptor) => {
 			// If Untagged is selected, I don't add it as a tag, but I remember it in a boolean
-			if (tag.name === UNTAGGED_NAME) {
+			if (tagDescriptor.tag.name === UNTAGGED_NAME) {
 				showUntagged = true;
 				return accumulator;
 			}
 
-			accumulator.push(tag.uniqueId);
+			accumulator.push(tagDescriptor.tag.uniqueId);
 			return accumulator;
 		}, [] as string[]);
 
@@ -129,9 +129,9 @@ class TagsFilterScreen extends Component<Props, State> {
 		});
 	}
 
-	onTagDeselected = (tag: ITagSelectable) => {
-		console.log(`Tag deselected: ${tag.uniqueId}`);
-		const tagIndex = this.state.selectedTags.findIndex(t => t.uniqueId === tag.uniqueId);
+	onTagDeselected = (tagDescriptor: ITagSelectable) => {
+		console.log(`Tag deselected: ${tagDescriptor.tag.uniqueId}`);
+		const tagIndex = this.state.selectedTags.findIndex(t => t.tag.uniqueId === tagDescriptor.tag.uniqueId);
 		if (tagIndex <= -1) return;
 
 		this.state.selectedTags[tagIndex].selected = false;
@@ -153,7 +153,7 @@ class TagsFilterScreen extends Component<Props, State> {
 							style={styles.listItem}
 							selectedStyle={styles.selectedListItem} />
 					)}
-					keyExtractor={(item, index) => item.uniqueId}
+					keyExtractor={(item, index) => item.tag.uniqueId}
 					extraData={this.state}
 				/>
 			</SafeAreaView>

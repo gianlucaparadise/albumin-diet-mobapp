@@ -85,7 +85,7 @@ class AlbumDetailScreen extends Component<Props, State> {
 	}
 
 	get imageUrl() {
-		return this.props.albumDescriptor ? this.props.albumDescriptor.album.images[0].url : "";
+		return this.props.albumDescriptor ? this.props.albumDescriptor.album.images[0].url : ""; // TODO: use image placeholder
 	}
 
 	get albumName() {

@@ -1,0 +1,17 @@
+{
+  "data": {
+    "display_name": "gianlucaparadise",
+    "external_urls": {
+      "spotify": "https://open.spotify.com/user/gianlucaparadise"
+    },
+    "followers": {
+      "href": null,
+      "total": 0
+    },
+    "href": "https://api.spotify.com/v1/users/gianlucaparadise",
+    "id": "gianlucaparadise",
+    "images": [],
+    "type": "user",
+    "uri": "spotify:user:gianlucaparadise"
+  }
+}

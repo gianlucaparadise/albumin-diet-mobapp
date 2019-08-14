@@ -1,4 +1,4 @@
-import { GetMyAlbumsResponse, GetMyTagsResponse, UserAlbumsResponse, TagOnAlbumRequest, GetAlbumResponse, TaggedAlbum, UserAlbum, EmptyResponse } from "albumin-diet-types";
+import { GetMyAlbumsResponse, GetMyTagsResponse, UserAlbumsResponse, TagOnAlbumRequest, GetAlbumResponse, TaggedAlbum, UserAlbum, EmptyResponse, GetProfileResponse } from "albumin-diet-types";
 import { LoginHelper } from "./LoginHelper";
 import { MyUrlFactory } from "./MyUrlFactory";
 import { USE_STUB } from 'react-native-dotenv';
@@ -31,6 +31,19 @@ export class ConnectionHelper {
 		LoginHelper.Instance.refreshToken(result.headers);
 		const responseBody: T = await result.json();
 		return responseBody;
+	}
+
+	public async getProfile(): Promise<GetProfileResponse> {
+		if (isInStub) {
+			const response: GetProfileResponse = require('../../config/mocks/getProfile.json');
+			return response;
+		}
+
+		const url = MyUrlFactory.Instance.getUrl('profile');
+		const request = new Request(url);
+
+		const response = await this.send<GetProfileResponse>(request);
+		return response;
 	}
 
 	public async getAlbums(tags: string[] | null = null, showUntagged: boolean, offset = 0, limit = 20): Promise<GetMyAlbumsResponse> {

@@ -1,14 +1,49 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 import { LoginHelper } from '../helpers/LoginHelper';
-import { NavigationScreenProps } from 'react-navigation';
-import { Text, Button } from 'react-native-paper';
+import { NavigationScreenProps, NavigationScreenOptions, ScrollView } from 'react-navigation';
+import { Text, Button, Title } from 'react-native-paper';
+import { MyNavigationScreenOptionsGetter } from 'react-navigation-types';
+import { ConnectionHelper } from '../helpers/ConnectionHelper';
+import { UserObjectPrivate } from 'spotify-web-api-node-typings';
 
 interface Props extends NavigationScreenProps {
 }
 
-export default class MyProfileScreen extends Component<Props> {
+interface State {
+	profile?: UserObjectPrivate
+}
+
+export default class MyProfileScreen extends Component<Props, State> {
+	static navigationOptions: MyNavigationScreenOptionsGetter<NavigationScreenOptions> = (navigationOptions) => {
+		return {
+			title: 'Profile',
+		};
+	}
+
+	constructor(props: Props) {
+		super(props);
+
+		this.state = {
+			profile: undefined
+		};
+	}
+
 	componentDidMount() {
+		this.getProfile();
+	}
+
+	getProfile = async () => {
+		try {
+			const response = await ConnectionHelper.Instance.getProfile();
+			// this.props.navigationOptions = { title: profileResponse.data.display_name };
+			this.setState({
+				profile: response.data
+			});
+		} catch (error) {
+			console.error('Error while getProfile');
+			console.error(error);
+		}
 	}
 
 	logout = async () => {
@@ -21,25 +56,42 @@ export default class MyProfileScreen extends Component<Props> {
 		}
 	}
 
+	get imageUrl() {
+		const profile = this.state.profile;
+		return profile && profile.images && profile.images[0] ? profile.images[0].url : ''; // TODO: use image placeholder
+	}
+
+	get username() {
+		const profile = this.state.profile;
+		return profile ? profile.display_name : '';
+	}
+
 	render() {
 		return (
-			<View style={styles.container}>
-				<Text style={styles.welcome}>My Profile</Text>
+			<ScrollView contentContainerStyle={styles.container}>
+				<Image
+					resizeMode="cover"
+					style={styles.userimage}
+					source={{ uri: this.imageUrl }} />
+				<Title style={styles.username}>{this.username}</Title>
 				<Button onPress={this.logout}>Logout</Button>
-			</View>
+			</ScrollView>
 		);
 	}
 }
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
+		padding: 15,
+		alignItems: 'center'
 	},
-	welcome: {
-		fontSize: 20,
+	userimage: {
+		width: 200,
+		aspectRatio: 1,
+		borderRadius: 100
+	},
+	username: {
+		marginVertical: 5,
 		textAlign: 'center',
-		margin: 10,
 	},
 });

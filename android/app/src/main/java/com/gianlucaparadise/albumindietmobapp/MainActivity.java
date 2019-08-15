@@ -1,4 +1,4 @@
-package com.albumindietmobapp;
+package com.gianlucaparadise.albumindietmobapp;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

@@ -1,4 +1,4 @@
-package com.albumindietmobapp;
+package com.gianlucaparadise.albumindietmobapp;
 
 import android.app.Application;
 

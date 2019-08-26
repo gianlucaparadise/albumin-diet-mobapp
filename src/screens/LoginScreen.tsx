@@ -1,52 +1,71 @@
 import React, { Component } from 'react';
-import { StyleSheet, NativeSyntheticEvent } from 'react-native';
-import { WebView, WebViewNavigation, WebViewError, WebViewIOSLoadRequestEvent } from "react-native-webview";
+import { StyleSheet, WebView, WebViewIOSLoadRequestEvent, Platform, NavState } from 'react-native';
 import { LoginHelper } from '../helpers/LoginHelper';
 import { NavigationScreenProps } from 'react-navigation';
+
+// TODO: Loging flow shouldn't be done using a WebView
 
 interface Props extends NavigationScreenProps {
 }
 
 export default class LoginScreen extends Component<Props> {
-	onLoad = (event: NativeSyntheticEvent<WebViewNavigation>) => {
+
+	isFinishingLogin = false;
+
+	onLoad = (event: any) => {
 		console.log(`onLoad`);
 		console.log(event);
 	}
 
-	onLoadStart = (event: NativeSyntheticEvent<WebViewNavigation>) => {
+	onLoadStart = (event: any) => {
 		console.log(`onLoadStart`);
 		console.log(event);
 	}
 
-	onLoadEnd = (event: NativeSyntheticEvent<WebViewNavigation> | NativeSyntheticEvent<WebViewError>) => {
+	onLoadEnd = (event: any) => {
 		console.log(`onLoadEnd`);
 		console.log(event);
 	}
 
-	onError = (event: NativeSyntheticEvent<WebViewError>) => {
+	onError = (event: any) => {
 		console.log(`onError`);
 		console.log(event);
 	}
 
-	onNavigationStateChange = (event: WebViewNavigation) => {
+	onNavigationStateChange = (event: NavState) => {
 		console.log(`onNavigationStateChange`);
 		console.log(event);
+
+		if (Platform.OS !== 'android') return;
+
+		//#region Android-only code
+		if (!this.isFinishingLogin && LoginHelper.Instance.isLoginCallback(event.url)) {
+			this.finishLogin(event.url!);
+			return;
+		}
+		//#endregion
 	}
 
 	onShouldLoad = (event: WebViewIOSLoadRequestEvent) => {
 		console.log(`onShouldLoad`);
 		console.log(event);
 
+		if (Platform.OS !== 'ios') return true;
+
+		//#region iOS-only code
 		if (LoginHelper.Instance.isLoginCallback(event.url)) {
 			this.finishLogin(event.url);
 			return false;
 		}
 
 		return true;
+		//#endregion
 	}
 
 	finishLogin = async (url: string) => {
 		console.log('Getting token');
+		this.isFinishingLogin = true;
+
 		try {
 			await LoginHelper.Instance.finishLogin(url);
 			this.props.navigation.navigate('HomeFlow');
@@ -67,7 +86,6 @@ export default class LoginScreen extends Component<Props> {
 				onError={this.onError}
 				onShouldStartLoadWithRequest={this.onShouldLoad}
 				onNavigationStateChange={this.onNavigationStateChange}
-				style={{ marginTop: 20 }}
 			/>
 		);
 	}

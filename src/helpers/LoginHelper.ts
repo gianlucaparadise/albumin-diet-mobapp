@@ -22,8 +22,8 @@ export class LoginHelper {
 	 * Returns `true` when input url is login callback and you need to call FinishLogin
 	 * @param url Url to check
 	 */
-	public isLoginCallback(url: string) {
-		return url.indexOf('/auth/spotify/callback') !== -1;
+	public isLoginCallback(url?: string) {
+		return url && url.indexOf('/auth/spotify/callback') !== -1;
 	}
 
 	/**

@@ -3,7 +3,7 @@ import { StyleSheet, FlatList, StatusBar, SafeAreaView } from 'react-native';
 import { Button } from 'react-native-paper';
 import { ITag, TagDescriptor } from 'albumin-diet-types';
 import { DrawerItemsProps, NavigationActions } from 'react-navigation';
-import TagChip, { ITagSelectable } from '../widgets/TagChip';
+import TagChip from '../widgets/TagChip';
 import { AlbuminColors } from '../Theme';
 import { NavigationState } from 'react-navigation';
 import { MyAlbumsNavigationParams } from './MyAlbumsScreen';
@@ -20,7 +20,7 @@ interface OwnProps extends DrawerItemsProps {
 }
 
 interface StateProps {
-	tags: ITagSelectable[],
+	tags: TagDescriptor[],
 }
 
 interface DispatchProps {
@@ -31,7 +31,7 @@ type Props = StateProps & DispatchProps & OwnProps;
 //#endregion
 
 interface State {
-	selectedTags: ITagSelectable[]
+	selectedTags: TagDescriptor[]
 }
 
 const getActiveRouteState = function (route: NavigationState): NavigationState {
@@ -71,20 +71,14 @@ class TagsFilterScreen extends Component<Props, State> {
 	modifyTags = (allTags?: TagDescriptor[]) => {
 		try {
 			// TODO: should this be in thunk or actions?
-			const allTagsSelectable = allTags as ITagSelectable[];
-
 			// Injecting the Untagged special tag
-			if (allTagsSelectable && allTagsSelectable.length > 0) {
+			if (allTags && allTags.length > 0) {
 
-				const hasUntaggedTag = allTagsSelectable.findIndex(t => t.tag.uniqueId === UNTAGGED_ID) >= 0;
+				const hasUntaggedTag = allTags.findIndex(t => t.tag.uniqueId === UNTAGGED_ID) >= 0;
 
 				if (!hasUntaggedTag) {
-					const untaggedTag: ITagSelectable = { tag: { name: UNTAGGED_NAME, uniqueId: UNTAGGED_ID }, count: 1, selected: false };
-					allTagsSelectable.unshift(untaggedTag);
-
-					for (const tagDescriptor of allTagsSelectable) {
-						tagDescriptor.selected = this.state.selectedTags.findIndex(selectedTag => selectedTag.tag.uniqueId === tagDescriptor.tag.uniqueId) !== -1;
-					}
+					const untaggedTag: TagDescriptor = { tag: { name: UNTAGGED_NAME, uniqueId: UNTAGGED_ID }, count: 1 };
+					allTags.unshift(untaggedTag);
 				}
 			}
 
@@ -120,22 +114,27 @@ class TagsFilterScreen extends Component<Props, State> {
 		this.props.navigation.closeDrawer();
 	}
 
-	onTagSelected = (tag: ITagSelectable) => {
-		// I deselect previous selected tags
-		this.state.selectedTags.forEach(t => t.selected = false);
-
-		this.setState({
-			selectedTags: [tag]
-		});
+	isTagSelected = (tagDescriptor: TagDescriptor): boolean => {
+		return this.state.selectedTags.findIndex(t => t.tag.uniqueId === tagDescriptor.tag.uniqueId) >= 0;
 	}
 
-	onTagDeselected = (tagDescriptor: ITagSelectable) => {
-		console.log(`Tag deselected: ${tagDescriptor.tag.uniqueId}`);
+	onTagClicked = (tagDescriptor: TagDescriptor) => {
 		const tagIndex = this.state.selectedTags.findIndex(t => t.tag.uniqueId === tagDescriptor.tag.uniqueId);
-		if (tagIndex <= -1) return;
+		const isSelected = tagIndex >= 0;
 
-		this.state.selectedTags[tagIndex].selected = false;
-		this.state.selectedTags.splice(tagIndex, 1);
+		let selectedTags: TagDescriptor[];
+		if (isSelected) {
+			// Only one tag can be selected: if I to deselect this, no more tag is selected
+			selectedTags = [];
+		}
+		else {
+			// Only one tag can be selected: if I select this, the list has one tag
+			selectedTags = [tagDescriptor];
+		}
+
+		this.setState({
+			selectedTags
+		});
 	}
 
 	render() {
@@ -148,8 +147,8 @@ class TagsFilterScreen extends Component<Props, State> {
 					renderItem={({ item }) => (
 						<TagChip
 							tag={item}
-							onSelected={this.onTagSelected}
-							onDeselected={this.onTagDeselected}
+							selected={this.isTagSelected(item)}
+							onClick={this.onTagClicked}
 							style={styles.listItem}
 							selectedStyle={styles.selectedListItem} />
 					)}
@@ -180,7 +179,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state: AppState): StateProps => ({
-	tags: state.tagReducer.tags as ITagSelectable[]
+	tags: state.tagReducer.tags || []
 });
 
 //Map your action creators to your props.

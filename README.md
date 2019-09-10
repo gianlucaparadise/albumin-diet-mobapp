@@ -11,13 +11,17 @@ With Albumin Diet you can:
 
 ## Try it
 
+**N.B.** This is intended to be a POC and is using a free DBaaS with limited storage available. All your data may be lost without warning.
+
 ### Android
 
 Albumin Diet for Android can be installed from the [Play Store](https://play.google.com/store/apps/details?id=com.gianlucaparadise.albumindietmobapp).
 
 ### iOS
 
-Albumin Diet for iOS version is fully working, but it has not been published yet because I can't afford the Apple Developer License 😢
+Albumin Diet for iOS is fully working, but it has not been published yet because I can't afford the Apple Developer License 😢
+
+However, you can use the web version: www.albumindiet.tk
 
 ## Ecosystem
 

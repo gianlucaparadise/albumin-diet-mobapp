@@ -21,7 +21,7 @@ Albumin Diet for Android can be installed from the [Play Store](https://play.goo
 
 Albumin Diet for iOS is fully working, but it has not been published yet because I can't afford the Apple Developer License 😢
 
-However, you can use the web version: www.albumindiet.tk
+However, you can use the web version: www.albumindiet.ml
 
 ## Ecosystem
 

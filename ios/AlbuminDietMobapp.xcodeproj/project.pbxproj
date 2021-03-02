@@ -15,6 +15,7 @@
 		17064C048303482DB718169D /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EE63F7A56844C16AD3F0E5A /* FontAwesome5_Solid.ttf */; };
 		17C27F9A673E423FAF081424 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3B868889BC724DFA81932877 /* MaterialCommunityIcons.ttf */; };
 		24623D93F5ED45699D88C672 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5268A00984E64955A3F72538 /* Ionicons.ttf */; };
+		298D8822F324CC9A5774F727 /* libPods-AlbuminDietMobapp-AlbuminDietMobappTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E9B6D2AF3A7936CF55C180A3 /* libPods-AlbuminDietMobapp-AlbuminDietMobappTests.a */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -38,7 +39,6 @@
 		ECC847CDAEC8496D9A40233A /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E3DF1A6140A34DDDADE8AB24 /* Zocial.ttf */; };
 		ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED297162215061F000B7C4FE /* JavaScriptCore.framework */; };
 		ED2971652150620600B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED2971642150620600B7C4FE /* JavaScriptCore.framework */; };
-		F0F3207193214A29C028C816 /* libPods-AlbuminDietMobappTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 201F1474BD6D4F64EDDE523F /* libPods-AlbuminDietMobappTests.a */; };
 		F95BE9ACDB3147BE86DB1446 /* libRNVectorIcons-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E63B4246ED4251B74D5F67 /* libRNVectorIcons-tvOS.a */; };
 		F9B3F957363F4D08A80A894D /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 86E8B143B931499DA0BCA3AE /* Foundation.ttf */; };
 		FC9542229197410F990A6860 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 78CC1044068E4FE6B42CA007 /* Octicons.ttf */; };
@@ -81,7 +81,7 @@
 		1BE9F91C2885ABB1A6A88FC7 /* Pods-AlbuminDietMobappTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AlbuminDietMobappTests.release.xcconfig"; path = "Target Support Files/Pods-AlbuminDietMobappTests/Pods-AlbuminDietMobappTests.release.xcconfig"; sourceTree = "<group>"; };
 		1EE7F7FA2912D59283591EEE /* Pods-AlbuminDietMobapp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AlbuminDietMobapp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-AlbuminDietMobapp-tvOSTests/Pods-AlbuminDietMobapp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		1F294FCFE6B54840C517CAB4 /* Pods-AlbuminDietMobapp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AlbuminDietMobapp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-AlbuminDietMobapp-tvOS/Pods-AlbuminDietMobapp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		201F1474BD6D4F64EDDE523F /* libPods-AlbuminDietMobappTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AlbuminDietMobappTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		244875C5607F32DDC14D9481 /* Pods-AlbuminDietMobapp-AlbuminDietMobappTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AlbuminDietMobapp-AlbuminDietMobappTests.release.xcconfig"; path = "Target Support Files/Pods-AlbuminDietMobapp-AlbuminDietMobappTests/Pods-AlbuminDietMobapp-AlbuminDietMobappTests.release.xcconfig"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* AlbuminDietMobapp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AlbuminDietMobapp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* AlbuminDietMobapp-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AlbuminDietMobapp-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -91,6 +91,7 @@
 		5268A00984E64955A3F72538 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		5791860CCA61B04D528A9FF2 /* Pods-AlbuminDietMobapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AlbuminDietMobapp.debug.xcconfig"; path = "Target Support Files/Pods-AlbuminDietMobapp/Pods-AlbuminDietMobapp.debug.xcconfig"; sourceTree = "<group>"; };
 		5BC0A0051BE48C9E4BD12463 /* libPods-AlbuminDietMobapp-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AlbuminDietMobapp-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		61CA063427826932BB939211 /* Pods-AlbuminDietMobapp-AlbuminDietMobappTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AlbuminDietMobapp-AlbuminDietMobappTests.debug.xcconfig"; path = "Target Support Files/Pods-AlbuminDietMobapp-AlbuminDietMobappTests/Pods-AlbuminDietMobapp-AlbuminDietMobappTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6269FC013D527C6F30892F30 /* Pods-AlbuminDietMobapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AlbuminDietMobapp.release.xcconfig"; path = "Target Support Files/Pods-AlbuminDietMobapp/Pods-AlbuminDietMobapp.release.xcconfig"; sourceTree = "<group>"; };
 		70A2961951E942BF935591AC /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		70A75FAF24724045A9DF90E6 /* libRNCAsyncStorage.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNCAsyncStorage.a; sourceTree = "<group>"; };
@@ -110,6 +111,7 @@
 		D0CF915377494AC2818D5156 /* libRNGestureHandler-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNGestureHandler-tvOS.a"; sourceTree = "<group>"; };
 		D3BE60CC3A2F7B82A005ED0A /* Pods-AlbuminDietMobapp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AlbuminDietMobapp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-AlbuminDietMobapp-tvOSTests/Pods-AlbuminDietMobapp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E3DF1A6140A34DDDADE8AB24 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
+		E9B6D2AF3A7936CF55C180A3 /* libPods-AlbuminDietMobapp-AlbuminDietMobappTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AlbuminDietMobapp-AlbuminDietMobappTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F7A4F4A6575044678BBC54E3 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
@@ -120,7 +122,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F0F3207193214A29C028C816 /* libPods-AlbuminDietMobappTests.a in Frameworks */,
+				298D8822F324CC9A5774F727 /* libPods-AlbuminDietMobapp-AlbuminDietMobappTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -199,7 +201,7 @@
 				CDCE6B9951B7FEB55C95313C /* libPods-AlbuminDietMobapp.a */,
 				96A1757D294E7C6D08568361 /* libPods-AlbuminDietMobapp-tvOS.a */,
 				5BC0A0051BE48C9E4BD12463 /* libPods-AlbuminDietMobapp-tvOSTests.a */,
-				201F1474BD6D4F64EDDE523F /* libPods-AlbuminDietMobappTests.a */,
+				E9B6D2AF3A7936CF55C180A3 /* libPods-AlbuminDietMobapp-AlbuminDietMobappTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -215,6 +217,8 @@
 				1EE7F7FA2912D59283591EEE /* Pods-AlbuminDietMobapp-tvOSTests.release.xcconfig */,
 				094D27A0598BD4119B2E6F4A /* Pods-AlbuminDietMobappTests.debug.xcconfig */,
 				1BE9F91C2885ABB1A6A88FC7 /* Pods-AlbuminDietMobappTests.release.xcconfig */,
+				61CA063427826932BB939211 /* Pods-AlbuminDietMobapp-AlbuminDietMobappTests.debug.xcconfig */,
+				244875C5607F32DDC14D9481 /* Pods-AlbuminDietMobapp-AlbuminDietMobappTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -300,6 +304,8 @@
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
+				CAF9813ACD14EBFF7617B959 /* [CP] Embed Pods Frameworks */,
+				7CB7B6605DFB3447C289BF35 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -321,6 +327,7 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				F10D739FF081C89BDB09FB82 /* [CP] Copy Pods Resources */,
+				BA42DF166211678FF699A802 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -515,6 +522,90 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		7CB7B6605DFB3447C289BF35 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AlbuminDietMobapp-AlbuminDietMobappTests/Pods-AlbuminDietMobapp-AlbuminDietMobappTests-resources.sh",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Feather.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Foundation.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Octicons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Zocial.ttf",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Feather.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Brands.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Regular.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Solid.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Foundation.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Ionicons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCommunityIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Octicons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SimpleLineIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Zocial.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AlbuminDietMobapp-AlbuminDietMobappTests/Pods-AlbuminDietMobapp-AlbuminDietMobappTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BA42DF166211678FF699A802 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AlbuminDietMobapp/Pods-AlbuminDietMobapp-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AlbuminDietMobapp/Pods-AlbuminDietMobapp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CAF9813ACD14EBFF7617B959 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AlbuminDietMobapp-AlbuminDietMobappTests/Pods-AlbuminDietMobapp-AlbuminDietMobappTests-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AlbuminDietMobapp-AlbuminDietMobappTests/Pods-AlbuminDietMobapp-AlbuminDietMobappTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		CE93646C3AE9BEA5F5248920 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -530,7 +621,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-AlbuminDietMobappTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-AlbuminDietMobapp-AlbuminDietMobappTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -603,6 +694,7 @@
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Octicons.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Zocial.ttf",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
@@ -621,6 +713,7 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Octicons.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SimpleLineIcons.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Zocial.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -694,7 +787,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 094D27A0598BD4119B2E6F4A /* Pods-AlbuminDietMobappTests.debug.xcconfig */;
+			baseConfigurationReference = 61CA063427826932BB939211 /* Pods-AlbuminDietMobapp-AlbuminDietMobappTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -723,7 +816,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1BE9F91C2885ABB1A6A88FC7 /* Pods-AlbuminDietMobappTests.release.xcconfig */;
+			baseConfigurationReference = 244875C5607F32DDC14D9481 /* Pods-AlbuminDietMobapp-AlbuminDietMobappTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;

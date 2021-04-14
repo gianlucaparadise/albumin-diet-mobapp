@@ -1,4 +1,4 @@
-import { createDrawerNavigator } from "react-navigation";
+import { createDrawerNavigator } from "react-navigation-drawer";
 import { HomeTabs } from "./HomeTabs";
 import TagsFilterScreen from "../screens/TagsFilterScreen";
 import { AlbuminColors } from "../Theme";

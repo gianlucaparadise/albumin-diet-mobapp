@@ -1,5 +1,5 @@
 import { homeScreens as screens } from "../screens";
-import { createStackNavigator } from "react-navigation";
+import { createStackNavigator } from "react-navigation-stack";
 import { commonStackConfig } from "./helpers";
 
 export const AlbumsFlow = createStackNavigator(

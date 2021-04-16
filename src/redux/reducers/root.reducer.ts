@@ -6,11 +6,11 @@ import { myAlbumsReducer } from './my-albums.reducer';
 import { albumDetailReducer } from './album-detail.reducer';
 
 export const rootReducer = combineReducers({
-    tagReducer: tagReducer,
-    searchReducer: searchReducer,
-    listeningListReducer: listeningListReducer,
-    myAlbumsReducer: myAlbumsReducer,
-    albumDetailReducer: albumDetailReducer
+  tagReducer: tagReducer,
+  searchReducer: searchReducer,
+  listeningListReducer: listeningListReducer,
+  myAlbumsReducer: myAlbumsReducer,
+  albumDetailReducer: albumDetailReducer,
 });
 
 export type AppState = ReturnType<typeof rootReducer>;

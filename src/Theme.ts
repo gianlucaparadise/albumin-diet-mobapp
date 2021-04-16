@@ -1,29 +1,29 @@
-import { Theme, DefaultTheme } from "react-native-paper";
+import { Theme, DefaultTheme } from 'react-native-paper';
 
 export const AlbuminColors = {
-	primary: '#cddc39', // should be mat-lime palette
-	accent: '#9e9e9e', // should be mat-grey palette
-	error: '#ff5722', // should be mat-deep-orange
-	background: '#303030',
-	surface: '#424242',
-	text: '#fff',
-	// backdrop: '#FF0000',
-	// disabled: '#00FF00',
-	placeholder: 'rgba(255,255,255,0.7)',
-	appbar: '#212121',
-	chips: '#616161',
-	
-	surfaceAlpha50: 'rgba(66,66,66, 0.7)'
-}
+  primary: '#cddc39', // should be mat-lime palette
+  accent: '#9e9e9e', // should be mat-grey palette
+  error: '#ff5722', // should be mat-deep-orange
+  background: '#303030',
+  surface: '#424242',
+  text: '#fff',
+  // backdrop: '#FF0000',
+  // disabled: '#00FF00',
+  placeholder: 'rgba(255,255,255,0.7)',
+  appbar: '#212121',
+  chips: '#616161',
+
+  surfaceAlpha50: 'rgba(66,66,66, 0.7)',
+};
 
 export const AlbuminTheme: Theme = {
-	...DefaultTheme,
-	// dark: true,
-	roundness: 2,
-	colors: {
-		...DefaultTheme.colors,
-		...AlbuminColors,
-	}
+  ...DefaultTheme,
+  // dark: true,
+  roundness: 2,
+  colors: {
+    ...DefaultTheme.colors,
+    ...AlbuminColors,
+  },
 };
 
 // primary - primary color for your app, usually your brand color.

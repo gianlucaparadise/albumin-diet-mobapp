@@ -1,32 +1,29 @@
-import { ITag, TagDescriptor } from "albumin-diet-types";
-import { TagActionTypes, TagActions } from "../actions/tag.actions";
+import { ITag, TagDescriptor } from 'albumin-diet-types';
+import { TagActionTypes, TagActions } from '../actions/tag.actions';
 
 export interface TagState {
-    tags?: TagDescriptor[];
-    errorMessage?: string;
+  tags?: TagDescriptor[];
+  errorMessage?: string;
 }
 
 const initialState: TagState = {
-    tags: []
-}
+  tags: [],
+};
 
-export function tagReducer(
-    state = initialState,
-    action: TagActions
-): TagState {
-    switch (action.type) {
-        case TagActionTypes.Load:
-            return {
-                tags: action.payload.tags
-            }
+export function tagReducer(state = initialState, action: TagActions): TagState {
+  switch (action.type) {
+    case TagActionTypes.Load:
+      return {
+        tags: action.payload.tags,
+      };
 
-        case TagActionTypes.Error:
-            return {
-                ...state,
-                errorMessage: 'Error'
-            };
+    case TagActionTypes.Error:
+      return {
+        ...state,
+        errorMessage: 'Error',
+      };
 
-        default:
-            return state
-    }
+    default:
+      return state;
+  }
 }

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { StyleSheet, FlatList, StatusBar, SafeAreaView } from 'react-native';
 import { Button } from 'react-native-paper';
 import { ITag, TagDescriptor } from 'albumin-diet-types';
-import { NavigationActions } from 'react-navigation';
 import TagChip from '../widgets/TagChip';
 import { AlbuminColors } from '../Theme';
 import { NavigationState } from 'react-navigation';
@@ -10,12 +9,15 @@ import { MyAlbumsNavigationParams } from './MyAlbumsScreen';
 import { connect } from 'react-redux';
 import { AppState } from '../redux/reducers/root.reducer';
 import { loadTags } from '../redux/thunks/tag.thunk';
-import { NavigationDrawerScreenProps } from 'react-navigation-drawer';
+import { DrawerScreenProps } from '@react-navigation/drawer';
+import { HomeDrawerParamList } from '../navigation/HomeDrawer';
 
 const UNTAGGED_NAME = 'Untagged';
 const UNTAGGED_ID = 'untagged';
 
 //#region Props
+type NavigationProps = DrawerScreenProps<HomeDrawerParamList, 'TagFilter'>;
+
 interface StateProps {
   tags: TagDescriptor[];
 }
@@ -24,7 +26,7 @@ interface DispatchProps {
   loadTags: () => void;
 }
 
-type Props = NavigationDrawerScreenProps<{}, StateProps & DispatchProps>;
+type Props = NavigationProps & StateProps & DispatchProps;
 //#endregion
 
 interface State {

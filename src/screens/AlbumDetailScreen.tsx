@@ -24,12 +24,11 @@ import {
 } from '../redux/thunks/album-detail.thunk';
 import { connect } from 'react-redux';
 import { getCanBeEgged } from '../redux/reducers/album-detail.reducer';
-import { NavigationStackProp } from 'react-navigation-stack';
+import { StackScreenProps } from '@react-navigation/stack';
+import { HomeStackParamList } from '../navigation/HomeStacks';
 
 //#region Props
-interface NavigationProps {
-  navigation: NavigationStackProp<AlbumDetailNavigationParams>;
-}
+type NavigationProps = StackScreenProps<HomeStackParamList, 'AlbumDetail'>
 
 interface StateProps {
   albumDescriptor?: TaggedAlbum;
@@ -54,7 +53,7 @@ interface DispatchProps {
 type Props = StateProps & DispatchProps & NavigationProps;
 //#endregion
 
-interface State {}
+interface State { }
 
 export interface AlbumDetailNavigationParams {
   albumDescriptor: UserAlbum;
@@ -74,13 +73,13 @@ class AlbumDetailScreen extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    const albumDescriptor = this.props.navigation.getParam('albumDescriptor');
+    const albumDescriptor = this.props.route.params.albumDescriptor as TaggedAlbum;
     this.props.loadAlbum(albumDescriptor);
 
     this.state = {};
   }
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   get artistName() {
     return this.props.albumDescriptor

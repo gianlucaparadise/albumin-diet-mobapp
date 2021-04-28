@@ -1,18 +1,24 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-// import { HomeTabs } from './HomeTabs';
 import { TagsFilterScreen } from '../screens/';
 import { AlbuminColors } from '../Theme';
+import { HomeTabs } from './HomeTabs';
 
-const Drawer = createDrawerNavigator()
+export type HomeDrawerParamList = {
+    HomeTabs: undefined
+}
+
+const Drawer = createDrawerNavigator<HomeDrawerParamList>()
 
 export function HomeDrawer() {
     return (
         <Drawer.Navigator
+            initialRouteName='HomeTabs'
             drawerPosition='right'
             screenOptions={{ gestureEnabled: false }}
             drawerStyle={{ backgroundColor: AlbuminColors.surface }}
             drawerContent={(props) => <TagsFilterScreen />}>
+            <Drawer.Screen name='HomeTabs' component={HomeTabs} />
         </Drawer.Navigator>
     )
 }

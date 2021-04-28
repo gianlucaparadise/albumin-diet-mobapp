@@ -1,9 +1,10 @@
+import { StackScreenProps } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Headline, Paragraph } from 'react-native-paper';
-import { NavigationStackScreenProps } from 'react-navigation-stack';
+import { LoginStackParamList } from '../navigation/LoginStack';
 
-type Props = NavigationStackScreenProps<{}, {}>
+type Props = StackScreenProps<LoginStackParamList, 'Welcome'>;
 
 export default class WelcomeScreen extends Component<Props> {
   goToLogin = () => {

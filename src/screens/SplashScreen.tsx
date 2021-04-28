@@ -1,13 +1,14 @@
+import { StackScreenProps } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { StyleSheet, View, Animated, Easing } from 'react-native';
-import { NavigationSwitchScreenProps } from 'react-navigation';
+import { RootStackParamList } from '../navigation';
 import { LoginHelper } from '../helpers/LoginHelper';
 import { AlbuminColors } from '../Theme';
 
-type Props = NavigationSwitchScreenProps<{}, {}>
+type Props = StackScreenProps<RootStackParamList, 'Splash'>;
 
 export default class SplashScreen extends Component<Props> {
-  timeout?: NodeJS.Timeout;
+  timeout?: number;
   headphonesAnimatedValue = new Animated.Value(0);
   fadeAnimatedValue = new Animated.Value(0);
 
@@ -25,9 +26,9 @@ export default class SplashScreen extends Component<Props> {
     const isLoggedIn = await LoginHelper.Instance.isLoggedIn();
 
     if (isLoggedIn) {
-      this.props.navigation.navigate('HomeFlow');
+      this.props.navigation.navigate('HomeFlow', { initial: true };
     } else {
-      this.props.navigation.navigate('LoginFlow');
+      this.props.navigation.navigate('LoginFlow', { screen: 'Welcome' });
     }
   };
 

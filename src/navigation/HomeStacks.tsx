@@ -2,10 +2,22 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { commonStackConfig, headerMode } from './helpers';
 import { AlbumDetailScreen, MyAlbumsScreen, MyListeningListScreen, MyProfileScreen, SearchScreen } from '../screens';
+import { AlbumDetailNavigationParams } from '../screens/AlbumDetailScreen';
+import { MyAlbumsNavigationParams } from '../screens/MyAlbumsScreen';
 
-const Stack = createStackNavigator();
+export type HomeStackParamList = {
+  MyAlbums: MyAlbumsNavigationParams;
+  AlbumDetail: AlbumDetailNavigationParams;
+  MyListeningList: undefined;
+  Search: undefined;
+  MyProfile: undefined;
+};
 
-function TabFlowGenerator(initialRouteName: string) {
+const Stack = createStackNavigator<HomeStackParamList>();
+
+type RouteName = keyof HomeStackParamList;
+
+function TabFlowGenerator(initialRouteName: RouteName) {
   return function () {
     return (
       <Stack.Navigator initialRouteName={initialRouteName} headerMode={headerMode} screenOptions={commonStackConfig} >

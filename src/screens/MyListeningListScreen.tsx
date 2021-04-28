@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Animated } from 'react-native';
-import { FlatList } from 'react-navigation';
+import { FlatList } from 'react-native';
 import { UserAlbum } from 'albumin-diet-types';
 import { AlbumDetailNavigationParams } from './AlbumDetailScreen';
 // import { MyNavigationScreenOptionsGetter } from 'react-navigation-types';
@@ -9,12 +9,11 @@ import { AppState } from '../redux/reducers/root.reducer';
 import { connect } from 'react-redux';
 import { loadListeningList } from '../redux/thunks/listening-list.thunk';
 import { loadListeningListNext } from '../redux/thunks/listening-list.thunk';
-import { NavigationStackProp } from 'react-navigation-stack';
+import { StackScreenProps } from '@react-navigation/stack';
+import { HomeStackParamList } from '../navigation/HomeStacks';
 
 //#region Props
-interface NavigationProps {
-  navigation: NavigationStackProp<{}>;
-}
+type NavigationProps = StackScreenProps<HomeStackParamList, 'MyListeningList'>;
 
 interface StateProps {
   albumDescriptors: UserAlbum[];
@@ -28,7 +27,7 @@ interface DispatchProps {
 type Props = StateProps & DispatchProps & NavigationProps;
 //#endregion
 
-interface State {}
+interface State { }
 
 class MyListeningListScreen extends Component<Props, State> {
   static navigationOptions = () => {

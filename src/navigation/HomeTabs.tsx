@@ -3,6 +3,7 @@ import {
   ListeningListFlow,
   SearchFlow,
   ProfileFlow,
+  HomeStackParamList,
 } from './HomeStacks';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 // import { getActiveChildNavigationOptions } from 'react-navigation';
@@ -11,10 +12,18 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import React from 'react';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import AlbuminIcon from '../albumin-icons/AlbuminIcons';
+import { NavigatorScreenParams } from '@react-navigation/native';
 
 const iconSize = 25;
 
-const Tab = createMaterialBottomTabNavigator();
+export type HomeTabsParamList = {
+  AlbumsFlow: NavigatorScreenParams<HomeStackParamList>;
+  ListeningListFlow: NavigatorScreenParams<HomeStackParamList>;
+  SearchFlow: NavigatorScreenParams<HomeStackParamList>;
+  ProfileFlow: NavigatorScreenParams<HomeStackParamList>;
+}
+
+const Tab = createMaterialBottomTabNavigator<HomeTabsParamList>();
 
 export function HomeTabs() {
   return (

@@ -4,7 +4,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { commonStackConfig, headerMode } from './helpers';
 import { LoginScreen, WelcomeScreen } from '../screens';
 
-const Stack = createStackNavigator();
+export type LoginStackParamList = {
+  Welcome: undefined;
+  Login: undefined;
+}
+
+const Stack = createStackNavigator<LoginStackParamList>();
 
 export function LoginStack() {
   return (

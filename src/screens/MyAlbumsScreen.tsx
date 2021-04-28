@@ -9,12 +9,11 @@ import { AppState } from '../redux/reducers/root.reducer';
 import { loadMyAlbums } from '../redux/thunks/my-albums.thunk';
 import { loadMyAlbumsNext } from '../redux/thunks/my-albums.thunk';
 import { connect } from 'react-redux';
-import { NavigationDrawerProp } from 'react-navigation-drawer';
+import { DrawerScreenProps } from '@react-navigation/drawer';
+import { HomeStackParamList } from '../navigation/HomeStacks';
 
 //#region Props
-interface NavigationProps {
-  navigation: NavigationDrawerProp<MyAlbumsNavigationParams>;
-}
+type NavigationProps = DrawerScreenProps<HomeStackParamList, 'MyAlbums'>
 
 interface StateProps {
   albumDescriptors: UserAlbum[];
@@ -28,7 +27,7 @@ interface DispatchProps {
 type Props = StateProps & DispatchProps & NavigationProps;
 //#endregion
 
-interface State {}
+interface State { }
 
 export interface MyAlbumsNavigationParams {
   /**
@@ -77,9 +76,9 @@ class MyAlbumsScreen extends Component<Props, State> {
   }
 
   componentDidUpdate() {
-    const untagged: boolean = this.props.navigation.getParam('untagged');
+    const untagged: boolean = this.props.route.params.untagged;
 
-    const inputTags: string[] = this.props.navigation.getParam('tags');
+    const inputTags: string[] = this.props.route.params.tags;
     const inputTag = inputTags ? inputTags[0] : null;
     const selectedTag = this.selectedTags ? this.selectedTags[0] : null;
 

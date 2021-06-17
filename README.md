@@ -66,15 +66,29 @@ yarn install
 cd ios && pod install && cd ..
 ```
 
-2. Run the app
+2. Run the app:
+
+Start the bundler
 
 ```sh
-react-native run-ios
+yarn react-native start
+```
+
+and in another shell start the app
+
+```sh
+yarn react-native run-ios
 ```
 
 ### Android setup
 
-1. Open `android/` folder with Android Studio and make it auto-configure everything
+1. Fill the example keystore file with your information
+
+```sh
+cp android/keystoreinfo.example.gradle android/keystoreinfo.gradle && vi android/keystoreinfo.gradle # use your favorite editor instead of vi
+```
+
+2. Open `android/` folder with Android Studio and make it auto-configure everything
 
 ```sh
 studio android/
@@ -82,16 +96,18 @@ studio android/
 
 **N.B.** this works only if you have installed the [command line launcher](https://stackoverflow.com/a/48266060/6155481)
 
-2. Fill the example keystore file with your information
+3. Run the app:
+
+Start the bundler
 
 ```sh
-cp android/keystoreinfo.example.gradle android/keystoreinfo.gradle && vi android/keystoreinfo.gradle # use your favorite editor instead of vi
+yarn react-native start
 ```
 
-3. Run the app
+and in another shell start the app
 
 ```sh
-react-native run-android
+yarn react-native run-android
 ```
 
 **N.B.** You need to run the *albumin-diet-engine* locally following [this](https://github.com/gianlucaparadise/albumin-diet-engine/blob/master/README.md) guide.

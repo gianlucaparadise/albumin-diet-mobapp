@@ -41,7 +41,7 @@ class MyListeningListScreen extends Component<Props, State> {
   yOffset = new Animated.Value(0);
   onScroll = Animated.event([
     { nativeEvent: { contentOffset: { y: this.yOffset } } },
-  ]);
+  ], { useNativeDriver: false});
 
   constructor(props: Props) {
     super(props);

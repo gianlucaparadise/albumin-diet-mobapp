@@ -59,7 +59,7 @@ export default class MyProfileScreen extends Component<NavigationStackScreenProp
     const profile = this.state.profile;
     return profile && profile.images && profile.images[0]
       ? profile.images[0].url
-      : ''; // TODO: use image placeholder
+      : undefined; // TODO: use image placeholder
   }
 
   get username() {

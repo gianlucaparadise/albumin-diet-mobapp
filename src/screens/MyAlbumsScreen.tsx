@@ -48,7 +48,7 @@ class MyAlbumsScreen extends Component<Props, State> {
       title: 'Albums',
       headerRight: (
         <IconButton
-          icon="filter-list"
+          icon="filter-variant"
           onPress={navigationOptions.navigation.getParam('onFilterClicked')}
         />
       ),

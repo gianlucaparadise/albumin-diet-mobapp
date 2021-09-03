@@ -274,7 +274,7 @@ class AlbumDetailScreen extends Component<Props, State> {
         <View style={styles.iconsContainer}>
           <Button
             mode="contained"
-            icon="play-arrow"
+            icon="play-circle"
             uppercase={false}
             onPress={this.onPressPlay}>
             Play in Spotify

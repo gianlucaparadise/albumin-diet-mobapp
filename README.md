@@ -58,6 +58,10 @@ git clone https://github.com/gianlucaparadise/albumin-diet-mobapp && cd albumin-
 yarn install
 ```
 
+### Prerequisites
+
+You need to run the *albumin-diet-engine* locally following [this](https://github.com/gianlucaparadise/albumin-diet-engine/blob/master/README.md) guide.
+
 ### iOS setup
 
 1. Install iOS dependencies 
@@ -68,16 +72,8 @@ cd ios && pod install && cd ..
 
 2. Run the app:
 
-Start the bundler
-
 ```sh
-yarn react-native start
-```
-
-and in another shell start the app
-
-```sh
-yarn react-native run-ios
+yarn ios
 ```
 
 ### Android setup
@@ -98,16 +94,26 @@ studio android/
 
 3. Run the app:
 
-Start the bundler
-
 ```sh
-yarn react-native start
+yarn android
 ```
 
-and in another shell start the app
+### Cleaning
+
+* Clean android using _gradle_:
 
 ```sh
-yarn react-native run-android
+yarn clean-android
 ```
 
-**N.B.** You need to run the *albumin-diet-engine* locally following [this](https://github.com/gianlucaparadise/albumin-diet-engine/blob/master/README.md) guide.
+* Clean ios using _xcodebuild_:
+
+```sh
+yarn clean-ios
+```
+
+* Clean node_modules and re-install:
+
+```sh
+yarn clean-node
+```

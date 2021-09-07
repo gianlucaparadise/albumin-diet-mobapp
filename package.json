@@ -11,7 +11,10 @@
     "postinstall": "npx jetify",
     "tsc": "tsc",
     "update-types": "yarn add --dev albumin-diet-types@latest",
-    "release": "sh bundle-android.sh"
+    "release": "sh bundle-android.sh",
+    "clean-android": "cd android && ./gradlew clean && cd ../",
+    "clean-ios": "cd ios && xcodebuild clean && cd ../",
+    "clean-node": "rm -rf node_modules && yarn install"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.6.1",

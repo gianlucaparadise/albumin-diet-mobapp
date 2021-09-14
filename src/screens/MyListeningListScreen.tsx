@@ -1,20 +1,17 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Animated } from 'react-native';
-import { FlatList } from 'react-navigation';
+import { StyleSheet, View, Animated, FlatList } from 'react-native';
 import { UserAlbum } from 'albumin-diet-types';
 import { AlbumDetailNavigationParams } from './AlbumDetailScreen';
-// import { MyNavigationScreenOptionsGetter } from 'react-navigation-types';
 import AlbumCardWidget from '../widgets/AlbumCardWidget';
 import { AppState } from '../redux/reducers/root.reducer';
 import { connect } from 'react-redux';
 import { loadListeningList } from '../redux/thunks/listening-list.thunk';
 import { loadListeningListNext } from '../redux/thunks/listening-list.thunk';
-import { NavigationStackProp } from 'react-navigation-stack';
+import { HomeStackParamList } from '../../src/navigation/HomeStacks';
+import { StackScreenProps } from '@react-navigation/stack';
 
 //#region Props
-interface NavigationProps {
-  navigation: NavigationStackProp<{}>;
-}
+type NavigationProps = StackScreenProps<HomeStackParamList, "MyListeningList">
 
 interface StateProps {
   albumDescriptors: UserAlbum[];
@@ -28,20 +25,15 @@ interface DispatchProps {
 type Props = StateProps & DispatchProps & NavigationProps;
 //#endregion
 
-interface State {}
+interface State { }
 
 class MyListeningListScreen extends Component<Props, State> {
-  static navigationOptions = () => {
-    return {
-      title: 'Listening List',
-    };
-  };
 
   scrollView?: FlatList<UserAlbum>;
   yOffset = new Animated.Value(0);
   onScroll = Animated.event([
     { nativeEvent: { contentOffset: { y: this.yOffset } } },
-  ], { useNativeDriver: false});
+  ], { useNativeDriver: false });
 
   constructor(props: Props) {
     super(props);

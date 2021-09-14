@@ -1,24 +1,32 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, Image, ScrollView } from 'react-native';
 import { LoginHelper } from '../helpers/LoginHelper';
-import {ScrollView} from 'react-navigation';
-import { Text, Button, Title } from 'react-native-paper';
+import { Button, Title } from 'react-native-paper';
 import { ConnectionHelper } from '../helpers/ConnectionHelper';
 import { UserObjectPrivate } from 'spotify-web-api-node-typings';
-import { NavigationStackScreenProps } from 'react-navigation-stack';
+import { HomeStackParamList } from '../../src/navigation/HomeStacks';
+import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../src/navigation';
 
-// interface Props extends NavigationScreenProps {}
+type ScreenNavigationProps = StackNavigationProp<HomeStackParamList, "MyProfile">
+type ParentNavigationProps = StackNavigationProp<RootStackParamList>
+type ComposedNavigationProps = CompositeNavigationProp<ScreenNavigationProps, ParentNavigationProps>
+
+type ScreenRouteProp = RouteProp<HomeStackParamList, "MyProfile">
+
+type NavigationProps = {
+  navigation: ComposedNavigationProps,
+  route: ScreenRouteProp
+}
+
+type Props = NavigationProps
 
 interface State {
   profile?: UserObjectPrivate;
 }
 
-export default class MyProfileScreen extends Component<NavigationStackScreenProps, State> {
-  static navigationOptions= () => {
-    return {
-      title: 'Profile',
-    };
-  };
+export default class MyProfileScreen extends Component<Props, State> {
 
   constructor(props: any) {
     super(props);

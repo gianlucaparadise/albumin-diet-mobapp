@@ -10,7 +10,6 @@ import {
 import { UserAlbum, TaggedAlbum } from 'albumin-diet-types';
 import { Headline, Subheading, Button } from 'react-native-paper';
 import { TrackObjectSimplified } from 'spotify-web-api-node-typings';
-// import { MyNavigationScreenOptionsGetter } from '../../types/react-navigation-types';
 import TagCloud from '../widgets/TagCloud';
 import ToggleIconButton from '../widgets/ToggleIconButton';
 import TrackList from '../widgets/TrackList';
@@ -24,12 +23,11 @@ import {
 } from '../redux/thunks/album-detail.thunk';
 import { connect } from 'react-redux';
 import { getCanBeEgged } from '../redux/reducers/album-detail.reducer';
-import { NavigationStackProp } from 'react-navigation-stack';
+import { HomeStackParamList } from '../../src/navigation/HomeStacks';
+import { StackScreenProps } from '@react-navigation/stack';
 
 //#region Props
-interface NavigationProps {
-  navigation: NavigationStackProp<AlbumDetailNavigationParams>;
-}
+type NavigationProps = StackScreenProps<HomeStackParamList, 'AlbumDetail'>
 
 interface StateProps {
   albumDescriptor?: TaggedAlbum;
@@ -54,33 +52,24 @@ interface DispatchProps {
 type Props = StateProps & DispatchProps & NavigationProps;
 //#endregion
 
-interface State {}
+interface State { }
 
 export interface AlbumDetailNavigationParams {
   albumDescriptor: UserAlbum;
 }
 
 class AlbumDetailScreen extends Component<Props, State> {
-  static navigationOptions = (navigationOptions: any) => {
-    const albumDescriptor: UserAlbum = navigationOptions.navigation.getParam(
-      'albumDescriptor',
-    );
-    const options = {
-      title: albumDescriptor.album.name,
-    };
-    return options;
-  };
 
   constructor(props: Props) {
     super(props);
 
-    const albumDescriptor = this.props.navigation.getParam('albumDescriptor');
+    const albumDescriptor = this.props.route.params.albumDescriptor as TaggedAlbum;
     this.props.loadAlbum(albumDescriptor);
 
     this.state = {};
   }
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   get artistName() {
     return this.props.albumDescriptor

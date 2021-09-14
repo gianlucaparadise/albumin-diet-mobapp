@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import { StyleSheet, FlatList, StatusBar, SafeAreaView } from 'react-native';
 import { Button } from 'react-native-paper';
 import { ITag, TagDescriptor } from 'albumin-diet-types';
-import { NavigationActions } from 'react-navigation';
+// import { NavigationActions } from 'react-navigation';
 import TagChip from '../widgets/TagChip';
 import { AlbuminColors } from '../Theme';
-import { NavigationState } from 'react-navigation';
+// import { NavigationState } from 'react-navigation';
 import { MyAlbumsNavigationParams } from './MyAlbumsScreen';
 import { connect } from 'react-redux';
 import { AppState } from '../redux/reducers/root.reducer';
 import { loadTags } from '../redux/thunks/tag.thunk';
-import { NavigationDrawerScreenProps } from 'react-navigation-drawer';
+import { DrawerContentComponentProps, DrawerContentOptions, DrawerContentScrollView } from '@react-navigation/drawer';
 
 const UNTAGGED_NAME = 'Untagged';
 const UNTAGGED_ID = 'untagged';
@@ -24,25 +24,25 @@ interface DispatchProps {
   loadTags: () => void;
 }
 
-type Props = NavigationDrawerScreenProps<{}, StateProps & DispatchProps>;
+type Props = DrawerContentComponentProps<DrawerContentOptions> & DispatchProps & StateProps;
 //#endregion
 
 interface State {
   selectedTags: TagDescriptor[];
 }
 
-const getActiveRouteState = function (route: NavigationState): NavigationState {
-  if (
-    !route.routes ||
-    route.routes.length === 0 ||
-    route.index >= route.routes.length
-  ) {
-    return route;
-  }
+// const getActiveRouteState = function (route: NavigationState): NavigationState {
+//   if (
+//     !route.routes ||
+//     route.routes.length === 0 ||
+//     route.index >= route.routes.length
+//   ) {
+//     return route;
+//   }
 
-  const childActiveRoute = route.routes[route.index] as NavigationState;
-  return getActiveRouteState(childActiveRoute);
-};
+//   const childActiveRoute = route.routes[route.index] as NavigationState;
+//   return getActiveRouteState(childActiveRoute);
+// };
 
 class TagsFilterScreen extends Component<Props, State> {
   constructor(props: Props) {
@@ -114,12 +114,13 @@ class TagsFilterScreen extends Component<Props, State> {
       untagged: showUntagged,
     };
 
-    const activeRoute = getActiveRouteState(this.props.navigation.state);
-    const navigateAction = NavigationActions.setParams({
-      params: navigationParams,
-      key: activeRoute.key,
-    });
-    this.props.navigation.dispatch(navigateAction);
+    // TODO: RN5 get active screen
+    // const activeRoute = getActiveRouteState(this.props.navigation.state);
+    // const navigateAction = NavigationActions.setParams({
+    //   params: navigationParams,
+    //   key: activeRoute.key,
+    // });
+    // this.props.navigation.dispatch(navigateAction);
     this.props.navigation.closeDrawer();
   };
 
@@ -153,7 +154,7 @@ class TagsFilterScreen extends Component<Props, State> {
 
   render() {
     return (
-      <SafeAreaView style={styles.container}>
+      <DrawerContentScrollView style={styles.container}>
         <Button onPress={this.onOkPress}>Ok</Button>
         <FlatList
           style={styles.list}
@@ -170,7 +171,7 @@ class TagsFilterScreen extends Component<Props, State> {
           keyExtractor={(item) => item.tag.uniqueId}
           extraData={this.state}
         />
-      </SafeAreaView>
+      </DrawerContentScrollView>
     );
   }
 }

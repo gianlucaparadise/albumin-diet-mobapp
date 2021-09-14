@@ -4,17 +4,15 @@ import { IconButton } from 'react-native-paper';
 import AlbumCardWidget from '../widgets/AlbumCardWidget';
 import { UserAlbum } from 'albumin-diet-types';
 import { AlbumDetailNavigationParams } from './AlbumDetailScreen';
-// import { MyNavigationScreenOptionsGetter } from '../../types/react-navigation-types';
 import { AppState } from '../redux/reducers/root.reducer';
 import { loadMyAlbums } from '../redux/thunks/my-albums.thunk';
 import { loadMyAlbumsNext } from '../redux/thunks/my-albums.thunk';
 import { connect } from 'react-redux';
-import { NavigationDrawerProp } from 'react-navigation-drawer';
+import { HomeStackParamList } from '../../src/navigation/HomeStacks';
+import { StackScreenProps } from '@react-navigation/stack';
 
 //#region Props
-interface NavigationProps {
-  navigation: NavigationDrawerProp<MyAlbumsNavigationParams>;
-}
+type NavigationProps = StackScreenProps<HomeStackParamList, "MyAlbums">
 
 interface StateProps {
   albumDescriptors: UserAlbum[];
@@ -28,7 +26,7 @@ interface DispatchProps {
 type Props = StateProps & DispatchProps & NavigationProps;
 //#endregion
 
-interface State {}
+interface State { }
 
 export interface MyAlbumsNavigationParams {
   /**
@@ -42,25 +40,12 @@ export interface MyAlbumsNavigationParams {
 }
 
 class MyAlbumsScreen extends Component<Props, State> {
-  // TODO: add react-native-paper AppBar.Header as custom Header: https://hackernoon.com/how-to-use-a-custom-header-and-custom-bottom-tab-bar-for-react-native-with-react-navigation-969a5d3cabb1
-  static navigationOptions = (navigationOptions: any) => {
-    return {
-      title: 'Albums',
-      headerRight: (
-        <IconButton
-          icon="filter-variant"
-          onPress={navigationOptions.navigation.getParam('onFilterClicked')}
-        />
-      ),
-      drawerLockMode: 'unlocked',
-    };
-  };
 
   scrollView?: FlatList<UserAlbum>;
   yOffset = new Animated.Value(0);
   onScroll = Animated.event([
     { nativeEvent: { contentOffset: { y: this.yOffset } } },
-  ], { useNativeDriver: false});
+  ], { useNativeDriver: false });
 
   selectedTags: string[] = [];
   showUntagged: boolean = false;
@@ -72,14 +57,13 @@ class MyAlbumsScreen extends Component<Props, State> {
   }
 
   componentDidMount() {
-    this.props.navigation.setParams({ onFilterClicked: this.onFilterClicked });
     this.getAlbums(this.selectedTags, this.showUntagged);
   }
 
   componentDidUpdate() {
-    const untagged: boolean = this.props.navigation.getParam('untagged');
+    const untagged: boolean = this.props.route.params.untagged;
 
-    const inputTags: string[] = this.props.navigation.getParam('tags');
+    const inputTags: string[] = this.props.route.params.tags;
     const inputTag = inputTags ? inputTags[0] : null;
     const selectedTag = this.selectedTags ? this.selectedTags[0] : null;
 
@@ -89,11 +73,6 @@ class MyAlbumsScreen extends Component<Props, State> {
       this.getAlbums(this.selectedTags, this.showUntagged);
     }
   }
-
-  onFilterClicked = () => {
-    console.log('Show filters');
-    this.props.navigation.openDrawer();
-  };
 
   getAlbums = (tags: string[], showUntagged: boolean) => {
     this.props.loadMyAlbums(tags, showUntagged);

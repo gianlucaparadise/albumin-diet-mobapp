@@ -3,9 +3,23 @@ import { StyleSheet } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { WebViewNavigation } from 'react-native-webview/lib/WebViewTypes';
 import { LoginHelper } from '../helpers/LoginHelper';
-import { NavigationSwitchScreenProps } from 'react-navigation';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
+import { LoginStackParamList } from '../../src/navigation/LoginStack';
+import { RootStackParamList } from '../../src/navigation';
 
-interface Props extends NavigationSwitchScreenProps {}
+type ScreenNavigationProps = StackNavigationProp<LoginStackParamList, "Login">
+type ParentNavigationProps = StackNavigationProp<RootStackParamList>
+type ComposedNavigationProps = CompositeNavigationProp<ScreenNavigationProps, ParentNavigationProps>
+
+type ScreenRouteProp = RouteProp<LoginStackParamList, "Login">
+
+type NavigationProps = {
+  navigation: ComposedNavigationProps,
+  route: ScreenRouteProp
+}
+
+interface Props extends NavigationProps { }
 
 export default class LoginScreen extends Component<Props> {
   onShouldLoad = (event: WebViewNavigation) => {
@@ -24,7 +38,7 @@ export default class LoginScreen extends Component<Props> {
     console.log('Getting token');
     try {
       await LoginHelper.Instance.finishLogin(url);
-      this.props.navigation.navigate('HomeFlow');
+      this.props.navigation.navigate("HomeFlow");
     } catch (ex) {
       console.error('Error while finishing login');
       console.error(ex);

@@ -1,13 +1,15 @@
+import { StackScreenProps } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { StyleSheet, View, Animated, Easing } from 'react-native';
-import { NavigationSwitchScreenProps } from 'react-navigation';
+import { RootStackParamList } from '../../src/navigation';
 import { LoginHelper } from '../helpers/LoginHelper';
 import { AlbuminColors } from '../Theme';
 
-type Props = NavigationSwitchScreenProps<{}, {}>
+type NavigationProps = StackScreenProps<RootStackParamList, "Splash">
+type Props = NavigationProps
 
 export default class SplashScreen extends Component<Props> {
-  timeout?: NodeJS.Timeout;
+  timeout?: number;
   headphonesAnimatedValue = new Animated.Value(0);
   fadeAnimatedValue = new Animated.Value(0);
 

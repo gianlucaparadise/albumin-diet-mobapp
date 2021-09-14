@@ -1,23 +1,96 @@
-import { homeScreens as screens } from '../screens';
-import { createStackNavigator } from 'react-navigation-stack';
+import React from 'react';
+import { AlbumDetailNavigationParams, homeScreens as screens, MyAlbumsNavigationParams } from '../screens';
+
+import { createStackNavigator } from '@react-navigation/stack';
+import { IconButton } from 'react-native-paper';
 import { commonStackConfig } from './helpers';
 
-export const AlbumsFlow = createStackNavigator(screens, {
-  initialRouteName: 'MyAlbums',
-  ...commonStackConfig,
-});
+const Stack = createStackNavigator<HomeStackParamList>()
 
-export const ListeningListFlow = createStackNavigator(screens, {
-  initialRouteName: 'MyListeningList',
-  ...commonStackConfig,
-});
+function getScreens() {
+  return (
+    <>
+      <Stack.Screen name="MyAlbums" component={screens.MyAlbums}
+        options={({ navigation }) => {
+          // TODO: add react-native-paper AppBar.Header as custom Header: https://hackernoon.com/how-to-use-a-custom-header-and-custom-bottom-tab-bar-for-react-native-with-react-navigation-969a5d3cabb1
+          return {
+            title: "Albums",
+            headerRight: () => (
+              <IconButton
+                icon="filter-variant"
+                onPress={() => {
+                  console.log('Show filters');
+                  navigation.openDrawer();
+                }}
+              />
+            ),
+            // drawerLockMode: 'unlocked', // TODO: RN5 add this prop
+          }
+        }} />
 
-export const SearchFlow = createStackNavigator(screens, {
-  initialRouteName: 'Search',
-  ...commonStackConfig,
-});
+      <Stack.Screen name="AlbumDetail" component={screens.AlbumDetail}
+        options={({ route }) => { return { title: route.params.albumDescriptor?.album.name } }} />
 
-export const ProfileFlow = createStackNavigator(screens, {
-  initialRouteName: 'MyProfile',
-  ...commonStackConfig,
-});
+      <Stack.Screen name="MyListeningList" component={screens.MyListeningList}
+        options={{ title: 'Listening List' }} />
+
+      <Stack.Screen name="Search" component={screens.Search}
+        options={{ title: 'Search' }} />
+
+      <Stack.Screen name="MyProfile" component={screens.MyProfile}
+        options={{ title: 'Profile' }} />
+    </>
+  )
+}
+
+export type HomeStackParamList = {
+  MyAlbums: MyAlbumsNavigationParams,
+  AlbumDetail: AlbumDetailNavigationParams,
+  MyListeningList: undefined,
+  Search: undefined,
+  MyProfile: undefined
+}
+
+export function AlbumsFlow() {
+  return (
+    <Stack.Navigator
+      initialRouteName="MyAlbums"
+      headerMode="float"
+      screenOptions={commonStackConfig}>
+      {getScreens()}
+    </Stack.Navigator>
+  )
+}
+
+export function ListeningListFlow() {
+  return (
+    <Stack.Navigator
+      initialRouteName="MyListeningList"
+      headerMode="float"
+      screenOptions={commonStackConfig}>
+      {getScreens()}
+    </Stack.Navigator>
+  )
+}
+
+export function SearchFlow() {
+  return (
+    <Stack.Navigator
+      initialRouteName="Search"
+      headerMode="float"
+      screenOptions={commonStackConfig}>
+      {getScreens()}
+    </Stack.Navigator>
+  )
+}
+
+export function ProfileFlow() {
+  return (
+    <Stack.Navigator
+      initialRouteName="MyProfile"
+      headerMode="float"
+      screenOptions={commonStackConfig}>
+      {getScreens()}
+    </Stack.Navigator>
+  )
+}

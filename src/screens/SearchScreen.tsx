@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Animated } from 'react-native';
-import { FlatList } from 'react-navigation';
+import { StyleSheet, View, Animated, FlatList } from 'react-native';
 import { Searchbar } from 'react-native-paper';
-// import { MyNavigationScreenOptionsGetter } from 'react-navigation-types';
 import { UserAlbum } from 'albumin-diet-types';
 import AlbumCardWidget from '../widgets/AlbumCardWidget';
 import { AlbumDetailNavigationParams } from './AlbumDetailScreen';
@@ -13,14 +11,13 @@ import {
   clearSearch,
   loadSearchNext,
 } from '../redux/thunks/search.thunk';
-import { NavigationStackProp } from 'react-navigation-stack';
+import { StackScreenProps } from '@react-navigation/stack';
+import { HomeStackParamList } from '../../src/navigation/HomeStacks';
 
 const WAIT_TIME: number = 500;
 
 //#region Props
-interface NavigationProps {
-  navigation: NavigationStackProp<{}>;
-}
+type NavigationProps = StackScreenProps<HomeStackParamList, "Search">
 
 interface StateProps {
   albumDescriptors: UserAlbum[];
@@ -40,19 +37,14 @@ interface State {
 }
 
 class SearchScreen extends Component<Props, State> {
-  static navigationOptions = () => {
-    return {
-      title: 'Search',
-    };
-  };
 
-  timeout?: NodeJS.Timeout;
+  timeout?: number;
 
   scrollView?: FlatList<UserAlbum>;
   yOffset = new Animated.Value(0);
   onScroll = Animated.event([
     { nativeEvent: { contentOffset: { y: this.yOffset } } },
-  ], { useNativeDriver: false});
+  ], { useNativeDriver: false });
 
   constructor(props: Props) {
     super(props);
@@ -62,7 +54,7 @@ class SearchScreen extends Component<Props, State> {
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   componentWillUnmount() {
     if (this.timeout) {

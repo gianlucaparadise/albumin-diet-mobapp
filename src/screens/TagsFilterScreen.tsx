@@ -179,7 +179,7 @@ class TagsFilterScreen extends Component<Props, State> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight,
+    backgroundColor: AlbuminColors.surface,
   },
   list: {
     paddingLeft: 14,

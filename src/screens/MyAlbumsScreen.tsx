@@ -61,9 +61,9 @@ class MyAlbumsScreen extends Component<Props, State> {
   }
 
   componentDidUpdate() {
-    const untagged: boolean = this.props.route.params.untagged;
+    const untagged: boolean = this.props.route.params?.untagged ?? false;
 
-    const inputTags: string[] = this.props.route.params.tags;
+    const inputTags: string[] = this.props.route.params?.tags ?? [];
     const inputTag = inputTags ? inputTags[0] : null;
     const selectedTag = this.selectedTags ? this.selectedTags[0] : null;
 

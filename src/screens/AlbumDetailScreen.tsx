@@ -63,7 +63,7 @@ class AlbumDetailScreen extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    const albumDescriptor = this.props.route.params.albumDescriptor as TaggedAlbum;
+    const albumDescriptor = this.props.route.params?.albumDescriptor as TaggedAlbum;
     this.props.loadAlbum(albumDescriptor);
 
     this.state = {};

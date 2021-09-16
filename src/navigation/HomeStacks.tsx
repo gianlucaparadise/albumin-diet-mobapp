@@ -29,7 +29,7 @@ function getScreens() {
         }} />
 
       <Stack.Screen name="AlbumDetail" component={screens.AlbumDetail}
-        options={({ route }) => { return { title: route.params.albumDescriptor?.album.name } }} />
+        options={({ route }) => { return { title: route.params?.albumDescriptor?.album.name } }} />
 
       <Stack.Screen name="MyListeningList" component={screens.MyListeningList}
         options={{ title: 'Listening List' }} />

@@ -24,7 +24,6 @@ function getScreens() {
                 }}
               />
             ),
-            // drawerLockMode: 'unlocked', // TODO: RN5 add this prop
           }
         }} />
 

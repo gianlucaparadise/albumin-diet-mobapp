@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { HomeTabs, HomeTabsParamList } from './HomeTabs';
@@ -12,27 +12,33 @@ export type HomeDrawerParamList = {
 }
 
 export function HomeDrawer() {
+  const [enabled, setEnabled] = useState(false);
+
   return (
-    <Drawer.Navigator
-      drawerPosition="right"
-      drawerContent={(props) => <TagsFilterScreen {...props} />}
-    >
-      <Drawer.Screen
-        name="HomeTabs"
-        component={HomeTabs} />
-    </Drawer.Navigator>
+    <DrawerContext.Provider value={{ isDrawerEnabled: enabled, setDrawerEnabled: setEnabled }}>
+      <Drawer.Navigator
+        drawerPosition="right"
+        screenOptions={{
+          gestureEnabled: enabled
+        }}
+        drawerContent={(props) => <TagsFilterScreen {...props} />}
+      >
+        <Drawer.Screen
+          name="HomeTabs"
+          component={HomeTabs} />
+      </Drawer.Navigator>
+    </DrawerContext.Provider>
   )
 }
 
-// TODO: RN5 - Add custom drawer
-// export const HomeDrawer = createDrawerNavigator(
-//   {
-//     HomeTabs: HomeTabs, // this is needed by the library, but it's never used
-//   },
-//   {
-//     drawerPosition: 'right',
-//     contentComponent: TagsFilterScreen,
-//     drawerLockMode: 'locked-closed', // this is enabled on in the correct page,
-//     drawerBackgroundColor: AlbuminColors.surface,
-//   },
-// );
+type DrawerVisibiltyContextType = {
+  isDrawerEnabled: boolean,
+  setDrawerEnabled: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const drawerContextInitial: DrawerVisibiltyContextType = {
+  isDrawerEnabled: false,
+  setDrawerEnabled: () => { }
+}
+
+export const DrawerContext = React.createContext(drawerContextInitial);

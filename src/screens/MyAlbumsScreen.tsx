@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useContext, useEffect } from 'react';
 import { StyleSheet, View, FlatList, Animated } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import AlbumCardWidget from '../widgets/AlbumCardWidget';
@@ -10,6 +10,8 @@ import { loadMyAlbumsNext } from '../redux/thunks/my-albums.thunk';
 import { connect } from 'react-redux';
 import { HomeStackParamList } from '../../src/navigation/HomeStacks';
 import { StackScreenProps } from '@react-navigation/stack';
+import { DrawerContext } from '../navigation/HomeDrawer';
+import { useIsFocused } from '@react-navigation/native';
 
 //#region Props
 type NavigationProps = StackScreenProps<HomeStackParamList, "MyAlbums">
@@ -149,6 +151,17 @@ const styles = StyleSheet.create({
   },
 });
 
+function MyAlbumsScreenWrapper(props: any) {
+  const { setDrawerEnabled } = useContext(DrawerContext)
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    setDrawerEnabled(isFocused)
+  }, [isFocused])
+
+  return <MyAlbumsScreen {...props} />
+}
+
 const mapStateToProps = (state: AppState): StateProps => ({
   albumDescriptors: state.myAlbumsReducer.albumDescriptors || [],
 });
@@ -159,4 +172,4 @@ const mapDispatchToProps: DispatchProps = {
   loadMyAlbumsNext: loadMyAlbumsNext,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MyAlbumsScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(MyAlbumsScreenWrapper);

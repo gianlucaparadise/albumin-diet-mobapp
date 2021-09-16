@@ -22,18 +22,6 @@ const Tab = createMaterialBottomTabNavigator<HomeTabsParamList>();
 
 const iconSize = 25;
 
-// TODO: RN5 replace this code with new one: https://reactnavigation.org/docs/5.x/screen-options-resolution#setting-parent-screen-options-based-on-child-navigators-state
-// const extractActiveChildNavigationOptions = (
-//   navigationOptions: any,
-//   optionName: string,
-// ) => {
-//   const activeChildOptions = getActiveChildNavigationOptions(
-//     navigationOptions.navigation,
-//     navigationOptions.screenProps,
-//   );
-//   return activeChildOptions[optionName];
-// };
-
 export type HomeTabsParamList = {
   AlbumsFlow: NavigatorScreenParams<HomeStackParamList>,
   ListeningListFlow: NavigatorScreenParams<HomeStackParamList>,
@@ -113,13 +101,3 @@ export function HomeTabs() {
     </Tab.Navigator>
   )
 }
-
-// TODO: RN5 replace this code with new one: https://reactnavigation.org/docs/5.x/screen-options-resolution#setting-parent-screen-options-based-on-child-navigators-state
-// HomeTabs.navigationOptions = (navigationOptions: any) => {
-//   return {
-//     drawerLockMode: extractActiveChildNavigationOptions(
-//       navigationOptions,
-//       'drawerLockMode',
-//     ),
-//   };
-// };

@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Headline, Paragraph } from 'react-native-paper';
-import { LoginStackParamList } from '../../src/navigation/LoginStack';
+import { LoginStackParamList } from '../navigation/LoginStack';
 
 type NavigationProps = StackScreenProps<LoginStackParamList, "Welcome">
 type Props = NavigationProps

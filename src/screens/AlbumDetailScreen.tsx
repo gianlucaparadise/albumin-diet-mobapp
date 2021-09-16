@@ -23,7 +23,7 @@ import {
 } from '../redux/thunks/album-detail.thunk';
 import { connect } from 'react-redux';
 import { getCanBeEgged } from '../redux/reducers/album-detail.reducer';
-import { HomeStackParamList } from '../../src/navigation/HomeStacks';
+import { HomeStackParamList } from '../navigation/HomeStacks';
 import { StackScreenProps } from '@react-navigation/stack';
 
 //#region Props

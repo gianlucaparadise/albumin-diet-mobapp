@@ -5,8 +5,8 @@ import { WebViewNavigation } from 'react-native-webview/lib/WebViewTypes';
 import { LoginHelper } from '../helpers/LoginHelper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
-import { LoginStackParamList } from '../../src/navigation/LoginStack';
-import { RootStackParamList } from '../../src/navigation';
+import { LoginStackParamList } from '../navigation/LoginStack';
+import { RootStackParamList } from '../navigation';
 
 type ScreenNavigationProps = StackNavigationProp<LoginStackParamList, "Login">
 type ParentNavigationProps = StackNavigationProp<RootStackParamList>

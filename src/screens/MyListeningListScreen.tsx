@@ -7,7 +7,7 @@ import { AppState } from '../redux/reducers/root.reducer';
 import { connect } from 'react-redux';
 import { loadListeningList } from '../redux/thunks/listening-list.thunk';
 import { loadListeningListNext } from '../redux/thunks/listening-list.thunk';
-import { HomeStackParamList } from '../../src/navigation/HomeStacks';
+import { HomeStackParamList } from '../navigation/HomeStacks';
 import { StackScreenProps } from '@react-navigation/stack';
 
 //#region Props

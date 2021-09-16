@@ -1,7 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { StyleSheet, View, Animated, Easing } from 'react-native';
-import { RootStackParamList } from '../../src/navigation';
+import { RootStackParamList } from '../navigation';
 import { LoginHelper } from '../helpers/LoginHelper';
 import { AlbuminColors } from '../Theme';
 

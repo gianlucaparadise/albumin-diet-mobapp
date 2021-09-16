@@ -12,7 +12,7 @@ import {
   loadSearchNext,
 } from '../redux/thunks/search.thunk';
 import { StackScreenProps } from '@react-navigation/stack';
-import { HomeStackParamList } from '../../src/navigation/HomeStacks';
+import { HomeStackParamList } from '../navigation/HomeStacks';
 
 const WAIT_TIME: number = 500;
 

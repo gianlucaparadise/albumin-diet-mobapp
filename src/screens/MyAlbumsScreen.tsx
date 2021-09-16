@@ -8,7 +8,7 @@ import { AppState } from '../redux/reducers/root.reducer';
 import { loadMyAlbums } from '../redux/thunks/my-albums.thunk';
 import { loadMyAlbumsNext } from '../redux/thunks/my-albums.thunk';
 import { connect } from 'react-redux';
-import { HomeStackParamList } from '../../src/navigation/HomeStacks';
+import { HomeStackParamList } from '../navigation/HomeStacks';
 import { StackScreenProps } from '@react-navigation/stack';
 import { DrawerContext } from '../navigation/HomeDrawer';
 import { useIsFocused } from '@react-navigation/native';

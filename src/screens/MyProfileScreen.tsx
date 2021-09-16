@@ -4,10 +4,10 @@ import { LoginHelper } from '../helpers/LoginHelper';
 import { Button, Title } from 'react-native-paper';
 import { ConnectionHelper } from '../helpers/ConnectionHelper';
 import { UserObjectPrivate } from 'spotify-web-api-node-typings';
-import { HomeStackParamList } from '../../src/navigation/HomeStacks';
+import { HomeStackParamList } from '../navigation/HomeStacks';
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../src/navigation';
+import { RootStackParamList } from '../navigation';
 
 type ScreenNavigationProps = StackNavigationProp<HomeStackParamList, "MyProfile">
 type ParentNavigationProps = StackNavigationProp<RootStackParamList>

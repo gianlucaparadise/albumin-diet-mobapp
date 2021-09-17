@@ -1,11 +1,9 @@
-import React, { Component } from 'react';
-import { StyleSheet, FlatList, StatusBar, SafeAreaView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, FlatList } from 'react-native';
 import { Button } from 'react-native-paper';
-import { ITag, TagDescriptor } from 'albumin-diet-types';
-// import { NavigationActions } from 'react-navigation';
+import { TagDescriptor } from "albumin-diet-types";
 import TagChip from '../widgets/TagChip';
 import { AlbuminColors } from '../Theme';
-// import { NavigationState } from 'react-navigation';
 import { MyAlbumsNavigationParams } from './MyAlbumsScreen';
 import { connect } from 'react-redux';
 import { AppState } from '../redux/reducers/root.reducer';
@@ -27,10 +25,6 @@ interface DispatchProps {
 type Props = DrawerContentComponentProps<DrawerContentOptions> & DispatchProps & StateProps;
 //#endregion
 
-interface State {
-  selectedTags: TagDescriptor[];
-}
-
 // const getActiveRouteState = function (route: NavigationState): NavigationState {
 //   if (
 //     !route.routes ||
@@ -44,31 +38,22 @@ interface State {
 //   return getActiveRouteState(childActiveRoute);
 // };
 
-class TagsFilterScreen extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
+function TagsFilterScreen(props: Props) {
 
-    console.log(`StatusBar h: ${StatusBar.currentHeight}`);
+  const [selectedTags, setSelectedTags] = useState<TagDescriptor[]>([])
 
-    this.state = {
-      selectedTags: [],
-    };
-  }
+  useEffect(() => {
+    props.loadTags();
+  }, [])
 
-  componentDidMount() {
-    this.props.loadTags();
-  }
-
-  componentDidUpdate(nextProps: Props) {
-    if (this.props.tags !== nextProps.tags) {
-      this.modifyTags(this.props.tags);
-    }
-  }
+  useEffect(() => {
+    modifyTags(props.tags);
+  }, [props.tags])
 
   /**
    * This method appends the Untagged tag updates the selected prop with the correct state
    */
-  modifyTags = (allTags?: TagDescriptor[]) => {
+  const modifyTags = (allTags?: TagDescriptor[]) => {
     try {
       // TODO: should this be in thunk or actions?
       // Injecting the Untagged special tag
@@ -93,9 +78,9 @@ class TagsFilterScreen extends Component<Props, State> {
     }
   };
 
-  onOkPress = () => {
+  const onOkPress = () => {
     let showUntagged = false;
-    const tagIds = this.state.selectedTags.reduce(
+    const tagIds = selectedTags.reduce(
       (accumulator, tagDescriptor) => {
         // If Untagged is selected, I don't add it as a tag, but I remember it in a boolean
         if (tagDescriptor.tag.name === UNTAGGED_NAME) {
@@ -121,59 +106,55 @@ class TagsFilterScreen extends Component<Props, State> {
     //   key: activeRoute.key,
     // });
     // this.props.navigation.dispatch(navigateAction);
-    this.props.navigation.closeDrawer();
+    props.navigation.closeDrawer();
   };
 
-  isTagSelected = (tagDescriptor: TagDescriptor): boolean => {
+  const isTagSelected = (tagDescriptor: TagDescriptor): boolean => {
     return (
-      this.state.selectedTags.findIndex(
+      selectedTags.findIndex(
         (t) => t.tag.uniqueId === tagDescriptor.tag.uniqueId,
       ) >= 0
     );
   };
 
-  onTagClicked = (tagDescriptor: TagDescriptor) => {
-    const tagIndex = this.state.selectedTags.findIndex(
+  const onTagClicked = (tagDescriptor: TagDescriptor) => {
+    const tagIndex = selectedTags.findIndex(
       (t) => t.tag.uniqueId === tagDescriptor.tag.uniqueId,
     );
     const isSelected = tagIndex >= 0;
 
-    let selectedTags: TagDescriptor[];
+    let newSelectedTags: TagDescriptor[];
     if (isSelected) {
       // Only one tag can be selected: if I to deselect this, no more tag is selected
-      selectedTags = [];
+      newSelectedTags = [];
     } else {
       // Only one tag can be selected: if I select this, the list has one tag
-      selectedTags = [tagDescriptor];
+      newSelectedTags = [tagDescriptor];
     }
 
-    this.setState({
-      selectedTags,
-    });
+    setSelectedTags(newSelectedTags)
   };
 
-  render() {
-    return (
-      <DrawerContentScrollView style={styles.container}>
-        <Button onPress={this.onOkPress}>Ok</Button>
-        <FlatList
-          style={styles.list}
-          data={this.props.tags}
-          renderItem={({ item }) => (
-            <TagChip
-              tag={item}
-              selected={this.isTagSelected(item)}
-              onClick={this.onTagClicked}
-              style={styles.listItem}
-              selectedStyle={styles.selectedListItem}
-            />
-          )}
-          keyExtractor={(item) => item.tag.uniqueId}
-          extraData={this.state}
-        />
-      </DrawerContentScrollView>
-    );
-  }
+  return (
+    <DrawerContentScrollView style={styles.container}>
+      <Button onPress={onOkPress}>Ok</Button>
+      <FlatList
+        style={styles.list}
+        data={props.tags}
+        renderItem={({ item }) => (
+          <TagChip
+            tag={item}
+            selected={isTagSelected(item)}
+            onClick={onTagClicked}
+            style={styles.listItem}
+            selectedStyle={styles.selectedListItem}
+          />
+        )}
+        keyExtractor={(item) => item.tag.uniqueId}
+        extraData={selectedTags}
+      />
+    </DrawerContentScrollView>
+  );
 }
 
 const styles = StyleSheet.create({

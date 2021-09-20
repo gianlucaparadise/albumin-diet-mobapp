@@ -1,6 +1,5 @@
 import React, { Component, useContext, useEffect } from 'react';
 import { StyleSheet, View, FlatList, Animated } from 'react-native';
-import { IconButton } from 'react-native-paper';
 import AlbumCardWidget from '../widgets/AlbumCardWidget';
 import { UserAlbum } from 'albumin-diet-types';
 import { AlbumDetailNavigationParams } from './AlbumDetailScreen';
@@ -28,8 +27,6 @@ interface DispatchProps {
 type Props = StateProps & DispatchProps & NavigationProps;
 //#endregion
 
-interface State { }
-
 export interface MyAlbumsNavigationParams {
   /**
    * List of tag uniqueIds to use as a filter
@@ -41,54 +38,55 @@ export interface MyAlbumsNavigationParams {
   untagged: boolean;
 }
 
-class MyAlbumsScreen extends Component<Props, State> {
+function MyAlbumsScreen(props: Props) {
 
-  scrollView?: FlatList<UserAlbum>;
-  yOffset = new Animated.Value(0);
-  onScroll = Animated.event([
-    { nativeEvent: { contentOffset: { y: this.yOffset } } },
+  let scrollView: FlatList<UserAlbum>;
+  let yOffset = new Animated.Value(0);
+  let onScroll = Animated.event([
+    { nativeEvent: { contentOffset: { y: yOffset } } },
   ], { useNativeDriver: false });
 
-  selectedTags: string[] = [];
-  showUntagged: boolean = false;
+  let selectedTags: string[] = [];
+  let showUntagged = false;
 
-  constructor(props: any) {
-    super(props);
+  const { setDrawerEnabled } = useContext(DrawerContext)
+  const isFocused = useIsFocused();
 
-    this.state = {};
-  }
+  useEffect(() => {
+    setDrawerEnabled(isFocused)
+  }, [isFocused])
 
-  componentDidMount() {
-    this.getAlbums(this.selectedTags, this.showUntagged);
-  }
+  useEffect(() => {
+    getAlbums(selectedTags, showUntagged);
+  }, [])
 
-  componentDidUpdate() {
-    const untagged: boolean = this.props.route.params?.untagged ?? false;
+  useEffect(() => {
+    const untagged: boolean = props.route.params?.untagged ?? false;
 
-    const inputTags: string[] = this.props.route.params?.tags ?? [];
+    const inputTags: string[] = props.route.params?.tags ?? [];
     const inputTag = inputTags ? inputTags[0] : null;
-    const selectedTag = this.selectedTags ? this.selectedTags[0] : null;
+    const selectedTag = selectedTags ? selectedTags[0] : null;
 
-    if (inputTag !== selectedTag || this.showUntagged !== untagged) {
-      this.selectedTags = inputTags;
-      this.showUntagged = untagged;
-      this.getAlbums(this.selectedTags, this.showUntagged);
+    if (inputTag !== selectedTag || showUntagged !== untagged) {
+      selectedTags = inputTags;
+      showUntagged = untagged;
+      getAlbums(selectedTags, showUntagged);
     }
-  }
+  }, [selectedTags, showUntagged, props.route.params])
 
-  getAlbums = (tags: string[], showUntagged: boolean) => {
-    this.props.loadMyAlbums(tags, showUntagged);
+  const getAlbums = (tags: string[], showUntagged: boolean) => {
+    props.loadMyAlbums(tags, showUntagged);
   };
 
   /**
    * Here I append the next page
    */
-  onPageFinishing = () => {
+  const onPageFinishing = () => {
     console.log('onPageFinishing');
-    this.props.loadMyAlbumsNext();
+    props.loadMyAlbumsNext();
   };
 
-  goToDetail = (albumDescriptor: UserAlbum, elementId: string) => {
+  const goToDetail = (albumDescriptor: UserAlbum, elementId: string) => {
     // Navigation.push(this.props.componentId, {
     // 	component: {
     // 		name: 'navigation.AlbumDetailScreen',
@@ -108,36 +106,34 @@ class MyAlbumsScreen extends Component<Props, State> {
     const navigationParams: AlbumDetailNavigationParams = {
       albumDescriptor: albumDescriptor,
     };
-    this.props.navigation.navigate('AlbumDetail', navigationParams);
+    props.navigation.navigate('AlbumDetail', navigationParams);
   };
 
-  render() {
-    return (
-      <View>
-        <FlatList
-          ref={(v: FlatList<UserAlbum>) => {
-            this.scrollView = v;
-          }}
-          style={styles.list}
-          data={this.props.albumDescriptors}
-          scrollEventThrottle={16}
-          onScroll={this.onScroll}
-          renderItem={({ item }) => (
-            <AlbumCardWidget
-              scrollView={this.scrollView}
-              onPress={this.goToDetail}
-              style={styles.listItem}
-              albumDescriptor={item}
-              yOffset={this.yOffset}
-            />
-          )}
-          keyExtractor={(item, index) => item.album.id}
-          onEndReached={this.onPageFinishing}
-          onEndReachedThreshold={5}
-        />
-      </View>
-    );
-  }
+  return (
+    <View>
+      <FlatList
+        ref={(v: FlatList<UserAlbum>) => {
+          scrollView = v;
+        }}
+        style={styles.list}
+        data={props.albumDescriptors}
+        scrollEventThrottle={16}
+        onScroll={onScroll}
+        renderItem={({ item }) => (
+          <AlbumCardWidget
+            scrollView={scrollView}
+            onPress={goToDetail}
+            style={styles.listItem}
+            albumDescriptor={item}
+            yOffset={yOffset}
+          />
+        )}
+        keyExtractor={(item, index) => item.album.id}
+        onEndReached={onPageFinishing}
+        onEndReachedThreshold={5}
+      />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -151,17 +147,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function MyAlbumsScreenWrapper(props: any) {
-  const { setDrawerEnabled } = useContext(DrawerContext)
-  const isFocused = useIsFocused();
-
-  useEffect(() => {
-    setDrawerEnabled(isFocused)
-  }, [isFocused])
-
-  return <MyAlbumsScreen {...props} />
-}
-
+//#region Redux
 const mapStateToProps = (state: AppState): StateProps => ({
   albumDescriptors: state.myAlbumsReducer.albumDescriptors || [],
 });
@@ -171,5 +157,6 @@ const mapDispatchToProps: DispatchProps = {
   loadMyAlbums: loadMyAlbums,
   loadMyAlbumsNext: loadMyAlbumsNext,
 };
+//#endregion
 
-export default connect(mapStateToProps, mapDispatchToProps)(MyAlbumsScreenWrapper);
+export default connect(mapStateToProps, mapDispatchToProps)(MyAlbumsScreen);

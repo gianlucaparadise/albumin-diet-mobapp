@@ -11,6 +11,7 @@ import { HomeStackParamList } from '../navigation/HomeStacks';
 import { StackScreenProps } from '@react-navigation/stack';
 import { DrawerContext } from '../navigation/HomeDrawer';
 import { useIsFocused } from '@react-navigation/native';
+import { TagsFilterContext } from './TagsFilterScreen';
 
 //#region Props
 type NavigationProps = StackScreenProps<HomeStackParamList, "MyAlbums">
@@ -27,17 +28,6 @@ interface DispatchProps {
 type Props = StateProps & DispatchProps & NavigationProps;
 //#endregion
 
-export interface MyAlbumsNavigationParams {
-  /**
-   * List of tag uniqueIds to use as a filter
-   */
-  tags: string[];
-  /**
-   * True if you want all the albums that are without tags
-   */
-  untagged: boolean;
-}
-
 function MyAlbumsScreen(props: Props) {
 
   let scrollView: FlatList<UserAlbum>;
@@ -46,8 +36,10 @@ function MyAlbumsScreen(props: Props) {
     { nativeEvent: { contentOffset: { y: yOffset } } },
   ], { useNativeDriver: false });
 
-  let selectedTags: string[] = [];
-  let showUntagged = false;
+  const { selectedTagIds, untagged } = useContext(TagsFilterContext)
+
+  console.log(`MyAlbumsScreen reading selectedTagIds: ${selectedTagIds}`)
+  console.log(`MyAlbumsScreen reading untagged: ${untagged}`)
 
   const { setDrawerEnabled } = useContext(DrawerContext)
   const isFocused = useIsFocused();
@@ -57,22 +49,10 @@ function MyAlbumsScreen(props: Props) {
   }, [isFocused])
 
   useEffect(() => {
-    getAlbums(selectedTags, showUntagged);
-  }, [])
-
-  useEffect(() => {
-    const untagged: boolean = props.route.params?.untagged ?? false;
-
-    const inputTags: string[] = props.route.params?.tags ?? [];
-    const inputTag = inputTags ? inputTags[0] : null;
-    const selectedTag = selectedTags ? selectedTags[0] : null;
-
-    if (inputTag !== selectedTag || showUntagged !== untagged) {
-      selectedTags = inputTags;
-      showUntagged = untagged;
-      getAlbums(selectedTags, showUntagged);
-    }
-  }, [selectedTags, showUntagged, props.route.params])
+    console.log(`MyAlbumsScreen useEffect reading selectedTagIds: ${selectedTagIds}`)
+    console.log(`MyAlbumsScreen useEffect reading untagged: ${untagged}`)
+    getAlbums(selectedTagIds, untagged);
+  }, [selectedTagIds, untagged])
 
   const getAlbums = (tags: string[], showUntagged: boolean) => {
     props.loadMyAlbums(tags, showUntagged);

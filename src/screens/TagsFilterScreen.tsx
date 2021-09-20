@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { StyleSheet, FlatList } from 'react-native';
 import { Button } from 'react-native-paper';
 import { TagDescriptor } from "albumin-diet-types";
 import TagChip from '../widgets/TagChip';
 import { AlbuminColors } from '../Theme';
-import { MyAlbumsNavigationParams } from './MyAlbumsScreen';
 import { connect } from 'react-redux';
 import { AppState } from '../redux/reducers/root.reducer';
 import { loadTags } from '../redux/thunks/tag.thunk';
@@ -25,22 +24,10 @@ interface DispatchProps {
 type Props = DrawerContentComponentProps<DrawerContentOptions> & DispatchProps & StateProps;
 //#endregion
 
-// const getActiveRouteState = function (route: NavigationState): NavigationState {
-//   if (
-//     !route.routes ||
-//     route.routes.length === 0 ||
-//     route.index >= route.routes.length
-//   ) {
-//     return route;
-//   }
-
-//   const childActiveRoute = route.routes[route.index] as NavigationState;
-//   return getActiveRouteState(childActiveRoute);
-// };
-
 function TagsFilterScreen(props: Props) {
 
   const [selectedTags, setSelectedTags] = useState<TagDescriptor[]>([])
+  const tagsContext = useContext(TagsFilterContext)
 
   useEffect(() => {
     props.loadTags();
@@ -94,18 +81,12 @@ function TagsFilterScreen(props: Props) {
       [] as string[],
     );
 
-    const navigationParams: MyAlbumsNavigationParams = {
-      tags: tagIds,
-      untagged: showUntagged,
-    };
+    tagsContext.selectedTagIds = tagIds
+    tagsContext.untagged = showUntagged
 
-    // TODO: RN5 get active screen
-    // const activeRoute = getActiveRouteState(this.props.navigation.state);
-    // const navigateAction = NavigationActions.setParams({
-    //   params: navigationParams,
-    //   key: activeRoute.key,
-    // });
-    // this.props.navigation.dispatch(navigateAction);
+    console.log(`TagsFilterScreen changing selectedTagIds: ${tagIds} - ${tagsContext.selectedTagIds}`)
+    console.log(`TagsFilterScreen changing untagged: ${showUntagged} - ${tagsContext.untagged}`)
+
     props.navigation.closeDrawer();
   };
 
@@ -175,6 +156,7 @@ const styles = StyleSheet.create({
   },
 });
 
+//#region Redux
 const mapStateToProps = (state: AppState): StateProps => ({
   tags: state.tagReducer.tags || [],
 });
@@ -183,5 +165,26 @@ const mapStateToProps = (state: AppState): StateProps => ({
 const mapDispatchToProps: DispatchProps = {
   loadTags: loadTags,
 };
+//#endregion
+
+//#region TagsFilterContext
+type TagsFilterContextType = {
+  /**
+   * List of tag uniqueIds to use as a filter
+   */
+  selectedTagIds: string[],
+  /**
+   * True if you want all the albums that are without tags
+   */
+  untagged: boolean
+}
+
+export const tagsFilterContextInitial: TagsFilterContextType = {
+  selectedTagIds: [],
+  untagged: false,
+}
+
+export const TagsFilterContext = React.createContext(tagsFilterContextInitial);
+//#endregion
 
 export default connect(mapStateToProps, mapDispatchToProps)(TagsFilterScreen);

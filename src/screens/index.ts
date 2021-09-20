@@ -1,4 +1,4 @@
-import MyAlbumsScreen, { MyAlbumsNavigationParams } from './../screens/MyAlbumsScreen';
+import MyAlbumsScreen from './../screens/MyAlbumsScreen';
 import MyListeningListScreen from './../screens/MyListeningListScreen';
 import SearchScreen from './../screens/SearchScreen';
 import MyProfileScreen from './../screens/MyProfileScreen';
@@ -22,4 +22,4 @@ export const loginScreens = {
   Login: LoginScreen,
 };
 
-export type { MyAlbumsNavigationParams, AlbumDetailNavigationParams }
+export type { AlbumDetailNavigationParams }

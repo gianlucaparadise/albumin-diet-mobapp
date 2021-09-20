@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlbumDetailNavigationParams, homeScreens as screens, MyAlbumsNavigationParams } from '../screens';
+import { AlbumDetailNavigationParams, homeScreens as screens } from '../screens';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { IconButton } from 'react-native-paper';
@@ -43,7 +43,7 @@ function getScreens() {
 }
 
 export type HomeStackParamList = {
-  MyAlbums: MyAlbumsNavigationParams,
+  MyAlbums: undefined,
   AlbumDetail: AlbumDetailNavigationParams,
   MyListeningList: undefined,
   Search: undefined,

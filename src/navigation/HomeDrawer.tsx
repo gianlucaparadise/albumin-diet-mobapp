@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { HomeTabs, HomeTabsParamList } from './HomeTabs';
-import TagsFilterScreen from '../screens/TagsFilterScreen';
+import TagsFilterScreen, { TagsFilterContext, tagsFilterContextInitial } from '../screens/TagsFilterScreen';
 // import { AlbuminColors } from '../Theme';
 
 const Drawer = createDrawerNavigator<HomeDrawerParamList>()
@@ -16,17 +16,19 @@ export function HomeDrawer() {
 
   return (
     <DrawerContext.Provider value={{ isDrawerEnabled: enabled, setDrawerEnabled: setEnabled }}>
-      <Drawer.Navigator
-        drawerPosition="right"
-        screenOptions={{
-          gestureEnabled: enabled
-        }}
-        drawerContent={(props) => <TagsFilterScreen {...props} />}
-      >
-        <Drawer.Screen
-          name="HomeTabs"
-          component={HomeTabs} />
-      </Drawer.Navigator>
+      <TagsFilterContext.Provider value={tagsFilterContextInitial}>
+        <Drawer.Navigator
+          drawerPosition="right"
+          screenOptions={{
+            gestureEnabled: enabled
+          }}
+          drawerContent={(props) => <TagsFilterScreen {...props} />}
+        >
+          <Drawer.Screen
+            name="HomeTabs"
+            component={HomeTabs} />
+        </Drawer.Navigator>
+      </TagsFilterContext.Provider>
     </DrawerContext.Provider>
   )
 }

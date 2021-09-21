@@ -38,7 +38,10 @@ export default class LoginScreen extends Component<Props> {
     console.log('Getting token');
     try {
       await LoginHelper.Instance.finishLogin(url);
-      this.props.navigation.navigate("HomeFlow");
+      this.props.navigation.reset({
+        index: 0,
+        routes: [{ name: 'HomeFlow' }]
+      });
     } catch (ex) {
       console.error('Error while finishing login');
       console.error(ex);

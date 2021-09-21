@@ -56,7 +56,10 @@ export default class MyProfileScreen extends Component<Props, State> {
   logout = async () => {
     try {
       await LoginHelper.Instance.logout();
-      this.props.navigation.navigate('LoginFlow');
+      this.props.navigation.reset({
+        index: 0,
+        routes: [{ name: 'LoginFlow' }]
+      });
     } catch (error) {
       console.error('Error while logging out');
       console.error(error);

@@ -27,9 +27,15 @@ export default class SplashScreen extends Component<Props> {
     const isLoggedIn = await LoginHelper.Instance.isLoggedIn();
 
     if (isLoggedIn) {
-      this.props.navigation.navigate('HomeFlow');
+      this.props.navigation.reset({
+        index: 0,
+        routes: [{ name: 'HomeFlow' }]
+      });
     } else {
-      this.props.navigation.navigate('LoginFlow');
+      this.props.navigation.reset({
+        index: 0,
+        routes: [{ name: 'LoginFlow' }]
+      });
     }
   };
 

@@ -38,9 +38,6 @@ function MyAlbumsScreen(props: Props) {
 
   const { selectedTagIds, untagged } = useContext(TagsFilterContext)
 
-  console.log(`MyAlbumsScreen reading selectedTagIds: ${selectedTagIds}`)
-  console.log(`MyAlbumsScreen reading untagged: ${untagged}`)
-
   const { setDrawerEnabled } = useContext(DrawerContext)
   const isFocused = useIsFocused();
 
@@ -49,8 +46,6 @@ function MyAlbumsScreen(props: Props) {
   }, [isFocused])
 
   useEffect(() => {
-    console.log(`MyAlbumsScreen useEffect reading selectedTagIds: ${selectedTagIds}`)
-    console.log(`MyAlbumsScreen useEffect reading untagged: ${untagged}`)
     getAlbums(selectedTagIds, untagged);
   }, [selectedTagIds, untagged])
 
@@ -61,7 +56,7 @@ function MyAlbumsScreen(props: Props) {
   /**
    * Here I append the next page
    */
-  const onPageFinishing = () => {
+  const onPageFinishing = function () {
     console.log('onPageFinishing');
     props.loadMyAlbumsNext();
   };

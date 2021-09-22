@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -52,34 +52,26 @@ interface DispatchProps {
 type Props = StateProps & DispatchProps & NavigationProps;
 //#endregion
 
-interface State { }
-
 export interface AlbumDetailNavigationParams {
   albumDescriptor: UserAlbum;
 }
 
-class AlbumDetailScreen extends Component<Props, State> {
+function AlbumDetailScreen(props: Props) {
 
-  constructor(props: Props) {
-    super(props);
+  useEffect(() => {
+    const albumDescriptor = props.route.params?.albumDescriptor as TaggedAlbum;
+    props.loadAlbum(albumDescriptor);
+  }, [])
 
-    const albumDescriptor = this.props.route.params?.albumDescriptor as TaggedAlbum;
-    this.props.loadAlbum(albumDescriptor);
-
-    this.state = {};
-  }
-
-  componentDidMount() { }
-
-  get artistName() {
-    return this.props.albumDescriptor
-      ? this.props.albumDescriptor.album.artists[0].name
+  const artistName = function () {
+    return props.albumDescriptor
+      ? props.albumDescriptor.album.artists[0].name
       : '';
   }
 
-  get releaseYear() {
-    const releaseDate = this.props.albumDescriptor
-      ? this.props.albumDescriptor.album.release_date
+  const releaseYear = function () {
+    const releaseDate = props.albumDescriptor
+      ? props.albumDescriptor.album.release_date
       : '';
     try {
       const date = new Date(releaseDate);
@@ -91,25 +83,25 @@ class AlbumDetailScreen extends Component<Props, State> {
     }
   }
 
-  get imageUrl() {
-    return this.props.albumDescriptor
-      ? this.props.albumDescriptor.album.images[0].url
+  const imageUrl = function () {
+    return props.albumDescriptor
+      ? props.albumDescriptor.album.images[0].url
       : undefined; // TODO: use image placeholder
   }
 
-  get albumName() {
-    return this.props.albumDescriptor
-      ? this.props.albumDescriptor.album.name
+  const albumName = function () {
+    return props.albumDescriptor
+      ? props.albumDescriptor.album.name
       : '';
   }
 
-  get totalTracks() {
-    return this.props.albumDescriptor
-      ? this.props.albumDescriptor.album.tracks.total
+  const totalTracks = function () {
+    return props.albumDescriptor
+      ? props.albumDescriptor.album.tracks.total
       : 0;
   }
 
-  calculateDuration(trackList: TrackObjectSimplified[]) {
+  const calculateDuration = function (trackList: TrackObjectSimplified[]) {
     let totalDuration = 0;
     for (const track of trackList) {
       totalDuration += track.duration_ms;
@@ -120,7 +112,7 @@ class AlbumDetailScreen extends Component<Props, State> {
     return date;
   }
 
-  timespanToString(timespan: Date) {
+  const timespanToString = function (timespan: Date) {
     const segments = [];
 
     const hours = timespan.getHours();
@@ -136,73 +128,73 @@ class AlbumDetailScreen extends Component<Props, State> {
     return segments.join(' ');
   }
 
-  get totalDuration() {
-    const timespan = this.calculateDuration(
-      this.props.albumDescriptor
-        ? this.props.albumDescriptor.album.tracks.items
+  const totalDuration = function () {
+    const timespan = calculateDuration(
+      props.albumDescriptor
+        ? props.albumDescriptor.album.tracks.items
         : [],
     );
-    const duration = this.timespanToString(timespan);
+    const duration = timespanToString(timespan);
 
     return duration;
   }
 
-  get albumId() {
-    return this.props.albumDescriptor
-      ? this.props.albumDescriptor.album.id
+  const albumId = function () {
+    return props.albumDescriptor
+      ? props.albumDescriptor.album.id
       : '';
   }
 
-  get isSaved() {
-    return this.props.albumDescriptor
-      ? this.props.albumDescriptor.isSavedAlbum
+  const isSaved = function () {
+    return props.albumDescriptor
+      ? props.albumDescriptor.isSavedAlbum
       : false;
   }
 
-  get isEgged() {
-    return this.props.albumDescriptor
-      ? this.props.albumDescriptor.isInListeningList
+  const isEgged = function () {
+    return props.albumDescriptor
+      ? props.albumDescriptor.isInListeningList
       : false;
   }
 
-  onPressSave = () => {
-    const albumDescriptor = this.props.albumDescriptor;
+  const onPressSave = function () {
+    const albumDescriptor = props.albumDescriptor;
     if (!albumDescriptor) {
       return;
     }
 
     if (albumDescriptor.isSavedAlbum) {
-      this.props.unsaveAlbum(albumDescriptor);
+      props.unsaveAlbum(albumDescriptor);
     } else {
-      this.props.saveAlbum(albumDescriptor);
+      props.saveAlbum(albumDescriptor);
     }
   };
 
-  onPressEgg = () => {
-    const albumDescriptor = this.props.albumDescriptor;
+  const onPressEgg = function () {
+    const albumDescriptor = props.albumDescriptor;
     if (!albumDescriptor) {
       return;
     }
 
     if (albumDescriptor.isInListeningList) {
-      this.props.deleteFromListeningList(albumDescriptor);
+      props.deleteFromListeningList(albumDescriptor);
     } else {
-      this.props.addToListeningList(albumDescriptor);
+      props.addToListeningList(albumDescriptor);
     }
   };
 
-  onPressPlay = async () => {
-    if (this.props.albumDescriptor) {
+  const onPressPlay = async function () {
+    if (props.albumDescriptor) {
       try {
-        await Linking.openURL(this.props.albumDescriptor.album.uri);
+        await Linking.openURL(props.albumDescriptor.album.uri);
       } catch (error) {
         // TODO: show a snackbar to inform that spotify is missing with an action to install spotify
-        this.onInstallSpotify();
+        onInstallSpotify();
       }
     }
   };
 
-  onInstallSpotify = async () => {
+  const onInstallSpotify = async function () {
     try {
       let marketUri: string;
       if (Platform.OS === 'android') {
@@ -216,69 +208,67 @@ class AlbumDetailScreen extends Component<Props, State> {
     }
   };
 
-  renderTagCloud = () => {
-    if (this.props.albumDescriptor && this.props.albumDescriptor.isSavedAlbum) {
+  const renderTagCloud = function () {
+    if (props.albumDescriptor && props.albumDescriptor.isSavedAlbum) {
       // const tags = [...this.state.albumDescriptor.tags, ...this.state.albumDescriptor.tags, ...this.state.albumDescriptor.tags];
       return (
         <View>
           <Headline style={styles.text}>Tags</Headline>
           <TagCloud
-            tags={this.props.albumDescriptor.tags}
-            albumDescriptor={this.props.albumDescriptor}
+            tags={props.albumDescriptor.tags}
+            albumDescriptor={props.albumDescriptor}
           />
         </View>
       );
     }
   };
 
-  render() {
-    return (
-      <ScrollView contentContainerStyle={styles.container}>
-        <Image
-          resizeMode="cover"
-          style={styles.cover}
-          source={{ uri: this.imageUrl }}
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <Image
+        resizeMode="cover"
+        style={styles.cover}
+        source={{ uri: imageUrl() }}
+      />
+      <View style={styles.space} />
+      <Headline style={styles.text}>{albumName()}</Headline>
+      <Subheading style={styles.text}>{artistName()}</Subheading>
+      <Subheading style={styles.text}>{releaseYear()}</Subheading>
+      <Subheading style={styles.text}>
+        {totalTracks()} tracks - {totalDuration()}
+      </Subheading>
+      <View style={styles.iconsContainer}>
+        <ToggleIconButton
+          type="save"
+          selected={isSaved()}
+          enabled={props.canSave}
+          onPress={onPressSave}
         />
-        <View style={styles.space} />
-        <Headline style={styles.text}>{this.albumName}</Headline>
-        <Subheading style={styles.text}>{this.artistName}</Subheading>
-        <Subheading style={styles.text}>{this.releaseYear}</Subheading>
-        <Subheading style={styles.text}>
-          {this.totalTracks} tracks - {this.totalDuration}
-        </Subheading>
-        <View style={styles.iconsContainer}>
-          <ToggleIconButton
-            type="save"
-            selected={this.isSaved}
-            enabled={this.props.canSave}
-            onPress={this.onPressSave}
-          />
-          <ToggleIconButton
-            type="eggs"
-            selected={this.isEgged}
-            enabled={this.props.canBeEgged}
-            onPress={this.onPressEgg}
-          />
-        </View>
-        <View style={styles.iconsContainer}>
-          <Button
-            mode="contained"
-            icon="play-circle"
-            uppercase={false}
-            onPress={this.onPressPlay}>
-            Play in Spotify
-          </Button>
-        </View>
-        <View style={styles.space} />
-        {this.renderTagCloud()}
-        <View style={styles.space} />
-        <View style={styles.trackListContainer}>
-          <Headline style={styles.text}>Tracks</Headline>
-          <TrackList albumDescriptor={this.props.albumDescriptor} />
-        </View>
-      </ScrollView>
-    );
-  }
+        <ToggleIconButton
+          type="eggs"
+          selected={isEgged()}
+          enabled={props.canBeEgged}
+          onPress={onPressEgg}
+        />
+      </View>
+      <View style={styles.iconsContainer}>
+        <Button
+          mode="contained"
+          icon="play-circle"
+          uppercase={false}
+          onPress={onPressPlay}>
+          Play in Spotify
+        </Button>
+      </View>
+      <View style={styles.space} />
+      {renderTagCloud()}
+      <View style={styles.space} />
+      <View style={styles.trackListContainer}>
+        <Headline style={styles.text}>Tracks</Headline>
+        <TrackList albumDescriptor={props.albumDescriptor} />
+      </View>
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -308,6 +298,7 @@ const styles = StyleSheet.create({
   },
 });
 
+//#region Redux
 const mapStateToProps = (state: AppState): StateProps => ({
   albumDescriptor: state.albumDetailReducer.albumDescriptor,
   canSave: state.albumDetailReducer.canSave,
@@ -325,5 +316,6 @@ const mapDispatchToProps: DispatchProps = {
   addToListeningList: addToListeningList,
   deleteFromListeningList: deleteFromListeningList,
 };
+//#endregion
 
 export default connect(mapStateToProps, mapDispatchToProps)(AlbumDetailScreen);

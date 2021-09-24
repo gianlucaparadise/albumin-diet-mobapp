@@ -84,9 +84,6 @@ function TagsFilterScreen(props: Props) {
     tagsContext.selectedTagIds = tagIds
     tagsContext.untagged = showUntagged
 
-    console.log(`TagsFilterScreen changing selectedTagIds: ${tagIds} - ${tagsContext.selectedTagIds}`)
-    console.log(`TagsFilterScreen changing untagged: ${showUntagged} - ${tagsContext.untagged}`)
-
     props.navigation.closeDrawer();
   };
 

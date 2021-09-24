@@ -22,8 +22,6 @@ export const loadAlbum = (
   albumDescriptor: TaggedAlbum,
 ): ThunkAction<void, AppState, null, AnyAction> => async (dispatch) => {
   try {
-    dispatch(selectAlbumAction(albumDescriptor));
-
     const albumsResponse = await ConnectionHelper.Instance.getAlbum(
       albumDescriptor.album.id,
     );
@@ -45,22 +43,22 @@ export const updateCurrentAlbum = (
 ): ThunkAction<void, AppState, null, AnyAction> => async (
   dispatch,
   getState,
-) => {
-  try {
-    const prevAlbumDescriptor = getState().albumDetailReducer.albumDescriptor;
-    const prevAlbumId = prevAlbumDescriptor ? prevAlbumDescriptor.album.id : '';
+  ) => {
+    try {
+      const prevAlbumDescriptor = getState().albumDetailReducer.albumDescriptor;
+      const prevAlbumId = prevAlbumDescriptor ? prevAlbumDescriptor.album.id : '';
 
-    if (prevAlbumId != albumDescriptor.album.id) {
-      return;
+      if (prevAlbumId != albumDescriptor.album.id) {
+        return;
+      }
+
+      dispatch(selectAlbumAction(albumDescriptor));
+    } catch (error) {
+      console.log('Error while updateCurrentAlbum');
+      console.log(error);
+      dispatch(errorAlbumDetailAction(error));
     }
-
-    dispatch(selectAlbumAction(albumDescriptor));
-  } catch (error) {
-    console.log('Error while updateCurrentAlbum');
-    console.log(error);
-    dispatch(errorAlbumDetailAction(error));
-  }
-};
+  };
 
 export const unsaveAlbum = (
   albumDescriptor: TaggedAlbum,

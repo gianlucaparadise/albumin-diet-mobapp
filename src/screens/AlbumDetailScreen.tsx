@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -58,20 +58,35 @@ export interface AlbumDetailNavigationParams {
 
 function AlbumDetailScreen(props: Props) {
 
+  const getAlbumDescriptor = function () {
+    const inputAlbumDescriptor = props.route.params?.albumDescriptor as TaggedAlbum;
+    const stateAlbumDescriptor = props.albumDescriptor
+
+    // The input album is the one I want to see, but on first render it has not been loaded in state yet.
+    // Here I check that the state album is the correct one and return it. Otherwise I return the input one.
+    if (inputAlbumDescriptor?.album?.id === stateAlbumDescriptor?.album.id) {
+      return stateAlbumDescriptor
+    }
+
+    return inputAlbumDescriptor
+  }
+
   useEffect(() => {
     const albumDescriptor = props.route.params?.albumDescriptor as TaggedAlbum;
     props.loadAlbum(albumDescriptor);
   }, [])
 
   const artistName = function () {
-    return props.albumDescriptor
-      ? props.albumDescriptor.album.artists[0].name
+    const albumDescriptor = getAlbumDescriptor()
+    return albumDescriptor
+      ? albumDescriptor.album.artists[0].name
       : '';
   }
 
   const releaseYear = function () {
-    const releaseDate = props.albumDescriptor
-      ? props.albumDescriptor.album.release_date
+    const albumDescriptor = getAlbumDescriptor()
+    const releaseDate = albumDescriptor
+      ? albumDescriptor.album.release_date
       : '';
     try {
       const date = new Date(releaseDate);
@@ -84,20 +99,23 @@ function AlbumDetailScreen(props: Props) {
   }
 
   const imageUrl = function () {
-    return props.albumDescriptor
-      ? props.albumDescriptor.album.images[0].url
+    const albumDescriptor = getAlbumDescriptor()
+    return albumDescriptor
+      ? albumDescriptor.album.images[0].url
       : undefined; // TODO: use image placeholder
   }
 
   const albumName = function () {
-    return props.albumDescriptor
-      ? props.albumDescriptor.album.name
+    const albumDescriptor = getAlbumDescriptor()
+    return albumDescriptor
+      ? albumDescriptor.album.name
       : '';
   }
 
   const totalTracks = function () {
-    return props.albumDescriptor
-      ? props.albumDescriptor.album.tracks.total
+    const albumDescriptor = getAlbumDescriptor()
+    return albumDescriptor
+      ? albumDescriptor.album.tracks.total
       : 0;
   }
 
@@ -129,9 +147,10 @@ function AlbumDetailScreen(props: Props) {
   }
 
   const totalDuration = function () {
+    const albumDescriptor = getAlbumDescriptor()
     const timespan = calculateDuration(
-      props.albumDescriptor
-        ? props.albumDescriptor.album.tracks.items
+      albumDescriptor
+        ? albumDescriptor.album.tracks.items
         : [],
     );
     const duration = timespanToString(timespan);
@@ -140,25 +159,28 @@ function AlbumDetailScreen(props: Props) {
   }
 
   const albumId = function () {
-    return props.albumDescriptor
-      ? props.albumDescriptor.album.id
+    const albumDescriptor = getAlbumDescriptor()
+    return albumDescriptor
+      ? albumDescriptor.album.id
       : '';
   }
 
   const isSaved = function () {
-    return props.albumDescriptor
-      ? props.albumDescriptor.isSavedAlbum
+    const albumDescriptor = getAlbumDescriptor()
+    return albumDescriptor
+      ? albumDescriptor.isSavedAlbum
       : false;
   }
 
   const isEgged = function () {
-    return props.albumDescriptor
-      ? props.albumDescriptor.isInListeningList
+    const albumDescriptor = getAlbumDescriptor()
+    return albumDescriptor
+      ? albumDescriptor.isInListeningList
       : false;
   }
 
   const onPressSave = function () {
-    const albumDescriptor = props.albumDescriptor;
+    const albumDescriptor = getAlbumDescriptor()
     if (!albumDescriptor) {
       return;
     }
@@ -171,7 +193,7 @@ function AlbumDetailScreen(props: Props) {
   };
 
   const onPressEgg = function () {
-    const albumDescriptor = props.albumDescriptor;
+    const albumDescriptor = getAlbumDescriptor()
     if (!albumDescriptor) {
       return;
     }
@@ -184,9 +206,10 @@ function AlbumDetailScreen(props: Props) {
   };
 
   const onPressPlay = async function () {
-    if (props.albumDescriptor) {
+    const albumDescriptor = getAlbumDescriptor()
+    if (albumDescriptor) {
       try {
-        await Linking.openURL(props.albumDescriptor.album.uri);
+        await Linking.openURL(albumDescriptor.album.uri);
       } catch (error) {
         // TODO: show a snackbar to inform that spotify is missing with an action to install spotify
         onInstallSpotify();
@@ -209,14 +232,15 @@ function AlbumDetailScreen(props: Props) {
   };
 
   const renderTagCloud = function () {
-    if (props.albumDescriptor && props.albumDescriptor.isSavedAlbum) {
+    const albumDescriptor = getAlbumDescriptor()
+    if (albumDescriptor && albumDescriptor.isSavedAlbum) {
       // const tags = [...this.state.albumDescriptor.tags, ...this.state.albumDescriptor.tags, ...this.state.albumDescriptor.tags];
       return (
         <View>
           <Headline style={styles.text}>Tags</Headline>
           <TagCloud
-            tags={props.albumDescriptor.tags}
-            albumDescriptor={props.albumDescriptor}
+            tags={albumDescriptor.tags}
+            albumDescriptor={albumDescriptor}
           />
         </View>
       );
@@ -265,7 +289,7 @@ function AlbumDetailScreen(props: Props) {
       <View style={styles.space} />
       <View style={styles.trackListContainer}>
         <Headline style={styles.text}>Tracks</Headline>
-        <TrackList albumDescriptor={props.albumDescriptor} />
+        <TrackList albumDescriptor={getAlbumDescriptor()} />
       </View>
     </ScrollView>
   );
